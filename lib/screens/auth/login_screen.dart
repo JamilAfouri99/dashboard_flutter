@@ -7,17 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dashboard/cubit/auth/auth_cubit.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class LoginScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 32.0),
               Form(
-                key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -69,33 +62,33 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
                     const SizedBox(height: 16.0),
-                    BlocBuilder<AuthCubit, AuthState>(
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (state is AuthenticationFailed) {
+                          CustomSnackbar.show(
+                            context,
+                            state.reason.toString(),
+                            type: SnackbarType.error,
+                          );
+                        } else if (state is AuthenticatedState) {
+                          RouteManager().routerManagerPushUntil(
+                            routeName: RouteConstants.home,
+                            context: context,
+                          );
+                        }
+                      },
                       builder: (context, state) {
                         if (state is AuthenticatingState) {
                           return const CircularProgressIndicator();
                         }
-                        if (state is AuthenticationFailed) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            CustomSnackbar.show(
-                              context,
-                              state.reason.toString(),
-                              type: SnackbarType.error,
-                            );
-                          });
-                        } else if (state is AuthenticatedState) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            RouteManager().routerManagerPushUntil(
-                              routeName: RouteConstants.home,
-                              context: context,
-                            );
-                          });
-                        }
                         return ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              context
-                                  .read<AuthCubit>()
-                                  .login(_emailController.text, _passwordController.text);
+                            final form = Form.of(context);
+                            if (form.validate()) {
+                              form.save();
+                              final email = _emailController.text;
+                              final password = _passwordController.text;
+                              context.read<AuthCubit>().login(email, password);
                             }
                           },
                           child: const Text('Login'),
@@ -105,8 +98,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 16.0),
                     TextButton(
                       onPressed: () {
-                        RouteManager()
-                            .routerManager(routeName: RouteConstants.signUp, context: context);
+                        RouteManager().routerManager(
+                          routeName: RouteConstants.signUp,
+                          context: context,
+                        );
                       },
                       child: const Text('Don\'t have an account? Sign up'),
                     ),

@@ -2,7 +2,7 @@ import 'package:dashboard/configuration/theme.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 
-class KeyperCustomButton extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final String title;
   final bool isInverted;
   final bool isDisabled;
@@ -10,7 +10,7 @@ class KeyperCustomButton extends StatelessWidget {
   final Widget? leading;
   final Function() selected;
 
-  const KeyperCustomButton({
+  const CustomButton({
     Key? key,
     required this.title,
     required this.selected,

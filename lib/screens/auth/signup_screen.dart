@@ -1,4 +1,3 @@
-import 'package:dashboard/cubit/auth/auth_cubit.dart';
 import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/configuration/theme.dart';
@@ -6,19 +5,15 @@ import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dashboard/cubit/auth/auth_cubit.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
-
-  @override
-  _SignUpScreenState createState() => _SignUpScreenState();
-}
-
-class _SignUpScreenState extends State<SignUpScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class SignUpScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+
+  SignUpScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,15 +33,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 32.0),
               Form(
-                key: _formKey,
                 child: Column(
                   children: [
                     TextFormField(
-                      key: const Key('email'),
+                      controller: _emailController,
                       decoration: const InputDecoration(
                         labelText: 'Email',
                       ),
-                      controller: _emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
@@ -56,12 +49,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 16.0),
                     TextFormField(
-                      key: const Key('password'),
+                      controller: _passwordController,
                       decoration: const InputDecoration(
                         labelText: 'Password',
                       ),
                       obscureText: true,
-                      controller: _passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
@@ -71,12 +63,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 16.0),
                     TextFormField(
-                      key: const Key('confirmPassword'),
+                      controller: _confirmPasswordController,
                       decoration: const InputDecoration(
                         labelText: 'Confirm Password',
                       ),
                       obscureText: true,
-                      controller: _confirmPasswordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please confirm your password';
@@ -86,49 +77,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                     ),
+                    const SizedBox(height: 16.0),
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (state is AuthenticationFailed) {
+                          CustomSnackbar.show(
+                            context,
+                            state.reason.toString(),
+                            type: SnackbarType.error,
+                          );
+                        } else if (state is AuthenticatedState) {
+                          RouteManager().routerManagerPushUntil(
+                            routeName: RouteConstants.home,
+                            context: context,
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is AuthenticatingState) {
+                          return const CircularProgressIndicator();
+                        }
+                        return ElevatedButton(
+                          onPressed: () async {
+                            final form = Form.of(context);
+                            if (form.validate()) {
+                              form.save();
+                              final email = _emailController.text;
+                              final password = _passwordController.text;
+                              final confirmed = _confirmPasswordController.text;
+                              context.read<AuthCubit>().signUp(email, password);
+                            }
+                          },
+                          child: const Text('Sign Up'),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    TextButton(
+                      onPressed: () {
+                        RouteManager().routerManager(
+                          routeName: RouteConstants.login,
+                          context: context,
+                        );
+                      },
+                      child: const Text('Already have an account? Log in'),
+                    ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              BlocBuilder<AuthCubit, AuthState>(
-                builder: (context, state) {
-                  if (state is AuthenticatingState) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (state is AuthenticationFailed) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      CustomSnackbar.show(
-                        context,
-                        state.reason.toString(),
-                        type: SnackbarType.error,
-                      );
-                    });
-                  } else if (state is AuthenticatedState) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      RouteManager().routerManagerPushUntil(
-                        routeName: RouteConstants.home,
-                        context: context,
-                      );
-                    });
-                  }
-                  return ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        context
-                            .read<AuthCubit>()
-                            .signUp(_emailController.text, _passwordController.text);
-                      }
-                    },
-                    child: const Text('Sign Up'),
-                  );
-                },
-              ),
-              const SizedBox(height: 16.0),
-              TextButton(
-                onPressed: () {
-                  RouteManager().routerManager(routeName: RouteConstants.login, context: context);
-                },
-                child: const Text('Already have an account? Log in'),
               ),
             ],
           ),
