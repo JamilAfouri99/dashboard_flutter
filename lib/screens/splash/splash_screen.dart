@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {
           if (state is AuthenticatedState) {
             RouteManager().routerManagerPopAndPushNamed(
-              routeName: RouteConstants.home,
+              routeName: RouteConstants.contacts,
               context: context,
             );
           } else if (state is UnauthenticatedState) {

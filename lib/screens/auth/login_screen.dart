@@ -72,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                           );
                         } else if (state is AuthenticatedState) {
                           RouteManager().routerManagerPushUntil(
-                            routeName: RouteConstants.home,
+                            routeName: RouteConstants.contacts,
                             context: context,
                           );
                         }

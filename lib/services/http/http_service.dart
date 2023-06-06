@@ -10,8 +10,8 @@ class HttpService {
   late final Dio client = Dio(
     BaseOptions(
       baseUrl: baseUrl,
-      // connectTimeout: const Duration(seconds: 6),
-      // receiveTimeout: const Duration(seconds: 60),
+      connectTimeout: const Duration(seconds: 6),
+      receiveTimeout: const Duration(seconds: 6),
       responseType: ResponseType.json,
     ),
   )..interceptors.add(AuthorizationInterceptor());

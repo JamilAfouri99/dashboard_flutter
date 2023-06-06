@@ -11,9 +11,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
   runZonedGuarded(() async {
+    const environment = String.fromEnvironment('ENV', defaultValue: 'development');
+    await dotenv.load(fileName: '.env.$environment');
+
     HttpOverrides.global = MyHttpOverrides();
     WidgetsFlutterBinding.ensureInitialized();
     LicenseRegistry.addLicense(() async* {

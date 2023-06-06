@@ -3,10 +3,15 @@ class RouteConstants {
   static const String home = "/home";
   static const String login = "/login";
   static const String signUp = "/signUp";
+  static const String contacts = "/contacts";
 }
 
 class URLConstants {
   static const String local = "http://localhost";
+}
+
+class ApiConstants {
+  static const String contacts = "/contacts";
 }
 
 class KeyConstants {
