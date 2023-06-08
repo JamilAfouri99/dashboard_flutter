@@ -4,8 +4,8 @@ class Contact {
   static const String positionProperty = 'position';
   static const String imageProperty = 'image';
 
-  final String id;
-  final String name;
+  late final String id;
+  late final String name;
   final String position;
   final String image;
 

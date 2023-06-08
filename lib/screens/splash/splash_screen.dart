@@ -20,12 +20,12 @@ class _SplashScreenState extends State<SplashScreen> {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
-            RouteManager().routerManagerPopAndPushNamed(
+            RouteManager.routerManagerPopAndPushNamed(
               routeName: RouteConstants.contacts,
               context: context,
             );
           } else if (state is UnauthenticatedState) {
-            RouteManager().routerManagerPopAndPushNamed(
+            RouteManager.routerManagerPopAndPushNamed(
               routeName: RouteConstants.login,
               context: context,
             );

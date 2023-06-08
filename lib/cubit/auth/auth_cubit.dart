@@ -17,7 +17,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     try {
       final repository = await makeRepository;
-      final token = await repository.getToken();
+      final Token? token = await repository.getToken();
 
       await Future.delayed(const Duration(seconds: 2));
 
@@ -31,14 +31,17 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthenticatingState());
 
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      final response = await Future.delayed(const Duration(seconds: 2),
+          () => {'user': User(email: email, password: password), 'token': 'foo'});
 
-      final user = User(email: email, password: password);
-      // call the endpoint
-      final token = Token('foo');
+      final user = response['user'];
+      print(user);
+      final token = Token(response['token'].toString());
+
+      repository = await makeRepository;
+      await repository?.setToken(token);
 
       emit(AuthenticatedState(token));
-      print('Authenticated');
     } catch (e) {
       emit(AuthenticationFailed(e));
     }
@@ -50,6 +53,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await Future.delayed(const Duration(seconds: 2));
       final user = User(email: email, password: password);
+      print(user);
       // call the endpoint
       final token = Token('foo');
 
@@ -61,8 +65,9 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> logout(context) async {
     emit(UnknownAuthState());
-    RouteManager().routerManagerPushUntil(routeName: RouteConstants.splash, context: context);
+    RouteManager.routerManagerPushUntil(routeName: RouteConstants.splash, context: context);
 
+    repository = await makeRepository;
     await repository?.removeToken();
     repository = null;
 

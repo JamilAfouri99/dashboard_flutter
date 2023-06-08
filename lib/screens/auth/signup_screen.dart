@@ -87,7 +87,7 @@ class SignUpScreen extends StatelessWidget {
                             type: SnackbarType.error,
                           );
                         } else if (state is AuthenticatedState) {
-                          RouteManager().routerManagerPushUntil(
+                          RouteManager.routerManagerPushUntil(
                             routeName: RouteConstants.contacts,
                             context: context,
                           );
@@ -115,7 +115,7 @@ class SignUpScreen extends StatelessWidget {
                     const SizedBox(height: 16.0),
                     TextButton(
                       onPressed: () {
-                        RouteManager().routerManager(
+                        RouteManager.routerManager(
                           routeName: RouteConstants.login,
                           context: context,
                         );

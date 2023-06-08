@@ -1,60 +1,59 @@
 import 'package:dashboard/configuration/theme.dart';
 import 'package:dashboard/cubit/contacts/contacts_cubit.dart';
 import 'package:dashboard/cubit/contacts/contacts_state.dart';
+import 'package:dashboard/helpers/groupe_by_first_letter.dart';
+import 'package:dashboard/helpers/sort_map_by_keys.dart';
 import 'package:dashboard/models/contact.dart';
+import 'package:dashboard/navigation/router_manager.dart';
+import 'package:dashboard/screens/contact/contact_screen.dart';
 import 'package:dashboard/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ContactsScreen extends StatelessWidget {
-  const ContactsScreen({super.key});
+  ContactsScreen({super.key});
+
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<ContactsCubit>(
       create: (context) => ContactsCubit()..fetch(),
       child: Scaffold(
         appBar: appBar,
+        floatingActionButton: _floatingActionButton(context),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 16),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25.0),
+                border: Border.all(color: Colors.grey.withOpacity(0.5)),
+              ),
               child: Row(
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25.0),
-                        border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                      ),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Icon(
-                              Icons.search,
-                              color: AppColors.grey.withOpacity(0.5),
-                            ),
-                          ),
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Search contacts',
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(color: AppColors.grey.withOpacity(0.5)),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Icon(
+                      Icons.search,
+                      color: AppColors.grey.withOpacity(0.5),
                     ),
                   ),
-                  const SizedBox(width: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add contact
-                    },
-                    child: Text('Add'),
+                  BlocBuilder<ContactsCubit, ContactsState>(
+                    builder: (context, state) => Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: (value) => context.read<ContactsCubit>().searchContacts(value),
+                        decoration: InputDecoration(
+                          hintText: 'Search contacts',
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(color: AppColors.grey.withOpacity(0.5)),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -66,7 +65,7 @@ class ContactsScreen extends StatelessWidget {
                   if (state is FailedState) {
                     Text(state.reason.toString());
                   } else if (state is SuccessState) {
-                    return _contacts(state.contacts);
+                    return _contacts(state.contacts, context);
                   }
                   return const Center(child: CircularProgressIndicator());
                 },
@@ -79,22 +78,23 @@ class ContactsScreen extends StatelessWidget {
   }
 }
 
-Widget _contacts(List<Contact> contacts) {
-  final groupedContacts = <String, List<Contact>>{};
-
-  for (final contact in contacts) {
-    final startingLetter = contact.name[0].toUpperCase();
-
-    if (!groupedContacts.containsKey(startingLetter)) {
-      groupedContacts[startingLetter] = [];
-    }
-
-    groupedContacts[startingLetter]!.add(contact);
+Widget _contacts(List<Contact> contacts, BuildContext context) {
+  if (contacts.isEmpty) {
+    return Center(
+      child: Text(
+        'No contacts found',
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
+    );
   }
 
+  final Map<String, List<Contact>> groupedContacts =
+      groupByFirstLetter(contacts, (contact) => contact.name[0].toUpperCase());
+  final Map<String, List<Contact>> sortedContracts = sortMapByKeys(groupedContacts);
+
   return ListView(
-    children: groupedContacts.keys.map((letter) {
-      final groupContacts = groupedContacts[letter]!;
+    children: sortedContracts.keys.map((letter) {
+      final groupContacts = sortedContracts[letter]!;
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,13 +117,14 @@ Widget _contacts(List<Contact> contacts) {
               ),
             ),
           ),
-          ListView.builder(
+          ListView.separated(
             shrinkWrap: true,
+            separatorBuilder: (BuildContext context, int index) => const Divider(),
             physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return _contact(groupContacts[index]);
-            },
             itemCount: groupContacts.length,
+            itemBuilder: (context, index) {
+              return _contact(groupContacts[index], context);
+            },
           ),
         ],
       );
@@ -131,10 +132,10 @@ Widget _contacts(List<Contact> contacts) {
   );
 }
 
-Widget _contact(Contact contact) => ListTile(
+Widget _contact(Contact contact, BuildContext context) => ListTile(
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(50.0),
-        child: Image.asset(
+        child: SvgPicture.asset(
           contact.image,
           width: 50.0,
           height: 50.0,
@@ -142,5 +143,17 @@ Widget _contact(Contact contact) => ListTile(
       ),
       title: Text(contact.name),
       subtitle: Text(contact.position),
-      onTap: () => print(contact.id),
+      onTap: () => RouteManager.navigateToWithData(
+        context,
+        () => ContactScreen(contact: contact),
+      ),
+    );
+
+FloatingActionButton _floatingActionButton(BuildContext context) => FloatingActionButton(
+      backgroundColor: AppColors.primary,
+      onPressed: () => RouteManager.navigateToWithData(
+        context,
+        () => const ContactScreen(),
+      ),
+      child: const Icon(Icons.add),
     );

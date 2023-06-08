@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 class RouteManager {
-  routerManager({required String routeName, required BuildContext context}) {
+  static routerManager({required String routeName, required BuildContext context}) {
     Navigator.of(context).pushNamed(routeName);
   }
 
-  routerManagerPushUntil({required String routeName, required BuildContext context}) {
+  static routerManagerPushUntil({required String routeName, required BuildContext context}) {
     Navigator.of(context).pushNamedAndRemoveUntil(routeName, (route) => false);
   }
 
-  routerManagerPopAndPushNamed({required String routeName, required BuildContext context}) {
+  static routerManagerPopAndPushNamed({required String routeName, required BuildContext context}) {
     Navigator.of(context).popAndPushNamed(routeName);
+  }
+
+  static navigateToWithData<T>(BuildContext context, Widget Function() builder) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (data) => builder()));
   }
 }
