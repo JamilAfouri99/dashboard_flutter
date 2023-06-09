@@ -7,6 +7,7 @@ import 'package:dashboard/models/contact.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/contact/contact_screen.dart';
 import 'package:dashboard/widgets/app_bar.dart';
+import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -63,11 +64,17 @@ class ContactsScreen extends StatelessWidget {
               child: BlocBuilder<ContactsCubit, ContactsState>(
                 builder: (context, state) {
                   if (state is FailedState) {
-                    Text(state.reason.toString());
+                    RefreshIndicator(
+                      onRefresh: () => context.read<ContactsCubit>().fetch(),
+                      child: Text(state.reason.toString()),
+                    );
                   } else if (state is SuccessState) {
-                    return _contacts(state.contacts, context);
+                    return RefreshIndicator(
+                      onRefresh: () => context.read<ContactsCubit>().fetch(),
+                      child: _contacts(state.contacts, context),
+                    );
                   }
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomProgressIndicator());
                 },
               ),
             ),
@@ -141,8 +148,14 @@ Widget _contact(Contact contact, BuildContext context) => ListTile(
           height: 50.0,
         ),
       ),
-      title: Text(contact.name),
-      subtitle: Text(contact.position),
+      title: Text(
+        contact.name,
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
+      subtitle: Text(
+        contact.position,
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
       onTap: () => RouteManager.navigateToWithData(
         context,
         () => ContactScreen(contact: contact),

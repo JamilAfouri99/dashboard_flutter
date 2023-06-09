@@ -2,6 +2,7 @@ import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/configuration/theme.dart';
 import 'package:dashboard/navigation/router_manager.dart';
+import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,7 +80,7 @@ class LoginScreen extends StatelessWidget {
                       },
                       builder: (context, state) {
                         if (state is AuthenticatingState) {
-                          return const CircularProgressIndicator();
+                          return const CustomProgressIndicator();
                         }
                         return ElevatedButton(
                           onPressed: () async {

@@ -1,6 +1,8 @@
 import 'package:dashboard/cubit/auth/auth_cubit.dart';
 import 'package:dashboard/configuration/theme.dart';
 import 'package:dashboard/configuration/constants.dart';
+import 'package:dashboard/cubit/contact/contact_cubit.dart';
+import 'package:dashboard/cubit/contacts/contacts_cubit.dart';
 import 'package:dashboard/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,8 +24,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthCubit()..checkToken(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => AuthCubit()..checkToken()),
+        BlocProvider(create: (_) => ContactsCubit()),
+        BlocProvider(create: (_) => ContactCubit()),
+      ],
       child: MaterialApp(
         title: 'Dashboard',
         onGenerateRoute: router.Router.generateRoute,

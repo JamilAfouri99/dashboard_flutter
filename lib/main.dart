@@ -18,7 +18,7 @@ Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString('assets/fonts/roboto/LICENSE.txt');
+    final license = await rootBundle.loadString('assets/fonts/inter/LICENSE.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 

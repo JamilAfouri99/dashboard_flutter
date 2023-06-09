@@ -31,20 +31,7 @@ class AppColors {
 final lightTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: AppColors.primary,
-  colorScheme: const ColorScheme(
-    brightness: Brightness.light,
-    primary: AppColors.primary,
-    onPrimary: AppColors.light,
-    secondary: AppColors.secondary,
-    onSecondary: AppColors.light,
-    background: AppColors.secondary,
-    onBackground: AppColors.dark,
-    surface: AppColors.light,
-    onSurface: AppColors.primary,
-    error: AppColors.onError,
-    onError: AppColors.light,
-  ),
-  fontFamily: 'Roboto',
+  fontFamily: 'Inter',
   textTheme: textTheme,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,
@@ -55,6 +42,7 @@ final lightTheme = ThemeData(
   indicatorColor: AppColors.primary,
   tabBarTheme: const TabBarTheme(labelColor: AppColors.primary),
   drawerTheme: const DrawerThemeData(backgroundColor: Colors.white, elevation: 2),
+  scaffoldBackgroundColor: Colors.white,
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(4),
@@ -75,20 +63,36 @@ final lightTheme = ThemeData(
     ),
   ),
   iconTheme: const IconThemeData(color: AppColors.primary),
+  colorScheme: const ColorScheme(
+    brightness: Brightness.light,
+    primary: AppColors.primary,
+    onPrimary: AppColors.light,
+    secondary: AppColors.secondary,
+    onSecondary: AppColors.light,
+    background: AppColors.secondary,
+    onBackground: AppColors.dark,
+    surface: AppColors.light,
+    onSurface: AppColors.primary,
+    error: AppColors.onError,
+    onError: AppColors.light,
+  ).copyWith(background: Colors.white),
 );
 
 TextTheme textTheme = const TextTheme(
   headlineLarge: TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 44,
+    color: AppColors.dark,
   ),
   headlineMedium: TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 24,
+    color: AppColors.dark,
   ),
   headlineSmall: TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 20,
+    color: AppColors.dark,
   ),
   titleLarge: TextStyle(
     fontWeight: FontWeight.w700,

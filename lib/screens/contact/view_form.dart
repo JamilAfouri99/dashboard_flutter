@@ -1,5 +1,6 @@
 import 'package:dashboard/configuration/image_constants.dart';
 import 'package:dashboard/configuration/theme.dart';
+import 'package:dashboard/helpers/index.dart';
 import 'package:dashboard/models/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,64 +34,86 @@ class ViewForm extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
-            'Alice Harding',
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
+            contact.name,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.grey[100],
-            ),
-            child: Text(
-              'Band',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[500],
-              ),
-            ),
-          ),
-          SizedBox(height: 16),
-          ListTile(
-            leading: Icon(Icons.work),
-            title: Text('Track Service Worker'),
-          ),
-          ListTile(
-            leading: Icon(Icons.business),
-            title: Text('Futurity'),
-          ),
-          ListTile(
-            leading: Icon(Icons.mail),
-            title: Text('aliceharding@mail.us'),
-            subtitle: Text('Personal'),
-            onTap: () {
-              // Add your email functionality here
-            },
+              width: double.infinity,
+              child: Wrap(
+                alignment: WrapAlignment.start,
+                children: [
+                  for (final category in contact.categories)
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.grey[100],
+                      ),
+                      child: Text(
+                        category,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                ],
+              )),
+          Divider(
+            height: 30,
+            color: AppColors.grey.withOpacity(0.3),
           ),
           ListTile(
-            leading: Icon(Icons.phone),
-            title: Text('+1 881 472 3113'),
-            subtitle: Text('Mobile'),
-          ),
-          ListTile(
-            leading: Icon(Icons.pin_drop_outlined),
-            title: Text('387 HoltCourt, Thomasville, Alaska, PO2867'),
-          ),
-          ListTile(
-            leading: Icon(Icons.cake_outlined),
-            title: Text('September 17, 1985'),
-          ),
-          ListTile(
-            leading: Icon(Icons.view_headline_rounded),
+            leading: const Icon(Icons.work_outline),
             title: Text(
-                'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.'),
+              contact.title,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.business),
+            title: Text(
+              contact.company,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.mail_outline_outlined),
+            title: Text(
+              contact.emails[0].email,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            subtitle: Text(contact.emails[0].label),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.phone_outlined),
+            title: Text(
+              formatPhoneNumber(contact.phones[0].phone),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            subtitle: Text(contact.phones[0].label),
+          ),
+          ListTile(
+            leading: const Icon(Icons.pin_drop_outlined),
+            title: Text(
+              contact.address,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.cake_outlined),
+            title: Text(
+              contact.birthday.ymd,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.view_headline_rounded),
+            title: Text(
+              contact.note,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/cubit/auth/auth_cubit.dart';
 import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/navigation/router_manager.dart';
+import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [CircularProgressIndicator()],
+              children: const [CustomProgressIndicator()],
             ),
           );
         },

@@ -18,6 +18,8 @@ dependencies:
   get_it: ^7.6.0
   flutter_dotenv: ^5.1.0
   flutter_svg: ^2.0.6
+  intl: ^0.18.1
+  image_picker: ^0.8.7+5
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +62,20 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/inter/Inter-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/inter/Inter-Thin.ttf
+          weight: 300
+        - asset: assets/fonts/inter/Inter-Light.ttf
+          weight: 400
+        - asset: assets/fonts/inter/Inter-Regular.ttf
+          weight: 500
+        - asset: assets/fonts/inter/Inter-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/inter/Inter-Bold.ttf
+          weight: 700
     - family: Roboto
       fonts:
         - asset: assets/fonts/roboto/Roboto-Thin.ttf
