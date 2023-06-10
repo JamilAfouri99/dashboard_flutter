@@ -153,7 +153,7 @@ Widget _contact(Contact contact, BuildContext context) => ListTile(
         style: Theme.of(context).textTheme.bodyLarge,
       ),
       subtitle: Text(
-        contact.position,
+        contact.title,
         style: Theme.of(context).textTheme.bodySmall,
       ),
       onTap: () => RouteManager.navigateToWithData(

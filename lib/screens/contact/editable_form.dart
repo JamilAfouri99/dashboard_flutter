@@ -1,26 +1,15 @@
-// TODO:
-// Implement image update
-// Implement category
-// implement phones
-
-import 'dart:async';
-import 'dart:io';
-import 'package:dashboard/configuration/theme.dart';
+import 'dart:typed_data';
 import 'package:dashboard/cubit/contact/contact_cubit.dart';
 import 'package:dashboard/cubit/contact/contact_state.dart';
+import 'package:dashboard/helpers/file_helper.dart';
 import 'package:dashboard/helpers/index.dart';
 import 'package:dashboard/configuration/index.dart';
 import 'package:dashboard/models/contact.dart';
 import 'package:dashboard/models/enums.dart';
-import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/contact/confirmation_dialog.dart';
-import 'package:dashboard/screens/contact/contact_screen.dart';
-import 'package:dashboard/screens/contacts/contacts.dart';
-import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
 
 class EditableForm extends StatefulWidget {
   final Contact? contact;
@@ -34,7 +23,7 @@ class EditableForm extends StatefulWidget {
 class _EditableFormState extends State<EditableForm> {
   final TextEditingController _imageController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  // final TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _companyController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -43,53 +32,61 @@ class _EditableFormState extends State<EditableForm> {
   List<TextEditingController> _emailControllers = [TextEditingController()];
   List<TextEditingController> _phoneControllers = [TextEditingController()];
 
-  List<Email> _emails = [];
-  List<Phone> _phones = [];
-
   @override
   void initState() {
     super.initState();
     if (widget.contact != null) {
       _imageController.text = widget.contact!.image;
       _nameController.text = widget.contact!.name;
-      // _categoryController.text = widget.contact!.categories; //TODO: implement this
       _titleController.text = widget.contact!.title;
       _companyController.text = widget.contact!.company;
       _addressController.text = widget.contact!.address;
       _birthdayController.text = widget.contact!.birthday.ymd;
       _noteController.text = widget.contact!.note;
+      _categoryController.text = widget.contact!.categories[0];
       _emailControllers = List<TextEditingController>.generate(
         widget.contact!.emails.length,
         (index) => TextEditingController(text: widget.contact!.emails[index].email),
       );
-      _emails = widget.contact!.emails;
       _phoneControllers = List<TextEditingController>.generate(
         widget.contact!.phones.length,
         (index) => TextEditingController(text: widget.contact!.phones[index].phone),
       );
-      _phones = widget.contact!.phones;
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    print('build run');
-    ImagePicker _imagePicker = ImagePicker();
-    String? _imagePath;
-
-    void _pickImage() async {
-      final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
-      if (pickedImage != null) {
-        _imagePath = pickedImage.path;
-      }
+  void dispose() {
+    super.dispose();
+    _imageController.dispose();
+    _nameController.dispose();
+    _titleController.dispose();
+    _companyController.dispose();
+    _addressController.dispose();
+    _birthdayController.dispose();
+    _noteController.dispose();
+    for (var controller in _emailControllers) {
+      controller.dispose();
     }
+    for (var controller in _phoneControllers) {
+      controller.dispose();
+    }
+  }
 
+  Uint8List? binaryImage;
+  Future<void> _pickImage() async {
+    binaryImage = await FileHelper.takePicture(context);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GestureDetector(
             onTap: () => _pickImage(),
@@ -106,14 +103,9 @@ class _EditableFormState extends State<EditableForm> {
                       color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                     ),
                   ),
-                  child: _imagePath != null
-                      ? Image.file(
-                          File(_imagePath!),
-                          fit: BoxFit.cover,
-                        )
-                      : widget.contact != null
-                          ? SvgPicture.asset(widget.contact!.image)
-                          : Container(),
+                  child: widget.contact != null && binaryImage != null
+                      ? Image.memory(binaryImage!)
+                      : SvgPicture.asset(ImageConstants.woman),
                 ),
                 Positioned(
                   bottom: 0,
@@ -142,12 +134,15 @@ class _EditableFormState extends State<EditableForm> {
               prefixIcon: Icon(Icons.person),
             ),
             controller: _nameController,
-            onChanged: (value) {
-              // Update the name field
-            },
           ),
-          const SizedBox(height: 8),
-          // const CategoryWidget(), //TODO: implement this category widget
+          const SizedBox(height: 16),
+          TextField(
+            decoration: const InputDecoration(
+              labelText: 'Category',
+              prefixIcon: Icon(Icons.category_outlined),
+            ),
+            controller: _categoryController,
+          ),
           const SizedBox(height: 16),
           TextField(
             decoration: const InputDecoration(
@@ -250,7 +245,7 @@ class _EditableFormState extends State<EditableForm> {
                         context: context,
                         builder: (context) => ConfirmationDialog(
                           action: ConfirmationDialogAction.cancel,
-                          contactId: widget.contact!.id,
+                          contactId: widget.contact != null ? widget.contact!.id : null,
                         ),
                       );
                     },
@@ -259,33 +254,62 @@ class _EditableFormState extends State<EditableForm> {
                   const SizedBox(width: 2),
                   ElevatedButton(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => ConfirmationDialog(
-                          action: ConfirmationDialogAction.add,
-                          contactId: widget.contact!.id,
-                          contact: Contact(
-                            id: generateSimpleId(),
-                            name: _nameController.text,
-                            position: _titleController.text,
-                            image: _imageController.text,
-                            categories: ['TODO'],
-                            title: _titleController.text,
-                            company: _companyController.text,
-                            emails: _emails,
-                            phones: _phones,
-                            address: _addressController.text,
-                            birthday: DateTime.now(),
-                            note: _noteController.text,
+                      if (widget.contact != null) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ConfirmationDialog(
+                            contactId: widget.contact!.id,
+                            action: ConfirmationDialogAction.update,
+                            contact: Contact(
+                              id: widget.contact!.id,
+                              name: _nameController.text,
+                              image: ImageConstants.woman,
+                              categories: [_categoryController.text],
+                              title: _titleController.text,
+                              company: _companyController.text,
+                              emails: _emailControllers
+                                  .map((email) => Email(email: email.text, label: ''))
+                                  .toList(),
+                              phones: _phoneControllers
+                                  .map((phone) => Phone(phone: phone.text, label: ''))
+                                  .toList(),
+                              address: _addressController.text,
+                              birthday: DateTime.now(),
+                              note: _noteController.text,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ConfirmationDialog(
+                            action: ConfirmationDialogAction.add,
+                            contact: Contact(
+                              id: generateSimpleId(),
+                              name: _nameController.text,
+                              image: ImageConstants.woman,
+                              categories: [_categoryController.text],
+                              title: _titleController.text,
+                              company: _companyController.text,
+                              emails: _emailControllers
+                                  .map((email) => Email(email: email.text, label: ''))
+                                  .toList(),
+                              phones: _phoneControllers
+                                  .map((phone) => Phone(phone: phone.text, label: ''))
+                                  .toList(),
+                              address: _addressController.text,
+                              birthday: DateTime.now(),
+                              note: _noteController.text,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: AppColors.light,
                       backgroundColor: AppColors.primary,
                     ),
-                    child: const Text('Save'),
+                    child: Text(widget.contact != null ? 'Update' : 'Save'),
                   ),
                 ],
               ),
@@ -299,51 +323,50 @@ class _EditableFormState extends State<EditableForm> {
   Widget emailsWidget() {
     return Column(
       children: [
-        for (int i = 0; i < _emails.length; i++) ...[
-          Row(
-            children: [
-              Expanded(
-                flex: 5,
-                child: TextField(
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                  controller: _emailControllers[i],
-                  onChanged: (value) {
-                    _emails[i].copyWith(email: value);
-                    setState(() {});
-                  },
-                ),
-              ),
-              if (_emails.length > 1)
-                Expanded(
-                  flex: 1,
-                  child: IconButton(
-                    onPressed: () {
-                      _emails.removeAt(i);
-                      _emailControllers.remove(_emailControllers[i]);
-                      setState(() {});
-                    },
-                    icon: const Icon(
-                      Icons.delete_outline_rounded,
-                      color: AppColors.onError,
+        ListView.builder(
+            shrinkWrap: true,
+            itemCount: _emailControllers.length,
+            itemBuilder: (context, i) {
+              return Column(children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          prefixIcon: Icon(Icons.email),
+                        ),
+                        controller: _emailControllers[i],
+                      ),
                     ),
-                  ),
-                )
-            ],
-          ),
-          if (_emails.length > 1) const SizedBox(height: 15),
-        ],
+                    if (_emailControllers.length > 1)
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _emailControllers.removeAt(i);
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.delete_outline_rounded,
+                            color: AppColors.onError,
+                          ),
+                        ),
+                      )
+                  ],
+                ),
+                if (_emailControllers.length > 1) const SizedBox(height: 15),
+              ]);
+            }),
         ListTile(
           title: const Text('Add an email address'),
           leading: const Icon(Icons.add_circle_rounded),
           onTap: () {
-            _emails.add(
-              Email(id: generateSimpleId(), email: '', label: ''),
-            );
-            _emailControllers.add(TextEditingController());
-            setState(() {});
+            setState(() {
+              _emailControllers.add(TextEditingController());
+            });
           },
         )
       ],
@@ -353,7 +376,7 @@ class _EditableFormState extends State<EditableForm> {
   Widget phonesWidget() {
     return Column(
       children: [
-        for (int i = 0; i < _phones.length; i++) ...[
+        for (int i = 0; i < _phoneControllers.length; i++) ...[
           Row(
             children: [
               Expanded(
@@ -364,20 +387,16 @@ class _EditableFormState extends State<EditableForm> {
                     prefixIcon: Icon(Icons.phone_outlined),
                   ),
                   controller: _phoneControllers[i],
-                  onChanged: (value) {
-                    _phones[i].copyWith(phone: value);
-                    setState(() {});
-                  },
                 ),
               ),
-              if (_phones.length > 1)
+              if (_phoneControllers.length > 1)
                 Expanded(
                   flex: 1,
                   child: IconButton(
                     onPressed: () {
-                      _phones.removeAt(i);
-                      _phoneControllers.remove(_phoneControllers[i]);
-                      setState(() {});
+                      setState(() {
+                        _phoneControllers.removeAt(i);
+                      });
                     },
                     icon: const Icon(
                       Icons.delete_outline_rounded,
@@ -387,74 +406,18 @@ class _EditableFormState extends State<EditableForm> {
                 )
             ],
           ),
-          if (_phones.length > 1) const SizedBox(height: 15),
+          if (_phoneControllers.length > 1) const SizedBox(height: 15),
         ],
         ListTile(
           title: const Text('Add a phone number'),
           leading: const Icon(Icons.add_circle_rounded),
           onTap: () {
-            _phones.add(
-              Phone(id: generateSimpleId(), phone: '', label: ''),
-            );
-            _phoneControllers.add(TextEditingController());
-            setState(() {});
+            setState(() {
+              _phoneControllers.add(TextEditingController());
+            });
           },
         )
       ],
     );
   }
-
-  void resetValues() {
-    _emails = [];
-    _imageController.text = '';
-    _nameController.text = '';
-    // _categoryController.text = '';
-    _titleController.text = '';
-    _companyController.text = '';
-    _addressController.text = '';
-    _birthdayController.text = '';
-    _noteController.text = '';
-    _emailControllers = [TextEditingController()];
-    _phoneControllers = [TextEditingController()];
-  }
-}
-
-Future<String?> confirmationDialog({
-  required BuildContext context,
-  required String title,
-  required ContactState state,
-  required Future<void> Function() onConfirm,
-}) {
-  final completer = Completer<String?>();
-
-  showDialog(
-    context: context,
-    builder: (_) {
-      return AlertDialog(
-        title: Text(title),
-        content: Text('Are you sure you want to ${title.toLowerCase()}?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              completer.complete(null); // Dialog canceled, complete with null
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              await onConfirm();
-              if (state is SuccessState) {
-                completer.complete('Confirmed'); // Dialog confirmed, complete with 'Confirmed'
-              } else {
-                completer.complete(null); // Dialog error
-              }
-            },
-            child: const Text('Confirm'),
-          ),
-        ],
-      );
-    },
-  );
-
-  return completer.future;
 }

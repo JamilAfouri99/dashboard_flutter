@@ -3,6 +3,7 @@ import 'package:dashboard/cubit/contact/contact_state.dart';
 import 'package:dashboard/models/contact.dart';
 import 'package:dashboard/models/enums.dart';
 import 'package:dashboard/navigation/router_manager.dart';
+import 'package:dashboard/screens/contact/contact_screen.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,8 +16,8 @@ class ConfirmationDialog extends StatelessWidget {
 
   const ConfirmationDialog({
     super.key,
+    this.contactId,
     required this.action,
-    required this.contactId,
     this.contact,
   });
 
@@ -37,10 +38,15 @@ class ConfirmationDialog extends StatelessWidget {
         message = 'Are you sure you want to add this contact?';
         buttonText = 'Add';
         break;
+      case ConfirmationDialogAction.update:
+        title = 'Confirm Update';
+        message = 'Are you sure you want to update this contact?';
+        buttonText = 'Update';
+        break;
       case ConfirmationDialogAction.cancel:
         title = 'Confirm Cancel';
         message = 'Are you sure you want to cancel?';
-        buttonText = 'Cancel';
+        buttonText = 'Confirm';
         break;
     }
 
@@ -78,6 +84,9 @@ class ConfirmationDialog extends StatelessWidget {
         break;
       case ConfirmationDialogAction.add:
         _addContact(context, contactCubit);
+        break;
+      case ConfirmationDialogAction.update:
+        _updateContact(context, contactCubit);
         break;
       case ConfirmationDialogAction.cancel:
         _cancelContact(context, contactCubit);
@@ -117,11 +126,32 @@ class ConfirmationDialog extends StatelessWidget {
     });
   }
 
+  void _updateContact(BuildContext context, ContactCubit contactCubit) {
+    if (contact == null) return;
+    contactCubit.updateContact(contact!).then((_) {
+      Navigator.pop(context);
+      RouteManager.navigateToWithData(
+        context,
+        () => ContactScreen(contact: contactCubit.contact),
+      );
+    }).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add contact: $error')),
+      );
+      Navigator.pop(context);
+    });
+  }
+
   void _cancelContact(BuildContext context, ContactCubit contactCubit) {
     Navigator.pop(context);
-    RouteManager.routerManagerPushUntil(
-      context: context,
-      routeName: RouteConstants.contacts,
-    );
+    contact != null
+        ? RouteManager.navigateToWithData(
+            context,
+            () => ContactScreen(contact: contact),
+          )
+        : RouteManager.routerManagerPushUntil(
+            context: context,
+            routeName: RouteConstants.contacts,
+          );
   }
 }

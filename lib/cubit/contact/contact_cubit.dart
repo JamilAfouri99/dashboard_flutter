@@ -8,7 +8,6 @@ class ContactCubit extends Cubit<ContactState> {
 
   bool isEditable = false;
   Contact? contact;
-  List<Email> emails = [];
 
   Future<void> fetch(String contactId) async {
     emit(LoadingState());
@@ -16,7 +15,6 @@ class ContactCubit extends Cubit<ContactState> {
       await Future.delayed(const Duration(seconds: 1));
       final Contact currentContact =
           dummyContacts.singleWhere((contact) => contact.id == contactId);
-      emails = currentContact.emails;
       contact = currentContact;
       emit(SuccessState(contact));
     } catch (error) {
@@ -28,20 +26,6 @@ class ContactCubit extends Cubit<ContactState> {
     emit(LoadingState());
     await Future.delayed(const Duration(milliseconds: 500), () => isEditable = editable);
     emit(SuccessState(null));
-  }
-
-  void manageEmails(Email email, {bool isRemove = false}) {
-    if (isRemove) {
-      emails.remove(email);
-    } else {
-      int index = emails.indexWhere((existingEmail) => existingEmail.id == email.id);
-      if (index != -1) {
-        emails[index] = email; // Update the email
-      } else {
-        emails.add(email); // Add email
-      }
-    }
-    emit(SuccessState(contact!.copyWith(emails: emails)));
   }
 
   Contact? getContactById(String contactId) {
@@ -66,5 +50,33 @@ class ContactCubit extends Cubit<ContactState> {
     await Future.delayed(const Duration(milliseconds: 500));
     dummyContacts.add(newContact);
     emit(SuccessState(null));
+  }
+
+  Future<void> updateContact(Contact updatedContact) async {
+    print(updatedContact.emails);
+    emit(LoadingState());
+    await Future.delayed(const Duration(milliseconds: 500));
+    int? index = dummyContacts.indexWhere(
+      (contact) => contact.id == updatedContact.id,
+    );
+    if (index == -1) {
+      return emit(FailedState('Fetching updated contact from dummy contacts failed'));
+    }
+
+    dummyContacts[index] = Contact(
+      id: updatedContact.id,
+      name: updatedContact.name,
+      image: updatedContact.image,
+      categories: updatedContact.categories,
+      title: updatedContact.title,
+      company: updatedContact.company,
+      emails: updatedContact.emails,
+      phones: updatedContact.phones,
+      address: updatedContact.address,
+      birthday: updatedContact.birthday,
+      note: updatedContact.note,
+    );
+    contact = dummyContacts[index];
+    emit(SuccessState(dummyContacts[index]));
   }
 }

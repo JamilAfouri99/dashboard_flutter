@@ -14,6 +14,8 @@ class ViewForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -40,21 +42,22 @@ class ViewForm extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 8),
-          Container(
+          SizedBox(
               width: double.infinity,
               child: Wrap(
-                alignment: WrapAlignment.start,
+                alignment: WrapAlignment.center,
                 children: [
                   for (final category in contact.categories)
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         color: Colors.grey[100],
                       ),
                       child: Text(
                         category,
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style:
+                            Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.grey),
                       ),
                     ),
                 ],
@@ -77,23 +80,8 @@ class ViewForm extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.mail_outline_outlined),
-            title: Text(
-              contact.emails[0].email,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            subtitle: Text(contact.emails[0].label),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.phone_outlined),
-            title: Text(
-              formatPhoneNumber(contact.phones[0].phone),
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            subtitle: Text(contact.phones[0].label),
-          ),
+          _emailsWidget(context),
+          _phonesWidget(context),
           ListTile(
             leading: const Icon(Icons.pin_drop_outlined),
             title: Text(
@@ -116,6 +104,51 @@ class ViewForm extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _emailsWidget(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: ListTile(
+        leading: const Icon(Icons.mail_outline_outlined),
+        // subtitle: Text(email.label),
+        title: DropdownButton<String>(
+          value: contact.emails[0].email,
+          isDense: false,
+          onChanged: (_) {},
+          items: contact.emails.map<DropdownMenuItem<String>>((Email value) {
+            return DropdownMenuItem<String>(
+              value: value.email,
+              child: Text(
+                value.email,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget _phonesWidget(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: ListTile(
+        leading: const Icon(Icons.phone_outlined),
+        // subtitle: Text(phone.label),
+        title: DropdownButton<String>(
+          onChanged: (_) {},
+          value: contact.phones[0].phone,
+          items: contact.phones.map<DropdownMenuItem<String>>((Phone value) {
+            return DropdownMenuItem<String>(
+              value: value.phone,
+              child: Text(
+                value.phone,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

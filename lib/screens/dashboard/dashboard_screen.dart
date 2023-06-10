@@ -8,7 +8,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: appBar,
-        body: Column(
+        body: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Center(

@@ -21,32 +21,38 @@ class ContactScreen extends StatelessWidget {
         if (contact != null) return ContactCubit()..fetch(contact!.id);
         return ContactCubit();
       },
-      child: SafeArea(
-        child: BlocConsumer<ContactCubit, ContactState>(listener: (context, state) {
-          if (state is FailedState) {
-            CustomSnackbar.show(context, state.reason.toString());
-          }
-        }, builder: (context, state) {
-          final isEditable = context.read<ContactCubit>().isEditable;
-          return Scaffold(
-            backgroundColor: AppColors.light,
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text(
-                contact == null
-                    ? 'New Contact'
-                    : isEditable
-                        ? 'Update Contact'
-                        : 'Profile',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+      child: BlocConsumer<ContactCubit, ContactState>(listener: (context, state) {
+        if (state is FailedState) {
+          CustomSnackbar.show(context, state.reason.toString());
+        }
+      }, builder: (context, state) {
+        final isEditable = context.read<ContactCubit>().isEditable;
+        return Scaffold(
+          backgroundColor: AppColors.light,
+          appBar: AppBar(
+            automaticallyImplyLeading: isEditable || contact == null ? false : true,
+            centerTitle: true,
+            title: Text(
+              contact == null
+                  ? 'New Contact'
+                  : isEditable
+                      ? 'Update Contact'
+                      : 'Profile',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            floatingActionButton:
-                contact != null && !isEditable ? _floatingActionButton(context) : null,
-            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            body: state is LoadingState
-                ? const Center(child: CustomProgressIndicator())
-                : SingleChildScrollView(
+          ),
+          floatingActionButton: contact != null && !isEditable && state is! LoadingState
+              ? _floatingActionButton(context)
+              : null,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          body: state is LoadingState
+              ? const Center(child: CustomProgressIndicator())
+              : RefreshIndicator(
+                  onRefresh: () {
+                    if (contact != null) return context.read<ContactCubit>().fetch(contact!.id);
+                    return Future(() => null);
+                  },
+                  child: SingleChildScrollView(
                     child: Column(
                       children: [
                         isEditable || contact == null
@@ -55,9 +61,9 @@ class ContactScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-          );
-        }),
-      ),
+                ),
+        );
+      }),
     );
   }
 
