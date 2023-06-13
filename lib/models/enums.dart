@@ -4,3 +4,8 @@ enum ConfirmationDialogAction {
   update,
   cancel,
 }
+
+enum Token {
+  access,
+  refresh,
+}

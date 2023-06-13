@@ -1,26 +1,26 @@
-import 'package:dashboard/configuration/theme.dart';
-import 'package:dashboard/cubit/contacts/contacts_cubit.dart';
-import 'package:dashboard/cubit/contacts/contacts_state.dart';
+import 'package:dashboard/configuration/index.dart';
+import 'package:dashboard/cubit/users/users_cubit.dart';
+import 'package:dashboard/cubit/users/users_state.dart';
 import 'package:dashboard/helpers/groupe_by_first_letter.dart';
 import 'package:dashboard/helpers/sort_map_by_keys.dart';
-import 'package:dashboard/models/contact.dart';
+import 'package:dashboard/models/user.dart';
 import 'package:dashboard/navigation/router_manager.dart';
-import 'package:dashboard/screens/contact/contact_screen.dart';
+import 'package:dashboard/screens/user/user_screen.dart';
 import 'package:dashboard/widgets/app_bar.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ContactsScreen extends StatelessWidget {
-  ContactsScreen({super.key});
+class UsersScreen extends StatelessWidget {
+  UsersScreen({super.key});
 
   final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ContactsCubit>(
-      create: (context) => ContactsCubit()..fetch(),
+    return BlocProvider<UsersCubit>(
+      create: (context) => UsersCubit()..fetch(),
       child: Scaffold(
         appBar: appBar,
         floatingActionButton: _floatingActionButton(context),
@@ -43,11 +43,11 @@ class ContactsScreen extends StatelessWidget {
                       color: AppColors.grey.withOpacity(0.5),
                     ),
                   ),
-                  BlocBuilder<ContactsCubit, ContactsState>(
+                  BlocBuilder<UsersCubit, UsersState>(
                     builder: (context, state) => Expanded(
                       child: TextField(
                         controller: _searchController,
-                        onChanged: (value) => context.read<ContactsCubit>().searchContacts(value),
+                        onChanged: (value) => context.read<UsersCubit>().searchUsers(value),
                         decoration: InputDecoration(
                           hintText: 'Search contacts',
                           border: InputBorder.none,
@@ -61,17 +61,22 @@ class ContactsScreen extends StatelessWidget {
             ),
             // List of contacts
             Expanded(
-              child: BlocBuilder<ContactsCubit, ContactsState>(
+              child: BlocBuilder<UsersCubit, UsersState>(
                 builder: (context, state) {
                   if (state is FailedState) {
-                    RefreshIndicator(
-                      onRefresh: () => context.read<ContactsCubit>().fetch(),
-                      child: Text(state.reason.toString()),
+                    return RefreshIndicator(
+                      onRefresh: () => context.read<UsersCubit>().fetch(),
+                      child: Center(
+                        child: Text(
+                          state.reason.toString(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     );
                   } else if (state is SuccessState) {
                     return RefreshIndicator(
-                      onRefresh: () => context.read<ContactsCubit>().fetch(),
-                      child: _contacts(state.contacts, context),
+                      onRefresh: () => context.read<UsersCubit>().fetch(),
+                      child: _users(state.users, context),
                     );
                   }
                   return const Center(child: CustomProgressIndicator());
@@ -85,8 +90,8 @@ class ContactsScreen extends StatelessWidget {
   }
 }
 
-Widget _contacts(List<Contact> contacts, BuildContext context) {
-  if (contacts.isEmpty) {
+Widget _users(List<User> users, BuildContext context) {
+  if (users.isEmpty) {
     return Center(
       child: Text(
         'No contacts found',
@@ -95,9 +100,9 @@ Widget _contacts(List<Contact> contacts, BuildContext context) {
     );
   }
 
-  final Map<String, List<Contact>> groupedContacts =
-      groupByFirstLetter(contacts, (contact) => contact.name[0].toUpperCase());
-  final Map<String, List<Contact>> sortedContracts = sortMapByKeys(groupedContacts);
+  final Map<String, List<User>> groupedContacts =
+      groupByFirstLetter(users, (contact) => contact.firstName![0].toUpperCase());
+  final Map<String, List<User>> sortedContracts = sortMapByKeys(groupedContacts);
 
   return ListView(
     children: sortedContracts.keys.map((letter) {
@@ -130,7 +135,7 @@ Widget _contacts(List<Contact> contacts, BuildContext context) {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: groupContacts.length,
             itemBuilder: (context, index) {
-              return _contact(groupContacts[index], context);
+              return _user(groupContacts[index], context);
             },
           ),
         ],
@@ -139,34 +144,35 @@ Widget _contacts(List<Contact> contacts, BuildContext context) {
   );
 }
 
-Widget _contact(Contact contact, BuildContext context) => ListTile(
+Widget _user(User user, BuildContext context) => ListTile(
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(50.0),
         child: SvgPicture.asset(
-          contact.image,
+          user.avatar ?? ImageConstants.woman,
           width: 50.0,
           height: 50.0,
         ),
       ),
       title: Text(
-        contact.name,
+        user.firstName ?? '',
         style: Theme.of(context).textTheme.bodyLarge,
       ),
       subtitle: Text(
-        contact.title,
+        user.role ?? '',
         style: Theme.of(context).textTheme.bodySmall,
       ),
-      onTap: () => RouteManager.navigateToWithData(
-        context,
-        () => ContactScreen(contact: contact),
-      ),
+      // onTap: () => RouteManager.navigateToWithData(
+      //   context,
+      //   () => UserScreen(user: user),
+      // ),
+      onTap: () {},
     );
 
 FloatingActionButton _floatingActionButton(BuildContext context) => FloatingActionButton(
       backgroundColor: AppColors.primary,
       onPressed: () => RouteManager.navigateToWithData(
         context,
-        () => const ContactScreen(),
+        () => const UserScreen(),
       ),
       child: const Icon(Icons.add),
     );

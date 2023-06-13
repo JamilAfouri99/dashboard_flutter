@@ -1,19 +1,19 @@
-import 'package:dashboard/cubit/contact/contact_state.dart';
+import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/mocks/contacts.dart';
 import 'package:dashboard/models/contact.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ContactCubit extends Cubit<ContactState> {
-  ContactCubit() : super(UnknownState());
+class UserCubit extends Cubit<UserState> {
+  UserCubit() : super(UnknownState());
 
   bool isEditable = false;
-  Contact? contact;
+  DummyUser? contact;
 
   Future<void> fetch(String contactId) async {
     emit(LoadingState());
     try {
       await Future.delayed(const Duration(seconds: 1));
-      final Contact currentContact =
+      final DummyUser currentContact =
           dummyContacts.singleWhere((contact) => contact.id == contactId);
       contact = currentContact;
       emit(SuccessState(contact));
@@ -28,15 +28,15 @@ class ContactCubit extends Cubit<ContactState> {
     emit(SuccessState(null));
   }
 
-  Contact? getContactById(String contactId) {
+  DummyUser? getUserById(String contactId) {
     return dummyContacts.firstWhere((contact) => contact.id == contactId);
   }
 
-  Future<void> deleteContact(String contactId) async {
+  Future<void> deleteUser(String contactId) async {
     emit(LoadingState());
     try {
       await Future.delayed(const Duration(milliseconds: 500));
-      Contact? toBeDeletedContact = getContactById(contactId);
+      DummyUser? toBeDeletedContact = getUserById(contactId);
       if (toBeDeletedContact == null) throw 'Unreachable contact';
       dummyContacts.remove(toBeDeletedContact);
       emit(SuccessState(null));
@@ -45,14 +45,14 @@ class ContactCubit extends Cubit<ContactState> {
     }
   }
 
-  Future<void> addNewContact(Contact newContact) async {
+  Future<void> addNewUser(DummyUser newContact) async {
     emit(LoadingState());
     await Future.delayed(const Duration(milliseconds: 500));
     dummyContacts.add(newContact);
     emit(SuccessState(null));
   }
 
-  Future<void> updateContact(Contact updatedContact) async {
+  Future<void> updateUser(DummyUser updatedContact) async {
     print(updatedContact.emails);
     emit(LoadingState());
     await Future.delayed(const Duration(milliseconds: 500));
@@ -63,7 +63,7 @@ class ContactCubit extends Cubit<ContactState> {
       return emit(FailedState('Fetching updated contact from dummy contacts failed'));
     }
 
-    dummyContacts[index] = Contact(
+    dummyContacts[index] = DummyUser(
       id: updatedContact.id,
       name: updatedContact.name,
       image: updatedContact.image,

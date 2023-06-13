@@ -1,4 +1,4 @@
-import 'package:dashboard/models/token.dart';
+import 'package:dashboard/models/tokens.dart';
 
 abstract class AuthState {}
 
@@ -7,8 +7,13 @@ class UnknownAuthState extends AuthState {}
 class AuthenticatingState extends AuthState {}
 
 class AuthenticatedState extends AuthState {
-  final Token token;
-  AuthenticatedState(this.token);
+  final AccessToken accessToken;
+  final RefreshToken refreshToken;
+
+  AuthenticatedState({
+    required this.accessToken,
+    required this.refreshToken,
+  });
 }
 
 class UnauthenticatedState extends AuthState {}

@@ -1,18 +1,18 @@
 import 'dart:typed_data';
-import 'package:dashboard/cubit/contact/contact_cubit.dart';
-import 'package:dashboard/cubit/contact/contact_state.dart';
+import 'package:dashboard/cubit/user/user_cubit.dart';
+import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/helpers/file_helper.dart';
 import 'package:dashboard/helpers/index.dart';
 import 'package:dashboard/configuration/index.dart';
 import 'package:dashboard/models/contact.dart';
 import 'package:dashboard/models/enums.dart';
-import 'package:dashboard/screens/contact/confirmation_dialog.dart';
+import 'package:dashboard/screens/user/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class EditableForm extends StatefulWidget {
-  final Contact? contact;
+  final DummyUser? contact;
 
   const EditableForm({Key? key, this.contact}) : super(key: key);
 
@@ -212,7 +212,7 @@ class _EditableFormState extends State<EditableForm> {
             keyboardType: TextInputType.multiline,
           ),
           const SizedBox(height: 24),
-          BlocBuilder<ContactCubit, ContactState>(builder: (context, state) {
+          BlocBuilder<UserCubit, UserState>(builder: (context, state) {
             return Container(
               margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.symmetric(horizontal: 6),
@@ -260,7 +260,7 @@ class _EditableFormState extends State<EditableForm> {
                           builder: (context) => ConfirmationDialog(
                             contactId: widget.contact!.id,
                             action: ConfirmationDialogAction.update,
-                            contact: Contact(
+                            contact: DummyUser(
                               id: widget.contact!.id,
                               name: _nameController.text,
                               image: ImageConstants.woman,
@@ -284,7 +284,7 @@ class _EditableFormState extends State<EditableForm> {
                           context: context,
                           builder: (context) => ConfirmationDialog(
                             action: ConfirmationDialogAction.add,
-                            contact: Contact(
+                            contact: DummyUser(
                               id: generateSimpleId(),
                               name: _nameController.text,
                               image: ImageConstants.woman,

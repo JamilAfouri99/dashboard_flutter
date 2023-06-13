@@ -1,47 +1,97 @@
 import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/models/token.dart';
-import 'package:dashboard/models/user.dart';
+import 'package:dashboard/models/sign_in.dart';
+import 'package:dashboard/models/tokens.dart';
+import 'package:dashboard/models/sign_up.dart';
+import 'package:dashboard/models/logged_in_user.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/repositories/token.dart';
+import 'package:dashboard/services/api/auth_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final makeRepository = TokenRepository.make();
-  TokenRepository? repository;
+  final makeRepository = TokensRepository.make();
+  final AuthApi authApi;
+  TokensRepository? repository;
 
-  AuthCubit() : super(UnknownAuthState());
+  AuthCubit()
+      : authApi = AuthApi(),
+        super(UnknownAuthState());
 
-  Future<void> checkToken() async {
+  // call in splash screen
+  Future<void> checkAccessToken() async {
     emit(AuthenticatingState());
 
     try {
       final repository = await makeRepository;
-      final Token? token = await repository.getToken();
+      final AccessToken? accessToken = await repository.getAccessToken();
 
-      await Future.delayed(const Duration(seconds: 2));
+      if (accessToken == null) {
+        return checkRefreshToken();
+      }
 
-      token != null ? emit(AuthenticatedState(token)) : emit(UnauthenticatedState());
+      LoggedInUser response = await authApi.accessToken();
+      await repository.setTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+
+      emit(AuthenticatedState(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      ));
     } catch (e) {
       emit(AuthenticationFailed(e));
     }
   }
 
-  Future<void> login(String email, String password) async {
+  // call when I got 401 to generate new tokens (access - refresh)
+  Future<void> checkRefreshToken() async {
     emit(AuthenticatingState());
 
     try {
-      final response = await Future.delayed(const Duration(seconds: 2),
-          () => {'user': User(email: email, password: password), 'token': 'foo'});
+      final repository = await makeRepository;
+      final RefreshToken? refreshToken = await repository.getRefreshToken();
 
-      final user = response['user'];
-      print(user);
-      final token = Token(response['token'].toString());
+      if (refreshToken == null) {
+        emit(UnauthenticatedState());
+        // logout(context); //FIXME: complete this part
+        return;
+      }
+
+      LoggedInUser response = await authApi.accessToken();
+      await repository.setTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+
+      AuthenticatedState(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+    } catch (e) {
+      emit(AuthenticationFailed(e));
+    }
+  }
+
+  Future<void> signIn(String email, String password) async {
+    emit(AuthenticatingState());
+
+    try {
+      final response = await authApi.signIn(SignIn(email: email, password: password));
 
       repository = await makeRepository;
-      await repository?.setToken(token);
+      await repository?.setTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
 
-      emit(AuthenticatedState(token));
+      //TODO: store the user information
+
+      emit(AuthenticatedState(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      ));
     } catch (e) {
       emit(AuthenticationFailed(e));
     }
@@ -51,13 +101,20 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthenticatingState());
 
     try {
-      await Future.delayed(const Duration(seconds: 2));
-      final user = User(email: email, password: password);
-      print(user);
-      // call the endpoint
-      final token = Token('foo');
+      final response = await authApi.signUp(SignUp(email: email, password: password));
 
-      emit(AuthenticatedState(token));
+      repository = await makeRepository;
+      await repository?.setTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+
+      //TODO: store the user information
+
+      emit(AuthenticatedState(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      ));
     } catch (e) {
       emit(AuthenticationFailed(e));
     }
@@ -68,8 +125,9 @@ class AuthCubit extends Cubit<AuthState> {
     RouteManager.routerManagerPushUntil(routeName: RouteConstants.splash, context: context);
 
     repository = await makeRepository;
-    await repository?.removeToken();
+    await repository?.removeTokens();
     repository = null;
+    // call the endpoint
 
     await Future.delayed(const Duration(seconds: 2));
 

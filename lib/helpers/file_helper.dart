@@ -20,5 +20,6 @@ class FileHelper {
         type: SnackbarType.error,
       );
     }
+    return null;
   }
 }

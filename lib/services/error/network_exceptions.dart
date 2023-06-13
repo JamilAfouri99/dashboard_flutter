@@ -1,119 +1,130 @@
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:dashboard/services/navigation_service.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 BuildContext context = NavigationService.navigatorKey.currentState!.context;
 
 abstract class NetworkExceptions {
-  static Future<String> getDioException(error) async {
-    if (error is Exception) {
-      try {
-        String networkExceptions;
-        if (error is DioError) {
-          switch (error.type) {
-            case DioErrorType.cancel:
-              networkExceptions = requestCancelled();
-              break;
-            case DioErrorType.connectionTimeout:
-              networkExceptions = requestTimeout();
-              break;
-            // case DioErrorType.other:
-            //   networkExceptions = noInternetConnection();
-            //   break;
-            case DioErrorType.receiveTimeout:
-              networkExceptions = sendTimeout();
-              break;
-            // case DioErrorType.response:
-            //   switch (error.response!.statusCode) {
-            //     case 400:
-            //       networkExceptions = error.response!.data['message'] != null
-            //           ? error.response!.data['message'] as String
-            //           : badRequest();
-            //       break;
-            //     case 401:
-            //       return 'Authentication failed.';
-            //     case 403:
-            //       return 'The authenticated user is not allowed to access the specified API endpoint.';
-            //     case 404:
-            //       networkExceptions = error.response!.data['message'] != null
-            //           ? error.response!.data['message'] as String
-            //           : notFound('The requested resource does not exist');
-            //       break;
-            //     case 405:
-            //       networkExceptions = error.response!.data['message'] != null
-            //           ? error.response!.data['message'] as String
-            //           : notFound('Method not Allowed');
-            //       break;
-            //     case 409:
-            //       networkExceptions = error.response!.data['message'] != null
-            //           ? error.response!.data['message'] as String
-            //           : conflict();
-            //       break;
-            //     case 408:
-            //       networkExceptions = error.response!.data['message'] != null
-            //           ? error.response!.data['message'] as String
-            //           : requestTimeout();
-            //       break;
-            //     case 422:
-            //       networkExceptions = error.response!.data['message'] != null
-            //           ? error.response!.data['message'] as String
-            //           : 'Data validation failed';
-            //       break;
-            //     case 500:
-            //       networkExceptions = error.response!.data['message'] != null
-            //           ? error.response!.data['message'] as String
-            //           : internalServerError();
-            //       break;
-            //     case 503:
-            //       networkExceptions = error.response!.data['message'] != null
-            //           ? error.response!.data['message'] as String
-            //           : serviceUnavailable();
-            //       break;
-            //     default:
-            //       var responseCode = error.response!.statusCode;
-            //       networkExceptions = error.response!.data['message'] != null
-            //           ? error.response!.data['message'] as String
-            //           : defaultError(
-            //               'Received invalid status code: $responseCode',
-            //             );
-            //   }
-            //   break;
-            case DioErrorType.sendTimeout:
-              networkExceptions = sendTimeout();
-              break;
-            case DioErrorType.badCertificate:
-              // TODO: Handle this case.
-              break;
-            case DioErrorType.badResponse:
-              // TODO: Handle this case.
-              break;
-            case DioErrorType.connectionError:
-              // TODO: Handle this case.
-              break;
-            case DioErrorType.unknown:
-              // TODO: Handle this case.
-              break;
-          }
-        } else if (error is SocketException) {
-          networkExceptions = noInternetConnection();
-        } else {
-          networkExceptions = unexpectedError();
-        }
-        networkExceptions = '';
-        return networkExceptions;
-      } on FormatException catch (_) {
-        return formatException();
-      } catch (_) {
-        return unexpectedError();
-      }
-    } else {
-      if (error.toString().contains('is not a subtype of')) {
-        return unableToProcess();
+  static String getHttpException(dynamic error) {
+    try {
+      if (error is http.ClientException) {
+        return _handleClientException(error);
+      } else if (error is SocketException) {
+        return _handleSocketException(error);
+      } else if (error is http.Response) {
+        return _handleHttpResponse(error);
       } else {
-        return unexpectedError();
+        return _handleUnexpectedError();
+      }
+    } on FormatException catch (_) {
+      return _handleFormatException();
+    } catch (_) {
+      return _handleUnexpectedError();
+    }
+  }
+
+  static String _handleClientException(http.ClientException error) {
+    return noInternetConnection();
+  }
+
+  static String _handleSocketException(SocketException error) {
+    return error.osError!.message.toString();
+  }
+
+  static String _handleHttpResponse(http.Response response) {
+    switch (response.statusCode) {
+      case 400:
+        return _handleBadRequest(response);
+      case 401:
+        return 'Authentication failed.';
+      case 403:
+        return _handleNotAllowed(response);
+      case 404:
+        return _handleNotFound(response);
+      case 405:
+        return _handleMethodNotAllowed(response);
+      case 409:
+        return _handleConflict(response);
+      case 408:
+        return requestTimeout();
+      case 422:
+        return _handleDataValidationFailed(response);
+      case 500:
+        return _handleInternalServerError(response);
+      case 503:
+        return serviceUnavailable();
+      default:
+        return _handleDefaultError(response);
+    }
+  }
+
+  static String _handleBadRequest(http.Response response) {
+    final decodedBody = jsonDecode(response.body);
+    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+      final message = decodedBody['message'];
+      if (message is List<dynamic> && message.isNotEmpty) {
+        return message[0] as String;
       }
     }
+    return 'Bad request';
+  }
+
+  static String _handleNotFound(http.Response response) {
+    final message = response.body.isNotEmpty
+        ? response.body as String
+        : 'The requested resource does not exist';
+    return notFound(message);
+  }
+
+  static String _handleMethodNotAllowed(http.Response response) {
+    final message = response.body.isNotEmpty ? response.body as String : 'Method not Allowed';
+    return notFound(message);
+  }
+
+  static String _handleConflict(http.Response response) {
+    final message = response.body.isNotEmpty ? response.body as String : conflict();
+    return message;
+  }
+
+  static String _handleDataValidationFailed(http.Response response) {
+    final message = response.body.isNotEmpty ? response.body as String : 'Data validation failed';
+    return message;
+  }
+
+  static String _handleInternalServerError(http.Response response) {
+    final message = response.body.isNotEmpty ? response.body as String : internalServerError();
+    return message;
+  }
+
+  static String _handleDefaultError(http.Response response) {
+    final responseCode = response.statusCode;
+    final message = response.body.isNotEmpty
+        ? response.body as String
+        : defaultError('Received invalid status code: $responseCode');
+    return message;
+  }
+
+  static String _handleNotAllowed(http.Response response) {
+    final decodedBody = jsonDecode(response.body);
+    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+      final message = decodedBody['message'];
+      if (message is String) {
+        return message;
+      }
+    }
+
+    return 'The authenticated user is not allowed to access the specified API endpoint.';
+  }
+
+  static String _handleUnexpectedError() {
+    return unexpectedError();
+  }
+
+  static String _handleFormatException() {
+    return formatException();
   }
 
   static String notImplemented() {
@@ -134,10 +145,6 @@ abstract class NetworkExceptions {
 
   static String serviceUnavailable() {
     return 'Service unavailable';
-  }
-
-  static String methodNotAllowed() {
-    return 'Method Allowed';
   }
 
   static String badRequest() {

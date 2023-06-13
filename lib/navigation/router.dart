@@ -2,10 +2,10 @@ import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/models/contact.dart';
 import 'package:dashboard/screens/auth/login_screen.dart';
 import 'package:dashboard/screens/auth/signup_screen.dart';
-import 'package:dashboard/screens/contact/contact_screen.dart';
-import 'package:dashboard/screens/contacts/contacts.dart';
 import 'package:dashboard/screens/dashboard/dashboard_screen.dart';
 import 'package:dashboard/screens/splash/splash_screen.dart';
+import 'package:dashboard/screens/user/user_screen.dart';
+import 'package:dashboard/screens/users/users.dart';
 import 'package:flutter/material.dart';
 
 class Router {
@@ -19,12 +19,12 @@ class Router {
         return MaterialPageRoute(builder: (_) => SignUpScreen(), settings: settings);
       case RouteConstants.home:
         return MaterialPageRoute(builder: (_) => const DashboardScreen(), settings: settings);
-      case RouteConstants.contacts:
-        return MaterialPageRoute(builder: (_) => ContactsScreen(), settings: settings);
-      case RouteConstants.contact:
-        final contact = settings.arguments as Contact;
+      case RouteConstants.users:
+        return MaterialPageRoute(builder: (_) => UsersScreen(), settings: settings);
+      case RouteConstants.user:
+        final user = settings.arguments as DummyUser;
         return MaterialPageRoute(
-          builder: (_) => ContactScreen(contact: contact),
+          builder: (_) => UserScreen(user: user),
           settings: settings,
         );
 

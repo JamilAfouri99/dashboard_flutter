@@ -1,39 +1,39 @@
 import 'package:dashboard/configuration/theme.dart';
-import 'package:dashboard/cubit/contact/contact_cubit.dart';
-import 'package:dashboard/cubit/contact/contact_state.dart';
+import 'package:dashboard/cubit/user/user_cubit.dart';
+import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/models/contact.dart';
-import 'package:dashboard/screens/contact/editable_form.dart';
-import 'package:dashboard/screens/contact/view_form.dart';
+import 'package:dashboard/screens/user/editable_form.dart';
+import 'package:dashboard/screens/user/view_form.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ContactScreen extends StatelessWidget {
-  final Contact? contact;
+class UserScreen extends StatelessWidget {
+  final DummyUser? user;
 
-  const ContactScreen({super.key, this.contact});
+  const UserScreen({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ContactCubit>(
+    return BlocProvider<UserCubit>(
       create: (context) {
-        if (contact != null) return ContactCubit()..fetch(contact!.id);
-        return ContactCubit();
+        if (user != null) return UserCubit()..fetch(user!.id);
+        return UserCubit();
       },
-      child: BlocConsumer<ContactCubit, ContactState>(listener: (context, state) {
+      child: BlocConsumer<UserCubit, UserState>(listener: (context, state) {
         if (state is FailedState) {
           CustomSnackbar.show(context, state.reason.toString());
         }
       }, builder: (context, state) {
-        final isEditable = context.read<ContactCubit>().isEditable;
+        final isEditable = context.read<UserCubit>().isEditable;
         return Scaffold(
           backgroundColor: AppColors.light,
           appBar: AppBar(
-            automaticallyImplyLeading: isEditable || contact == null ? false : true,
+            automaticallyImplyLeading: isEditable || user == null ? false : true,
             centerTitle: true,
             title: Text(
-              contact == null
+              user == null
                   ? 'New Contact'
                   : isEditable
                       ? 'Update Contact'
@@ -41,7 +41,7 @@ class ContactScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          floatingActionButton: contact != null && !isEditable && state is! LoadingState
+          floatingActionButton: user != null && !isEditable && state is! LoadingState
               ? _floatingActionButton(context)
               : null,
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -49,15 +49,15 @@ class ContactScreen extends StatelessWidget {
               ? const Center(child: CustomProgressIndicator())
               : RefreshIndicator(
                   onRefresh: () {
-                    if (contact != null) return context.read<ContactCubit>().fetch(contact!.id);
+                    if (user != null) return context.read<UserCubit>().fetch(user!.id);
                     return Future(() => null);
                   },
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        isEditable || contact == null
-                            ? EditableForm(contact: contact)
-                            : ViewForm(contact: contact!),
+                        isEditable || user == null
+                            ? EditableForm(contact: user)
+                            : ViewForm(contact: user!),
                       ],
                     ),
                   ),
@@ -68,7 +68,7 @@ class ContactScreen extends StatelessWidget {
   }
 
   FloatingActionButton _floatingActionButton(BuildContext context) {
-    final ContactCubit bloc = context.read<ContactCubit>();
+    final UserCubit bloc = context.read<UserCubit>();
     return FloatingActionButton(
       backgroundColor: AppColors.primary,
       onPressed: () => bloc.isEditableHandler(true),

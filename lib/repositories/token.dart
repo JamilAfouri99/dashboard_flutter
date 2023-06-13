@@ -1,30 +1,49 @@
-import 'package:dashboard/models/token.dart';
+import 'package:dashboard/models/tokens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TokenRepository {
-  static Future<TokenRepository> make() async {
+class TokensRepository {
+  static Future<TokensRepository> make() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return TokenRepository(prefs);
+    return TokensRepository(prefs);
   }
 
-  final SharedPreferences tokenStorage;
-  TokenRepository(this.tokenStorage);
+  final SharedPreferences tokensStorage;
+  TokensRepository(this.tokensStorage);
 
-  Future<Token?> getToken() async {
-    final value = tokenStorage.getString('token');
+  Future<AccessToken?> getAccessToken() async {
+    final value = tokensStorage.getString('accessToken');
     if (value == null) {
       return null;
     }
-    return Token(value);
+    print(value);
+    return AccessToken(value);
   }
 
-  Future<void> setToken(Token token) async {
-    await tokenStorage.setString('token', token.token);
-  }
-
-  Future<void> removeToken() async {
-    if (tokenStorage.containsKey('token')) {
-      await tokenStorage.clear();
+  Future<RefreshToken?> getRefreshToken() async {
+    final value = tokensStorage.getString('refreshToken');
+    if (value == null) {
+      return null;
     }
+    return RefreshToken(value);
+  }
+
+  Future<void> setAccessToken(AccessToken accessToken) async {
+    await tokensStorage.setString('accessToken', accessToken.token);
+  }
+
+  Future<void> setRefreshToken(RefreshToken refreshToken) async {
+    await tokensStorage.setString('refreshToken', refreshToken.token);
+  }
+
+  Future<void> setTokens({
+    required AccessToken accessToken,
+    required RefreshToken refreshToken,
+  }) async {
+    await setAccessToken(accessToken);
+    await setRefreshToken(refreshToken);
+  }
+
+  Future<void> removeTokens() async {
+    await tokensStorage.clear();
   }
 }

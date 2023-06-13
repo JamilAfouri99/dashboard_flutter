@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class Contact extends Equatable {
+class DummyUser extends Equatable {
   static const String idProperty = 'id';
   static const String nameProperty = 'name';
   static const String imageProperty = 'image';
@@ -25,7 +25,7 @@ class Contact extends Equatable {
   final DateTime birthday;
   final String note;
 
-  const Contact({
+  const DummyUser({
     required this.id,
     required this.name,
     required this.image,
@@ -39,7 +39,7 @@ class Contact extends Equatable {
     required this.note,
   });
 
-  factory Contact.fromJson(Map<String, dynamic> json) => Contact(
+  factory DummyUser.fromJson(Map<String, dynamic> json) => DummyUser(
         id: json[idProperty],
         name: json[nameProperty],
         image: json[imageProperty],
@@ -67,7 +67,7 @@ class Contact extends Equatable {
         noteProperty: note,
       };
 
-  Contact copyWith({
+  DummyUser copyWith({
     String? id,
     String? name,
     String? image,
@@ -80,7 +80,7 @@ class Contact extends Equatable {
     DateTime? birthday,
     String? note,
   }) {
-    return Contact(
+    return DummyUser(
       id: id ?? this.id,
       name: name ?? this.name,
       image: image ?? this.image,

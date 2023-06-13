@@ -9,8 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dashboard/cubit/auth/auth_cubit.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController =
+      TextEditingController(text: 'owner-qcarder.com@test.com');
+  final TextEditingController _passwordController = TextEditingController(text: 'abc123');
 
   LoginScreen({Key? key}) : super(key: key);
 
@@ -73,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                           );
                         } else if (state is AuthenticatedState) {
                           RouteManager.routerManagerPushUntil(
-                            routeName: RouteConstants.contacts,
+                            routeName: RouteConstants.users,
                             context: context,
                           );
                         }
@@ -89,7 +90,7 @@ class LoginScreen extends StatelessWidget {
                               form.save();
                               final email = _emailController.text;
                               final password = _passwordController.text;
-                              context.read<AuthCubit>().login(email, password);
+                              context.read<AuthCubit>().signIn(email, password);
                             }
                           },
                           child: const Text('Login'),

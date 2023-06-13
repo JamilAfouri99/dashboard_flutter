@@ -3,8 +3,8 @@ class RouteConstants {
   static const String home = "/home";
   static const String login = "/login";
   static const String signUp = "/signUp";
-  static const String contacts = "/contacts";
-  static const String contact = "/contact";
+  static const String users = "/users";
+  static const String user = "/user";
 }
 
 class URLConstants {
@@ -12,7 +12,11 @@ class URLConstants {
 }
 
 class ApiConstants {
-  static const String contacts = "/contacts";
+  static const String signUp = "/auth/signup";
+  static const String signIn = "/auth/signin";
+  static const String accessToken = "/auth/signin/access-token";
+  static const String refreshToken = "/auth/signin/refresh-token";
+  static const String users = "/users";
 }
 
 class KeyConstants {

@@ -1,18 +1,18 @@
 import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/cubit/contact/contact_state.dart';
+import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/models/contact.dart';
 import 'package:dashboard/models/enums.dart';
 import 'package:dashboard/navigation/router_manager.dart';
-import 'package:dashboard/screens/contact/contact_screen.dart';
+import 'package:dashboard/screens/user/user_screen.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dashboard/cubit/contact/contact_cubit.dart';
+import 'package:dashboard/cubit/user/user_cubit.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final ConfirmationDialogAction action;
   final String? contactId;
-  final Contact? contact;
+  final DummyUser? contact;
 
   const ConfirmationDialog({
     super.key,
@@ -50,7 +50,7 @@ class ConfirmationDialog extends StatelessWidget {
         break;
     }
 
-    return BlocConsumer<ContactCubit, ContactState>(
+    return BlocConsumer<UserCubit, UserState>(
       listener: (_, state) {},
       builder: (context, state) => state is LoadingState
           ? const CustomProgressIndicator()
@@ -76,7 +76,7 @@ class ConfirmationDialog extends StatelessWidget {
   }
 
   void _handleAction(BuildContext context) {
-    final contactCubit = context.read<ContactCubit>();
+    final contactCubit = context.read<UserCubit>();
 
     switch (action) {
       case ConfirmationDialogAction.delete:
@@ -94,13 +94,13 @@ class ConfirmationDialog extends StatelessWidget {
     }
   }
 
-  void _deleteContact(BuildContext context, ContactCubit contactCubit) {
+  void _deleteContact(BuildContext context, UserCubit contactCubit) {
     if (contactId == null) return;
-    contactCubit.deleteContact(contactId!).then((_) {
+    contactCubit.deleteUser(contactId!).then((_) {
       Navigator.pop(context); // Close the dialog
       RouteManager.routerManagerPushUntil(
         context: context,
-        routeName: RouteConstants.contacts,
+        routeName: RouteConstants.users,
       ); // Navigate to the home screen
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -110,13 +110,13 @@ class ConfirmationDialog extends StatelessWidget {
     });
   }
 
-  void _addContact(BuildContext context, ContactCubit contactCubit) {
+  void _addContact(BuildContext context, UserCubit contactCubit) {
     if (contact == null) return;
-    contactCubit.addNewContact(contact!).then((_) {
+    contactCubit.addNewUser(contact!).then((_) {
       Navigator.pop(context);
       RouteManager.routerManagerPushUntil(
         context: context,
-        routeName: RouteConstants.contacts,
+        routeName: RouteConstants.users,
       );
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -126,13 +126,13 @@ class ConfirmationDialog extends StatelessWidget {
     });
   }
 
-  void _updateContact(BuildContext context, ContactCubit contactCubit) {
+  void _updateContact(BuildContext context, UserCubit contactCubit) {
     if (contact == null) return;
-    contactCubit.updateContact(contact!).then((_) {
+    contactCubit.updateUser(contact!).then((_) {
       Navigator.pop(context);
       RouteManager.navigateToWithData(
         context,
-        () => ContactScreen(contact: contactCubit.contact),
+        () => UserScreen(user: contactCubit.contact),
       );
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -142,16 +142,16 @@ class ConfirmationDialog extends StatelessWidget {
     });
   }
 
-  void _cancelContact(BuildContext context, ContactCubit contactCubit) {
+  void _cancelContact(BuildContext context, UserCubit contactCubit) {
     Navigator.pop(context);
     contact != null
         ? RouteManager.navigateToWithData(
             context,
-            () => ContactScreen(contact: contact),
+            () => UserScreen(user: contact),
           )
         : RouteManager.routerManagerPushUntil(
             context: context,
-            routeName: RouteConstants.contacts,
+            routeName: RouteConstants.users,
           );
   }
 }

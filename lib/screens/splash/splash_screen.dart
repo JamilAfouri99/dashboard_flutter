@@ -3,6 +3,7 @@ import 'package:dashboard/cubit/auth/auth_cubit.dart';
 import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
+import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {
           if (state is AuthenticatedState) {
             RouteManager.routerManagerPopAndPushNamed(
-              routeName: RouteConstants.contacts,
+              routeName: RouteConstants.users,
               context: context,
             );
           } else if (state is UnauthenticatedState) {
@@ -30,13 +31,19 @@ class _SplashScreenState extends State<SplashScreen> {
               routeName: RouteConstants.login,
               context: context,
             );
+          } else if (state is AuthenticationFailed) {
+            CustomSnackbar.show(context, state.reason.toString());
+            RouteManager.routerManagerPopAndPushNamed(
+              routeName: RouteConstants.login,
+              context: context,
+            );
           }
         },
         builder: (context, state) {
-          return Center(
+          return const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [CustomProgressIndicator()],
+              children: [CustomProgressIndicator()],
             ),
           );
         },

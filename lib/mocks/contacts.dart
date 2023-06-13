@@ -1,8 +1,8 @@
 import 'package:dashboard/configuration/image_constants.dart';
 import 'package:dashboard/models/contact.dart';
 
-final List<Contact> dummyContacts = [
-  Contact(
+final List<DummyUser> dummyContacts = [
+  DummyUser(
     id: '0',
     name: 'John Doe',
     image: ImageConstants.woman,
@@ -16,7 +16,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '1',
     name: 'Jane Smith',
     image: ImageConstants.woman,
@@ -30,7 +30,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '2',
     name: 'Alex Johnson',
     image: ImageConstants.woman,
@@ -44,7 +44,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '3',
     name: 'Emily Davis',
     image: ImageConstants.woman,
@@ -58,7 +58,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '4',
     name: 'Michael Brown',
     image: ImageConstants.woman,
@@ -72,7 +72,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '5',
     name: 'Olivia Wilson',
     image: ImageConstants.woman,
@@ -86,7 +86,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '6',
     name: 'William Anderson',
     image: ImageConstants.woman,
@@ -100,7 +100,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '7',
     name: 'Walid An8erson',
     image: ImageConstants.woman,
@@ -114,7 +114,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '9',
     name: 'Wadi Afouri',
     image: ImageConstants.woman,
@@ -128,7 +128,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '10',
     name: 'Jamil Afouri',
     image: ImageConstants.woman,
@@ -142,7 +142,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '11',
     name: 'Omar Afouri',
     image: ImageConstants.woman,
@@ -156,7 +156,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '12',
     name: 'Sophia Martinez',
     image: ImageConstants.woman,
@@ -170,7 +170,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '13',
     name: 'Daniel Taylor',
     image: ImageConstants.woman,
@@ -184,7 +184,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '14',
     name: 'Isabella Hernandez',
     image: ImageConstants.woman,
@@ -198,7 +198,7 @@ final List<Contact> dummyContacts = [
     note:
         'Adipisicing exercitation dolor nisi ipsum nostrud anim dolore sint veniam consequat lorem sit ex commodo nostrud occaecat elit magna magna commodo incididunt laborum ad irure pariatur et sit ullamco adipisicing.Ullamco in dolore amet est quis consectetur fugiat non nisi incididunt id laborum adipisicing dolor proident velit ut quis aliquip dolore id anim sit adipisicing nisi incididunt enim amet pariatur.',
   ),
-  Contact(
+  DummyUser(
     id: '15',
     name: 'Abdulla Johnson',
     image: ImageConstants.woman,

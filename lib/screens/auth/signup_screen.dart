@@ -89,7 +89,7 @@ class SignUpScreen extends StatelessWidget {
                           );
                         } else if (state is AuthenticatedState) {
                           RouteManager.routerManagerPushUntil(
-                            routeName: RouteConstants.contacts,
+                            routeName: RouteConstants.users,
                             context: context,
                           );
                         }
@@ -105,7 +105,7 @@ class SignUpScreen extends StatelessWidget {
                               form.save();
                               final email = _emailController.text;
                               final password = _passwordController.text;
-                              final confirmed = _confirmPasswordController.text;
+                              // final confirmed = _confirmPasswordController.text;
                               context.read<AuthCubit>().signUp(email, password);
                             }
                           },
