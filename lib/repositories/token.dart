@@ -15,7 +15,6 @@ class TokensRepository {
     if (value == null) {
       return null;
     }
-    print(value);
     return AccessToken(value);
   }
 

@@ -8,6 +8,7 @@ import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/user_screen.dart';
 import 'package:dashboard/widgets/app_bar.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
+import 'package:dashboard/widgets/failed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -64,14 +65,9 @@ class UsersScreen extends StatelessWidget {
               child: BlocBuilder<UsersCubit, UsersState>(
                 builder: (context, state) {
                   if (state is FailedState) {
-                    return RefreshIndicator(
-                      onRefresh: () => context.read<UsersCubit>().fetch(),
-                      child: Center(
-                        child: Text(
-                          state.reason.toString(),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                    return FailedWidget(
+                      error: state.reason.toString(),
+                      onPressed: () => context.read<UsersCubit>().fetch(),
                     );
                   } else if (state is SuccessState) {
                     return RefreshIndicator(

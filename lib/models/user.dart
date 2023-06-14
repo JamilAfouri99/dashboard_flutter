@@ -1,11 +1,11 @@
 class UsersResponse {
   static const usersProperty = 'data';
-  static const metaProperty = 'meta';
+  static const paginationProperty = 'meta';
 
   List<User>? users;
-  Meta? meta;
+  Pagination? pagination;
 
-  UsersResponse({this.users, this.meta});
+  UsersResponse({this.users, this.pagination});
 
   factory UsersResponse.fromJson(Map<String, dynamic> json) => UsersResponse(
         users: json[usersProperty] != null
@@ -14,12 +14,16 @@ class UsersResponse {
                 (i) => User.fromJson(json[usersProperty][i]),
               )
             : null,
-        meta: json[metaProperty] != null ? Meta.fromJson(json['meta']) : null,
+        pagination: json[paginationProperty] != null
+            ? Pagination.fromJson(
+                json[paginationProperty],
+              )
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
         usersProperty: users,
-        metaProperty: meta,
+        paginationProperty: pagination,
       };
 }
 
@@ -70,8 +74,12 @@ class User {
 
   User.fromJson(Map<String, dynamic> json) {
     id = json[idProperty];
-    createdAt = json[createdAtProperty];
-    updatedAt = json[updatedAtProperty];
+    createdAt = json[createdAtProperty] != null
+        ? DateTime.parse(json[createdAtProperty])
+        : json[createdAtProperty];
+    updatedAt = json[updatedAtProperty] != null
+        ? DateTime.parse(json[updatedAtProperty])
+        : json[updatedAtProperty];
     email = json[emailProperty];
     firstName = json[firstNameProperty];
     lastName = json[lastNameProperty];
@@ -124,8 +132,12 @@ class Group {
 
   Group.fromJson(Map<String, dynamic> json) {
     id = json[idProperty];
-    createdAt = json[createdAtProperty];
-    updatedAt = json[updatedAtProperty];
+    createdAt = json[createdAtProperty] != null
+        ? DateTime.parse(json[createdAtProperty])
+        : json[createdAtProperty];
+    updatedAt = json[updatedAtProperty] != null
+        ? DateTime.parse(json[updatedAtProperty])
+        : json[updatedAtProperty];
     name = json[nameProperty];
     profileId = json[profileIdProperty];
   }
@@ -174,8 +186,12 @@ class Profile {
 
   Profile.fromJson(Map<String, dynamic> json) {
     id = json[idProperty];
-    createdAt = json[createdAtProperty];
-    updatedAt = json[updatedAtProperty];
+    createdAt = json[createdAtProperty] != null
+        ? DateTime.parse(json[createdAtProperty])
+        : json[createdAtProperty];
+    updatedAt = json[updatedAtProperty] != null
+        ? DateTime.parse(json[updatedAtProperty])
+        : json[updatedAtProperty];
     background = json[backgroundProperty];
     title = json[titleProperty];
     company = json[companyProperty];
@@ -197,7 +213,7 @@ class Profile {
       };
 }
 
-class Meta {
+class Pagination {
   static const totalProperty = 'total';
   static const lastPageProperty = 'lastPage';
   static const currentPageProperty = 'currentPage';
@@ -212,7 +228,7 @@ class Meta {
   int? prev;
   int? next;
 
-  Meta({
+  Pagination({
     this.total,
     this.lastPage,
     this.currentPage,
@@ -221,7 +237,7 @@ class Meta {
     this.next,
   });
 
-  Meta.fromJson(Map<String, int?> json) {
+  Pagination.fromJson(Map<String, dynamic> json) {
     total = json[totalProperty];
     lastPage = json[lastPageProperty];
     currentPage = json[currentPageProperty];
@@ -230,7 +246,7 @@ class Meta {
     next = json[nextProperty];
   }
 
-  Map<String, dynamic> toJson() => <String, int?>{
+  Map<String, dynamic> toJson() => <String, dynamic>{
         totalProperty: total,
         lastPageProperty: lastPage,
         currentPageProperty: currentPage,

@@ -8,7 +8,9 @@ class LoadingState extends UsersState {}
 
 class SuccessState extends UsersState {
   final List<User> users;
-  SuccessState(this.users);
+  final Pagination? pagination;
+
+  SuccessState(this.users, this.pagination);
 }
 
 class FailedState extends UsersState {

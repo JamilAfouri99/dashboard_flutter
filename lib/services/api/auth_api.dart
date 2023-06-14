@@ -15,14 +15,6 @@ class AuthApi {
     );
   }
 
-  Future<LoggedInUser> refreshToken() async {
-    return await httpService.postRequest<LoggedInUser>(
-      path: ApiConstants.refreshToken,
-      expectedResponseModel: (json) => LoggedInUser.fromJson(json),
-      withRefreshToken: true,
-    );
-  }
-
   Future<LoggedInUser> signIn(SignIn info) async {
     return await httpService.postRequest(
       path: ApiConstants.signIn,

@@ -4,5 +4,6 @@
         "Roboto",
         "signin",
         "signup"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

@@ -19,7 +19,7 @@ class UsersCubit extends Cubit<UsersState> {
       _allUsers = response.users ?? [];
       //TODO: implement pagination
 
-      emit(SuccessState(response.users ?? []));
+      emit(SuccessState(response.users ?? [], response.pagination));
     } catch (error) {
       emit(FailedState(error.toString()));
     }
@@ -37,6 +37,6 @@ class UsersCubit extends Cubit<UsersState> {
         return fullName.contains(sanitizedSearchText);
       }).toList();
     }
-    emit(SuccessState(_filteredUsers));
+    emit(SuccessState(_filteredUsers, null));
   }
 }

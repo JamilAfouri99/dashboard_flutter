@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dashboard/cubit/auth/auth_cubit.dart';
 import 'package:dashboard/services/navigation_service.dart';
+import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 BuildContext context = NavigationService.navigatorKey.currentState!.context;
@@ -39,9 +42,15 @@ abstract class NetworkExceptions {
       case 400:
         return _handleBadRequest(response);
       case 401:
-        return 'Authentication failed.';
+        const message = 'Authentication failed.';
+        context.read<AuthCubit>().logout(context);
+        CustomSnackbar.show(context, message);
+        return message;
       case 403:
-        return _handleNotAllowed(response);
+        final message = _handleNotAllowed(response);
+        context.read<AuthCubit>().logout(context);
+        CustomSnackbar.show(context, message);
+        return message;
       case 404:
         return _handleNotFound(response);
       case 405:
