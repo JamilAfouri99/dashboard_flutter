@@ -1,7 +1,7 @@
 import 'package:dashboard/configuration/image_constants.dart';
 import 'package:dashboard/models/contact.dart';
 
-final List<DummyUser> dummyContacts = [
+final List<DummyUser> mocksUsers = [
   DummyUser(
     id: '0',
     name: 'John Doe',

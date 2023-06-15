@@ -1,8 +1,7 @@
 import 'package:dashboard/configuration/index.dart';
 import 'package:dashboard/cubit/users/users_cubit.dart';
 import 'package:dashboard/cubit/users/users_state.dart';
-import 'package:dashboard/helpers/groupe_by_first_letter.dart';
-import 'package:dashboard/helpers/sort_map_by_keys.dart';
+import 'package:dashboard/mocks/contacts.dart';
 import 'package:dashboard/models/user.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/user_screen.dart';
@@ -12,6 +11,7 @@ import 'package:dashboard/widgets/failed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class UsersScreen extends StatelessWidget {
   UsersScreen({super.key});
@@ -71,8 +71,10 @@ class UsersScreen extends StatelessWidget {
                     );
                   } else if (state is SuccessState) {
                     return RefreshIndicator(
-                      onRefresh: () => context.read<UsersCubit>().fetch(),
-                      child: _users(state.users, context),
+                      onRefresh: () => Future.sync(
+                        () => context.read<UsersCubit>().pagingController.refresh(),
+                      ),
+                      child: _users(context),
                     );
                   }
                   return const Center(child: CustomProgressIndicator());
@@ -86,57 +88,13 @@ class UsersScreen extends StatelessWidget {
   }
 }
 
-Widget _users(List<User> users, BuildContext context) {
-  if (users.isEmpty) {
-    return Center(
-      child: Text(
-        'No contacts found',
-        style: Theme.of(context).textTheme.bodyLarge,
-      ),
-    );
-  }
-
-  final Map<String, List<User>> groupedContacts =
-      groupByFirstLetter(users, (contact) => contact.firstName![0].toUpperCase());
-  final Map<String, List<User>> sortedContracts = sortMapByKeys(groupedContacts);
-
-  return ListView(
-    children: sortedContracts.keys.map((letter) {
-      final groupContacts = sortedContracts[letter]!;
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.grey.withOpacity(0.05),
-              border: Border(
-                top: BorderSide(color: AppColors.grey.withOpacity(0.1)),
-                bottom: BorderSide(color: AppColors.grey.withOpacity(0.1)),
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-            child: Text(
-              letter,
-              style: const TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          ListView.separated(
-            shrinkWrap: true,
-            separatorBuilder: (BuildContext context, int index) => const Divider(),
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: groupContacts.length,
-            itemBuilder: (context, index) {
-              return _user(groupContacts[index], context);
-            },
-          ),
-        ],
-      );
-    }).toList(),
+Widget _users(BuildContext context) {
+  return PagedListView<int, User>.separated(
+    pagingController: context.read<UsersCubit>().pagingController,
+    separatorBuilder: (context, index) => const Divider(),
+    builderDelegate: PagedChildBuilderDelegate<User>(
+      itemBuilder: (context, user, index) => _user(user, context),
+    ),
   );
 }
 
@@ -157,11 +115,10 @@ Widget _user(User user, BuildContext context) => ListTile(
         user.role ?? '',
         style: Theme.of(context).textTheme.bodySmall,
       ),
-      // onTap: () => RouteManager.navigateToWithData(
-      //   context,
-      //   () => UserScreen(user: user),
-      // ),
-      onTap: () {},
+      onTap: () => RouteManager.navigateToWithData(
+        context,
+        () => UserScreen(user: mocksUsers[0]),
+      ),
     );
 
 FloatingActionButton _floatingActionButton(BuildContext context) => FloatingActionButton(

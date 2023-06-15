@@ -13,8 +13,7 @@ class UserCubit extends Cubit<UserState> {
     emit(LoadingState());
     try {
       await Future.delayed(const Duration(seconds: 1));
-      final DummyUser currentContact =
-          dummyContacts.singleWhere((contact) => contact.id == contactId);
+      final DummyUser currentContact = mocksUsers.singleWhere((contact) => contact.id == contactId);
       contact = currentContact;
       emit(SuccessState(contact));
     } catch (error) {
@@ -29,7 +28,7 @@ class UserCubit extends Cubit<UserState> {
   }
 
   DummyUser? getUserById(String contactId) {
-    return dummyContacts.firstWhere((contact) => contact.id == contactId);
+    return mocksUsers.firstWhere((contact) => contact.id == contactId);
   }
 
   Future<void> deleteUser(String contactId) async {
@@ -38,7 +37,7 @@ class UserCubit extends Cubit<UserState> {
       await Future.delayed(const Duration(milliseconds: 500));
       DummyUser? toBeDeletedContact = getUserById(contactId);
       if (toBeDeletedContact == null) throw 'Unreachable contact';
-      dummyContacts.remove(toBeDeletedContact);
+      mocksUsers.remove(toBeDeletedContact);
       emit(SuccessState(null));
     } catch (error) {
       emit(FailedState(error.toString()));
@@ -48,7 +47,7 @@ class UserCubit extends Cubit<UserState> {
   Future<void> addNewUser(DummyUser newContact) async {
     emit(LoadingState());
     await Future.delayed(const Duration(milliseconds: 500));
-    dummyContacts.add(newContact);
+    mocksUsers.add(newContact);
     emit(SuccessState(null));
   }
 
@@ -56,14 +55,14 @@ class UserCubit extends Cubit<UserState> {
     print(updatedContact.emails);
     emit(LoadingState());
     await Future.delayed(const Duration(milliseconds: 500));
-    int? index = dummyContacts.indexWhere(
+    int? index = mocksUsers.indexWhere(
       (contact) => contact.id == updatedContact.id,
     );
     if (index == -1) {
       return emit(FailedState('Fetching updated contact from dummy contacts failed'));
     }
 
-    dummyContacts[index] = DummyUser(
+    mocksUsers[index] = DummyUser(
       id: updatedContact.id,
       name: updatedContact.name,
       image: updatedContact.image,
@@ -76,7 +75,7 @@ class UserCubit extends Cubit<UserState> {
       birthday: updatedContact.birthday,
       note: updatedContact.note,
     );
-    contact = dummyContacts[index];
-    emit(SuccessState(dummyContacts[index]));
+    contact = mocksUsers[index];
+    emit(SuccessState(mocksUsers[index]));
   }
 }
