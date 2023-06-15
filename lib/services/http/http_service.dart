@@ -169,11 +169,9 @@ class HttpService {
         },
         body: null,
       );
-      print(response.statusCode);
-      print(response.body);
 
       if (response.statusCode == 200) {
-        final LoggedInUser responseBody = jsonDecode(response.body);
+        final LoggedInUser responseBody = LoggedInUser.fromJson(jsonDecode(response.body));
 
         await tokensRepository.setTokens(
           accessToken: responseBody.accessToken,

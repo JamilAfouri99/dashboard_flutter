@@ -9,15 +9,13 @@ class UsersCubit extends Cubit<UsersState> {
       : usersApi = UsersApi(),
         super(UnknownState());
 
-  List<User> _allUsers = [];
-  List<User> _filteredUsers = [];
+  final int _perPage = 10;
+  int _currentPage = 1;
 
   Future<void> fetch() async {
     emit(LoadingState());
     try {
-      final UsersResponse response = await usersApi.fetch();
-      _allUsers = response.users ?? [];
-      //TODO: implement pagination
+      final UsersResponse response = await usersApi.fetch(page: _currentPage, perPage: _perPage);
 
       emit(SuccessState(response.users ?? [], response.pagination));
     } catch (error) {
@@ -27,16 +25,19 @@ class UsersCubit extends Cubit<UsersState> {
 
   void searchUsers(String searchText) {
     final sanitizedSearchText = searchText.trim().toLowerCase();
-    if (sanitizedSearchText.isEmpty) {
-      _filteredUsers = _allUsers;
-    } else {
-      _filteredUsers = _allUsers.where((user) {
-        final fullName = user.firstName != null && user.lastName != null
-            ? '${user.firstName} ${user.lastName}'.toLowerCase()
-            : '';
-        return fullName.contains(sanitizedSearchText);
-      }).toList();
+    List<User> filteredUsers = [];
+    if (state is SuccessState) {
+      if (sanitizedSearchText.isEmpty) {
+        filteredUsers = (state as SuccessState).users;
+      } else {
+        filteredUsers = (state as SuccessState).users.where((user) {
+          final fullName = user.firstName != null && user.lastName != null
+              ? '${user.firstName} ${user.lastName}'.toLowerCase()
+              : '';
+          return fullName.contains(sanitizedSearchText);
+        }).toList();
+      }
+      emit(SuccessState(filteredUsers, (state as SuccessState).pagination));
     }
-    emit(SuccessState(_filteredUsers, null));
   }
 }

@@ -254,4 +254,31 @@ class Pagination {
         prevProperty: prev,
         nextProperty: next,
       };
+
+  factory Pagination.initial() => Pagination(
+        total: 0,
+        lastPage: 0,
+        currentPage: 0,
+        perPage: 0,
+        prev: null,
+        next: null,
+      );
+
+  Pagination copyWith({
+    int? total,
+    int? lastPage,
+    int? currentPage,
+    int? perPage,
+    int? prev,
+    int? next,
+  }) {
+    return Pagination(
+      total: total ?? this.total,
+      lastPage: lastPage ?? this.lastPage,
+      currentPage: currentPage ?? this.currentPage,
+      perPage: perPage ?? this.perPage,
+      prev: prev ?? this.prev,
+      next: next ?? this.next,
+    );
+  }
 }
