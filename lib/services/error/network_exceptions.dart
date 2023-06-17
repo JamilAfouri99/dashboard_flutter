@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 BuildContext context = NavigationService.navigatorKey.currentState!.context;
 
-abstract class NetworkExceptions {
+class NetworkExceptions {
   static String getHttpException(dynamic error) {
     try {
       if (error is http.ClientException) {
@@ -30,7 +30,7 @@ abstract class NetworkExceptions {
   }
 
   static String _handleClientException(http.ClientException error) {
-    return noInternetConnection();
+    return ErrorMessages.noInternetConnection;
   }
 
   static String _handleSocketException(SocketException error) {
@@ -42,15 +42,9 @@ abstract class NetworkExceptions {
       case 400:
         return _handleBadRequest(response);
       case 401:
-        const message = 'Authentication failed.';
-        context.read<AuthCubit>().logout(context);
-        CustomSnackbar.show(context, message);
-        return message;
+        return handleAuthenticationFailed();
       case 403:
-        final message = _handleNotAllowed(response);
-        context.read<AuthCubit>().logout(context);
-        CustomSnackbar.show(context, message);
-        return message;
+        return _handleNotAllowed(response);
       case 404:
         return _handleNotFound(response);
       case 405:
@@ -58,13 +52,13 @@ abstract class NetworkExceptions {
       case 409:
         return _handleConflict(response);
       case 408:
-        return requestTimeout();
+        return ErrorMessages.requestTimeout;
       case 422:
         return _handleDataValidationFailed(response);
       case 500:
         return _handleInternalServerError(response);
       case 503:
-        return serviceUnavailable();
+        return ErrorMessages.serviceUnavailable;
       default:
         return _handleDefaultError(response);
     }
@@ -78,41 +72,39 @@ abstract class NetworkExceptions {
         return message[0] as String;
       }
     }
-    return 'Bad request';
+    return ErrorMessages.badRequest;
   }
 
   static String _handleNotFound(http.Response response) {
-    final message = response.body.isNotEmpty
-        ? response.body as String
-        : 'The requested resource does not exist';
-    return notFound(message);
+    final message = response.body.isNotEmpty ? response.body : ErrorMessages.resourceNotFound;
+    return message;
   }
 
   static String _handleMethodNotAllowed(http.Response response) {
-    final message = response.body.isNotEmpty ? response.body as String : 'Method not Allowed';
-    return notFound(message);
+    final message = response.body.isNotEmpty ? response.body : ErrorMessages.methodNotAllowed;
+    return message;
   }
 
   static String _handleConflict(http.Response response) {
-    final message = response.body.isNotEmpty ? response.body as String : conflict();
+    final message = response.body.isNotEmpty ? response.body : ErrorMessages.conflict;
     return message;
   }
 
   static String _handleDataValidationFailed(http.Response response) {
-    final message = response.body.isNotEmpty ? response.body as String : 'Data validation failed';
+    final message = response.body.isNotEmpty ? response.body : ErrorMessages.dataValidationFailed;
     return message;
   }
 
   static String _handleInternalServerError(http.Response response) {
-    final message = response.body.isNotEmpty ? response.body as String : internalServerError();
+    final message = response.body.isNotEmpty ? response.body : ErrorMessages.internalServerError;
     return message;
   }
 
   static String _handleDefaultError(http.Response response) {
     final responseCode = response.statusCode;
     final message = response.body.isNotEmpty
-        ? response.body as String
-        : defaultError('Received invalid status code: $responseCode');
+        ? response.body
+        : ErrorMessages.defaultError('Received invalid status code: $responseCode');
     return message;
   }
 
@@ -120,79 +112,42 @@ abstract class NetworkExceptions {
     final decodedBody = jsonDecode(response.body);
     if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
       final message = decodedBody['message'];
-      if (message is String) {
+      if (message.isNotEmpty) {
         return message;
       }
     }
-
-    return 'The authenticated user is not allowed to access the specified API endpoint.';
+    return ErrorMessages.notAllowed;
   }
 
   static String _handleUnexpectedError() {
-    return unexpectedError();
+    return ErrorMessages.unexpectedError;
   }
 
   static String _handleFormatException() {
-    return formatException();
+    return ErrorMessages.formatException;
   }
 
-  static String notImplemented() {
-    return 'Not Implemented';
+  static String handleAuthenticationFailed() {
+    context.read<AuthCubit>().logout(context);
+    CustomSnackbar.show(context, ErrorMessages.authenticationFailed);
+    return ErrorMessages.authenticationFailed;
   }
+}
 
-  static String requestCancelled() {
-    return 'Request Cancelled';
-  }
-
-  static String internalServerError() {
-    return 'Internal Server Error';
-  }
-
-  static String notFound(String reason) {
-    return reason;
-  }
-
-  static String serviceUnavailable() {
-    return 'Service unavailable';
-  }
-
-  static String badRequest() {
-    return 'Bad request';
-  }
-
-  static String unexpectedError() {
-    return 'Unexpected error occurred';
-  }
-
-  static String requestTimeout() {
-    return 'Connection request timeout';
-  }
-
-  static String noInternetConnection() {
-    return 'No internet connection';
-  }
-
-  static String conflict() {
-    return 'Error due to a conflict';
-  }
-
-  static String sendTimeout() {
-    return 'Send timeout in connection with API server';
-  }
-
-  static String unableToProcess() {
-    return 'Unable to process the data';
-  }
-
-  static String defaultError(String error) {
-    return error;
-  }
-
-  static String formatException() {
-    return 'Unexpected error occurred';
-  }
-
-  static String notAcceptable() {
-    return 'Not acceptable';
-  }
+class ErrorMessages {
+  static const authenticationFailed = 'Authentication failed';
+  static const resourceNotFound = 'The requested resource does not exist';
+  static const methodNotAllowed = 'Method not Allowed';
+  static const conflict = 'Error due to a conflict';
+  static const requestTimeout = 'Connection request timeout';
+  static const dataValidationFailed = 'Data validation failed';
+  static const internalServerError = 'Internal Server Error';
+  static const serviceUnavailable = 'Service unavailable';
+  static const badRequest = 'Bad request';
+  static const unexpectedError = 'Unexpected error occurred';
+  static const noInternetConnection = 'No internet connection';
+  static const notAllowed =
+      'The authenticated user is not allowed to access the specified API endpoint.';
+  static const formatException = 'Unexpected error occurred';
+  static String defaultError(String error) => error;
 }

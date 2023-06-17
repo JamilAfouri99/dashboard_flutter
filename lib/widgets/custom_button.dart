@@ -1,20 +1,17 @@
 import 'package:dashboard/configuration/theme.dart';
-import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final String title;
   final bool isInverted;
   final bool isDisabled;
-  final bool isLoading;
   final Widget? leading;
-  final Function() selected;
+  final Function() onPressed;
 
   const CustomButton({
     Key? key,
     required this.title,
-    required this.selected,
-    required this.isLoading,
+    required this.onPressed,
     this.isInverted = false,
     this.isDisabled = false,
     this.leading,
@@ -33,7 +30,9 @@ class CustomButton extends StatelessWidget {
             : LinearGradient(
                 colors: [
                   isDisabled ? AppColors.primary.withAlpha(120) : AppColors.primary,
-                  isDisabled ? AppColors.secondary.withAlpha(120) : AppColors.secondary
+                  isDisabled
+                      ? AppColors.primary.withOpacity(0.6).withAlpha(120)
+                      : AppColors.primary.withOpacity(0.6)
                 ],
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,
@@ -49,37 +48,31 @@ class CustomButton extends StatelessWidget {
           minimumSize: const Size(double.infinity, 56),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         ),
-        child: isLoading
-            ? const CustomProgressIndicator(
-                width: 20,
+        onPressed: onPressed,
+        child: leading == null
+            ? Text(
+                title,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: isInverted ? AppColors.primary : Colors.white),
               )
-            : leading == null
-                ? Text(
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  leading!,
+                  const SizedBox(
+                    width: 7,
+                  ),
+                  Text(
                     title,
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!
                         .copyWith(color: isInverted ? AppColors.primary : Colors.white),
                   )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      leading!,
-                      const SizedBox(
-                        width: 7,
-                      ),
-                      Text(
-                        title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(color: isInverted ? AppColors.primary : Colors.white),
-                      )
-                    ],
-                  ),
-        onPressed: () {
-          isLoading ? null : selected();
-        },
+                ],
+              ),
       ),
     );
   }

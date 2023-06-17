@@ -7,16 +7,13 @@ class RouteConstants {
   static const String user = "/user";
 }
 
-class URLConstants {
-  static const String local = "http://localhost";
-}
-
 class ApiConstants {
   static const String signUp = "/auth/signup";
   static const String signIn = "/auth/signin";
   static const String accessToken = "/auth/signin/access-token";
   static const String refreshToken = "/auth/signin/refresh-token";
   static const String users = "/users";
+  static const String logout = "/auth/logout";
 }
 
 class KeyConstants {

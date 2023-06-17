@@ -127,6 +127,19 @@ class AuthCubit extends Cubit<AuthState> {
     repository = await makeRepository;
     await repository?.removeTokens();
     repository = null;
+
+    await authApi.logout();
+
+    emit(UnauthenticatedState());
+  }
+
+  Future<void> remoteLogout(context) async {
+    emit(UnknownAuthState());
+    RouteManager.routerManagerPushUntil(routeName: RouteConstants.splash, context: context);
+
+    repository = await makeRepository;
+    await repository?.removeTokens();
+    repository = null;
     // call the endpoint
 
     await Future.delayed(const Duration(seconds: 2));

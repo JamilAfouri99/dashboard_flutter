@@ -12,22 +12,22 @@ class UsersCubit extends Cubit<UsersState> {
 
   UsersCubit()
       : usersApi = UsersApi(),
-        super(UnknownState()) {
+        super(UsersUnknown()) {
     pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
   }
 
   Future<void> fetch({page = 1, perPage = 10}) async {
-    emit(LoadingState());
+    emit(UsersLoading());
     try {
       final UsersResponse response = await usersApi.fetch(page: page, perPage: perPage);
       List<User> users = response.users ?? [];
 
       users = _usersSorting(users);
-      emit(SuccessState(users, response.pagination));
+      emit(UsersLoaded(users, response.pagination));
     } catch (error) {
-      emit(FailedState(error.toString()));
+      emit(UsersFailed(error.toString()));
     }
   }
 
@@ -53,18 +53,18 @@ class UsersCubit extends Cubit<UsersState> {
   void searchUsers(String searchText) {
     final sanitizedSearchText = searchText.trim().toLowerCase();
     List<User> filteredUsers = [];
-    if (state is SuccessState) {
+    if (state is UsersLoaded) {
       if (sanitizedSearchText.isEmpty) {
-        filteredUsers = (state as SuccessState).users;
+        filteredUsers = (state as UsersLoaded).users;
       } else {
-        filteredUsers = (state as SuccessState).users.where((user) {
+        filteredUsers = (state as UsersLoaded).users.where((user) {
           final fullName = user.firstName != null && user.lastName != null
               ? '${user.firstName} ${user.lastName}'.toLowerCase()
               : '';
           return fullName.contains(sanitizedSearchText);
         }).toList();
       }
-      emit(SuccessState(filteredUsers, (state as SuccessState).pagination));
+      emit(UsersLoaded(filteredUsers, (state as UsersLoaded).pagination));
     }
   }
 

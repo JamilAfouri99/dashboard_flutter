@@ -1,2 +1,2 @@
-// implement logout logic
+// implement shimmer loading
 // user details screen

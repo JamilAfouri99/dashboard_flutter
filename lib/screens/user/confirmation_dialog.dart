@@ -52,7 +52,7 @@ class ConfirmationDialog extends StatelessWidget {
 
     return BlocConsumer<UserCubit, UserState>(
       listener: (_, state) {},
-      builder: (context, state) => state is LoadingState
+      builder: (context, state) => state is UserLoading
           ? const CustomProgressIndicator()
           : AlertDialog(
               title: Text(title),

@@ -34,6 +34,10 @@ class AuthApi {
   }
 
   Future<void> logout() async {
-    return await Future.delayed(const Duration(milliseconds: delay), () {});
+    return Future.delayed(const Duration(milliseconds: 500));
+    // return await httpService.postRequest(
+    //   path: ApiConstants.logout,
+    //   expectedResponseModel: (_) {},
+    // );
   }
 }

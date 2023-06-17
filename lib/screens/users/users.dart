@@ -1,11 +1,12 @@
 import 'package:dashboard/configuration/index.dart';
+import 'package:dashboard/cubit/auth/auth_cubit.dart';
+import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/cubit/users/users_cubit.dart';
 import 'package:dashboard/cubit/users/users_state.dart';
 import 'package:dashboard/mocks/contacts.dart';
 import 'package:dashboard/models/user.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/user_screen.dart';
-import 'package:dashboard/widgets/app_bar.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:dashboard/widgets/failed_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,22 @@ class UsersScreen extends StatelessWidget {
     return BlocProvider<UsersCubit>(
       create: (context) => UsersCubit()..fetch(),
       child: Scaffold(
-        appBar: appBar,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Contacts', style: Theme.of(context).textTheme.titleLarge),
+          actions: [
+            BlocBuilder<AuthCubit, AuthState>(
+              builder: (context, state) {
+                return IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () async {
+                    await context.read<AuthCubit>().logout(context);
+                  },
+                );
+              },
+            ),
+          ],
+        ),
         floatingActionButton: _floatingActionButton(context),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Column(
@@ -64,12 +80,12 @@ class UsersScreen extends StatelessWidget {
             Expanded(
               child: BlocBuilder<UsersCubit, UsersState>(
                 builder: (context, state) {
-                  if (state is FailedState) {
+                  if (state is UsersFailed) {
                     return FailedWidget(
                       error: state.reason.toString(),
                       onPressed: () => context.read<UsersCubit>().fetch(),
                     );
-                  } else if (state is SuccessState) {
+                  } else if (state is UsersLoaded) {
                     return RefreshIndicator(
                       onRefresh: () => Future.sync(
                         () => context.read<UsersCubit>().pagingController.refresh(),

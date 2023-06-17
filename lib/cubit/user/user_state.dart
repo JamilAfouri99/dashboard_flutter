@@ -2,16 +2,16 @@ import 'package:dashboard/models/contact.dart';
 
 abstract class UserState {}
 
-class UnknownState extends UserState {}
+class UserUnknown extends UserState {}
 
-class LoadingState extends UserState {}
+class UserLoading extends UserState {}
 
-class SuccessState extends UserState {
+class UserLoaded extends UserState {
   final DummyUser? contact;
-  SuccessState(this.contact);
+  UserLoaded(this.contact);
 }
 
-class FailedState extends UserState {
+class UserFailed extends UserState {
   final Object reason;
-  FailedState(this.reason);
+  UserFailed(this.reason);
 }

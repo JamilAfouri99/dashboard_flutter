@@ -1,7 +1,7 @@
 import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/configuration/theme.dart';
 import 'package:dashboard/navigation/router_manager.dart';
+import 'package:dashboard/widgets/custom_button.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -18,21 +18,17 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign Up'),
-        backgroundColor: AppColors.primary,
-        automaticallyImplyLeading: false,
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const FlutterLogo(
-                size: 100,
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 32),
+                child: FlutterLogo(size: 150),
               ),
-              const SizedBox(height: 32.0),
               Form(
                 child: Column(
                   children: [
@@ -98,7 +94,8 @@ class SignUpScreen extends StatelessWidget {
                         if (state is AuthenticatingState) {
                           return const CustomProgressIndicator();
                         }
-                        return ElevatedButton(
+                        return CustomButton(
+                          title: 'Signup'.toUpperCase(),
                           onPressed: () async {
                             final form = Form.of(context);
                             if (form.validate()) {
@@ -109,18 +106,19 @@ class SignUpScreen extends StatelessWidget {
                               context.read<AuthCubit>().signUp(email, password);
                             }
                           },
-                          child: const Text('Sign Up'),
                         );
                       },
                     ),
                     const SizedBox(height: 16.0),
                     TextButton(
-                      onPressed: () {
-                        RouteManager.routerManager(
-                          routeName: RouteConstants.login,
-                          context: context,
-                        );
-                      },
+                      onPressed: context.watch<AuthCubit>().state is AuthenticatingState
+                          ? null
+                          : () {
+                              RouteManager.routerManager(
+                                routeName: RouteConstants.login,
+                                context: context,
+                              );
+                            },
                       child: const Text('Already have an account? Log in'),
                     ),
                   ],

@@ -22,7 +22,7 @@ class UserScreen extends StatelessWidget {
         return UserCubit();
       },
       child: BlocConsumer<UserCubit, UserState>(listener: (context, state) {
-        if (state is FailedState) {
+        if (state is UserFailed) {
           CustomSnackbar.show(context, state.reason.toString());
         }
       }, builder: (context, state) {
@@ -41,11 +41,11 @@ class UserScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          floatingActionButton: user != null && !isEditable && state is! LoadingState
+          floatingActionButton: user != null && !isEditable && state is! UserLoading
               ? _floatingActionButton(context)
               : null,
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          body: state is LoadingState
+          body: state is UserLoading
               ? const Center(child: CustomProgressIndicator())
               : RefreshIndicator(
                   onRefresh: () {

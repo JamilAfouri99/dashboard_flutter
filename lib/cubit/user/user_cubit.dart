@@ -4,27 +4,27 @@ import 'package:dashboard/models/contact.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserCubit extends Cubit<UserState> {
-  UserCubit() : super(UnknownState());
+  UserCubit() : super(UserUnknown());
 
   bool isEditable = false;
   DummyUser? contact;
 
   Future<void> fetch(String contactId) async {
-    emit(LoadingState());
+    emit(UserLoading());
     try {
       await Future.delayed(const Duration(seconds: 1));
       final DummyUser currentContact = mocksUsers.singleWhere((contact) => contact.id == contactId);
       contact = currentContact;
-      emit(SuccessState(contact));
+      emit(UserLoaded(contact));
     } catch (error) {
-      emit(FailedState(error.toString()));
+      emit(UserFailed(error.toString()));
     }
   }
 
   Future<void> isEditableHandler(bool editable) async {
-    emit(LoadingState());
+    emit(UserLoading());
     await Future.delayed(const Duration(milliseconds: 500), () => isEditable = editable);
-    emit(SuccessState(null));
+    emit(UserLoaded(null));
   }
 
   DummyUser? getUserById(String contactId) {
@@ -32,34 +32,34 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> deleteUser(String contactId) async {
-    emit(LoadingState());
+    emit(UserLoading());
     try {
       await Future.delayed(const Duration(milliseconds: 500));
       DummyUser? toBeDeletedContact = getUserById(contactId);
       if (toBeDeletedContact == null) throw 'Unreachable contact';
       mocksUsers.remove(toBeDeletedContact);
-      emit(SuccessState(null));
+      emit(UserLoaded(null));
     } catch (error) {
-      emit(FailedState(error.toString()));
+      emit(UserFailed(error.toString()));
     }
   }
 
   Future<void> addNewUser(DummyUser newContact) async {
-    emit(LoadingState());
+    emit(UserLoading());
     await Future.delayed(const Duration(milliseconds: 500));
     mocksUsers.add(newContact);
-    emit(SuccessState(null));
+    emit(UserLoaded(null));
   }
 
   Future<void> updateUser(DummyUser updatedContact) async {
     print(updatedContact.emails);
-    emit(LoadingState());
+    emit(UserLoading());
     await Future.delayed(const Duration(milliseconds: 500));
     int? index = mocksUsers.indexWhere(
       (contact) => contact.id == updatedContact.id,
     );
     if (index == -1) {
-      return emit(FailedState('Fetching updated contact from dummy contacts failed'));
+      return emit(UserFailed('Fetching updated contact from dummy contacts failed'));
     }
 
     mocksUsers[index] = DummyUser(
@@ -76,6 +76,6 @@ class UserCubit extends Cubit<UserState> {
       note: updatedContact.note,
     );
     contact = mocksUsers[index];
-    emit(SuccessState(mocksUsers[index]));
+    emit(UserLoaded(mocksUsers[index]));
   }
 }

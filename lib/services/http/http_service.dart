@@ -145,12 +145,16 @@ class HttpService {
   Future<AccessToken> _latestAccessTokenHandler(TokensRepository tokensRepository) async {
     try {
       final RefreshToken? refreshToken = await tokensRepository.getRefreshToken();
-      if (refreshToken == null || _isTokenExpired(refreshToken.token)) throw 'Unauthenticated';
+      if (refreshToken == null || _isTokenExpired(refreshToken.token)) {
+        throw NetworkExceptions.handleAuthenticationFailed();
+      }
 
       await _refreshTokenHandler(tokensRepository, refreshToken);
 
       final AccessToken? latestAccessToken = await tokensRepository.getAccessToken();
-      if (latestAccessToken == null) throw 'Unauthenticated';
+      if (latestAccessToken == null) {
+        throw NetworkExceptions.handleAuthenticationFailed();
+      }
       return latestAccessToken;
     } catch (error) {
       rethrow;

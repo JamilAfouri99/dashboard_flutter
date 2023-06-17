@@ -83,239 +83,243 @@ class _EditableFormState extends State<EditableForm> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () => _pickImage(),
-            child: Stack(
-              children: [
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 4,
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-                    ),
-                  ),
-                  child: widget.contact != null && binaryImage != null
-                      ? Image.memory(binaryImage!)
-                      : SvgPicture.asset(ImageConstants.woman),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: const BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Name',
-              prefixIcon: Icon(Icons.person),
-            ),
-            controller: _nameController,
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Category',
-              prefixIcon: Icon(Icons.category_outlined),
-            ),
-            controller: _categoryController,
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Title',
-              prefixIcon: Icon(Icons.title),
-            ),
-            controller: _titleController,
-            onChanged: (value) {
-              // Update the title field
-            },
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Company',
-              prefixIcon: Icon(Icons.business),
-            ),
-            controller: _companyController,
-            onChanged: (value) {
-              // Update the company field
-            },
-          ),
-          const SizedBox(height: 16),
-          emailsWidget(),
-          const SizedBox(height: 16),
-          phonesWidget(),
-          const SizedBox(height: 16),
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Address',
-              prefixIcon: Icon(Icons.location_on),
-            ),
-            controller: _addressController,
-            onChanged: (value) {
-              // Update the address field
-            },
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Birthday',
-              prefixIcon: Icon(Icons.calendar_today),
-            ),
-            controller: _birthdayController,
-            onTap: () async {
-              // Show date picker and update the birthday field
-              DateTime? pickedDate = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime.now(),
-              );
-              if (pickedDate != null) {
-                _birthdayController.text = pickedDate.ymd;
-              }
-            },
-            readOnly: true,
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Note',
-              prefixIcon: Icon(Icons.note),
-            ),
-            controller: _noteController,
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-          ),
-          const SizedBox(height: 24),
-          BlocBuilder<UserCubit, UserState>(builder: (context, state) {
-            return Container(
-              margin: const EdgeInsets.only(top: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              child: Row(
+      child: Form(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () => _pickImage(),
+              child: Stack(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      if (widget.contact == null) {
-                        return;
-                      }
-
-                      showDialog(
-                        context: context,
-                        builder: (context) => ConfirmationDialog(
-                          action: ConfirmationDialogAction.delete,
-                          contactId: widget.contact!.id,
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: AppColors.light,
-                      backgroundColor: AppColors.onError,
+                  Container(
+                    clipBehavior: Clip.hardEdge,
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 4,
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                      ),
                     ),
-                    child: const Text('Delete'),
+                    child: widget.contact != null && binaryImage != null
+                        ? Image.memory(binaryImage!)
+                        : SvgPicture.asset(ImageConstants.woman),
                   ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => ConfirmationDialog(
-                          action: ConfirmationDialogAction.cancel,
-                          contactId: widget.contact != null ? widget.contact!.id : null,
-                        ),
-                      );
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                  const SizedBox(width: 2),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (widget.contact != null) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => ConfirmationDialog(
-                            contactId: widget.contact!.id,
-                            action: ConfirmationDialogAction.update,
-                            contact: DummyUser(
-                              id: widget.contact!.id,
-                              name: _nameController.text,
-                              image: ImageConstants.woman,
-                              categories: [_categoryController.text],
-                              title: _titleController.text,
-                              company: _companyController.text,
-                              emails: _emailControllers
-                                  .map((email) => Email(email: email.text, label: ''))
-                                  .toList(),
-                              phones: _phoneControllers
-                                  .map((phone) => Phone(phone: phone.text, label: ''))
-                                  .toList(),
-                              address: _addressController.text,
-                              birthday: DateTime.now(),
-                              note: _noteController.text,
-                            ),
-                          ),
-                        );
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (context) => ConfirmationDialog(
-                            action: ConfirmationDialogAction.add,
-                            contact: DummyUser(
-                              id: generateSimpleId(),
-                              name: _nameController.text,
-                              image: ImageConstants.woman,
-                              categories: [_categoryController.text],
-                              title: _titleController.text,
-                              company: _companyController.text,
-                              emails: _emailControllers
-                                  .map((email) => Email(email: email.text, label: ''))
-                                  .toList(),
-                              phones: _phoneControllers
-                                  .map((phone) => Phone(phone: phone.text, label: ''))
-                                  .toList(),
-                              address: _addressController.text,
-                              birthday: DateTime.now(),
-                              note: _noteController.text,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: AppColors.light,
-                      backgroundColor: AppColors.primary,
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 18,
+                      ),
                     ),
-                    child: Text(widget.contact != null ? 'Update' : 'Save'),
                   ),
                 ],
               ),
-            );
-          }),
-        ],
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Name',
+                prefixIcon: Icon(Icons.person),
+              ),
+              controller: _nameController,
+              validator: (value) => _validator(value),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Category',
+                prefixIcon: Icon(Icons.category_outlined),
+              ),
+              controller: _categoryController,
+              validator: (value) => _validator(value),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                prefixIcon: Icon(Icons.title),
+              ),
+              controller: _titleController,
+              validator: (value) => _validator(value),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Company',
+                prefixIcon: Icon(Icons.business),
+              ),
+              controller: _companyController,
+              validator: (value) => _validator(value),
+            ),
+            const SizedBox(height: 16),
+            emailsWidget(),
+            const SizedBox(height: 16),
+            phonesWidget(),
+            const SizedBox(height: 16),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Address',
+                prefixIcon: Icon(Icons.location_on),
+              ),
+              controller: _addressController,
+              validator: (value) => _validator(value),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Birthday',
+                prefixIcon: Icon(Icons.calendar_today),
+              ),
+              controller: _birthdayController,
+              validator: (value) => _validator(value),
+              onTap: () async {
+                // Show date picker and update the birthday field
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+                if (pickedDate != null) {
+                  _birthdayController.text = pickedDate.ymd;
+                }
+              },
+              readOnly: true,
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Note',
+                prefixIcon: Icon(Icons.note),
+              ),
+              controller: _noteController,
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              validator: (value) => _validator(value),
+            ),
+            const SizedBox(height: 24),
+            BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+              return Container(
+                margin: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        if (widget.contact == null) {
+                          return;
+                        }
+                        showDialog(
+                          context: context,
+                          builder: (context) => ConfirmationDialog(
+                            action: ConfirmationDialogAction.delete,
+                            contactId: widget.contact!.id,
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: AppColors.light,
+                        backgroundColor: AppColors.onError,
+                      ),
+                      child: const Text('Delete'),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ConfirmationDialog(
+                            action: ConfirmationDialogAction.cancel,
+                            contactId: widget.contact != null ? widget.contact!.id : null,
+                          ),
+                        );
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    const SizedBox(width: 2),
+                    ElevatedButton(
+                      onPressed: () {
+                        final form = Form.of(context);
+                        if (form.validate()) {
+                          form.save();
+
+                          if (widget.contact != null) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ConfirmationDialog(
+                                contactId: widget.contact!.id,
+                                action: ConfirmationDialogAction.update,
+                                contact: DummyUser(
+                                  id: widget.contact!.id,
+                                  name: _nameController.text,
+                                  image: ImageConstants.woman,
+                                  categories: [_categoryController.text],
+                                  title: _titleController.text,
+                                  company: _companyController.text,
+                                  emails: _emailControllers
+                                      .map((email) => Email(email: email.text, label: ''))
+                                      .toList(),
+                                  phones: _phoneControllers
+                                      .map((phone) => Phone(phone: phone.text, label: ''))
+                                      .toList(),
+                                  address: _addressController.text,
+                                  birthday: DateTime.now(),
+                                  note: _noteController.text,
+                                ),
+                              ),
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ConfirmationDialog(
+                                action: ConfirmationDialogAction.add,
+                                contact: DummyUser(
+                                  id: generateSimpleId(),
+                                  name: _nameController.text,
+                                  image: ImageConstants.woman,
+                                  categories: [_categoryController.text],
+                                  title: _titleController.text,
+                                  company: _companyController.text,
+                                  emails: _emailControllers
+                                      .map((email) => Email(email: email.text, label: ''))
+                                      .toList(),
+                                  phones: _phoneControllers
+                                      .map((phone) => Phone(phone: phone.text, label: ''))
+                                      .toList(),
+                                  address: _addressController.text,
+                                  birthday: DateTime.now(),
+                                  note: _noteController.text,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: AppColors.light,
+                        backgroundColor: AppColors.primary,
+                      ),
+                      child: Text(widget.contact != null ? 'Update' : 'Save'),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+        ),
       ),
     );
   }
@@ -338,6 +342,7 @@ class _EditableFormState extends State<EditableForm> {
                           prefixIcon: Icon(Icons.email),
                         ),
                         controller: _emailControllers[i],
+                        validator: (value) => _validator(value),
                       ),
                     ),
                     if (_emailControllers.length > 1)
@@ -381,12 +386,13 @@ class _EditableFormState extends State<EditableForm> {
             children: [
               Expanded(
                 flex: 5,
-                child: TextField(
+                child: TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Phone',
                     prefixIcon: Icon(Icons.phone_outlined),
                   ),
                   controller: _phoneControllers[i],
+                  validator: (value) => _validator(value),
                 ),
               ),
               if (_phoneControllers.length > 1)
@@ -419,5 +425,12 @@ class _EditableFormState extends State<EditableForm> {
         )
       ],
     );
+  }
+
+  String? _validator(value) {
+    if (value == null || value.isEmpty) {
+      return 'This field is required';
+    }
+    return null;
   }
 }
