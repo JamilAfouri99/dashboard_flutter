@@ -76,8 +76,14 @@ class NetworkExceptions {
   }
 
   static String _handleNotFound(http.Response response) {
-    final message = response.body.isNotEmpty ? response.body : ErrorMessages.resourceNotFound;
-    return message;
+    final decodedBody = jsonDecode(response.body);
+    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+      final message = decodedBody['message'];
+      if (message is String && message.isNotEmpty) {
+        return message;
+      }
+    }
+    return ErrorMessages.resourceNotFound;
   }
 
   static String _handleMethodNotAllowed(http.Response response) {

@@ -1,24 +1,23 @@
 import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/cubit/user/user_state.dart';
-import 'package:dashboard/models/contact.dart';
 import 'package:dashboard/models/enums.dart';
+import 'package:dashboard/models/user.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/user_screen.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
+import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dashboard/cubit/user/user_cubit.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final ConfirmationDialogAction action;
-  final String? contactId;
-  final DummyUser? contact;
+  final User? user;
 
   const ConfirmationDialog({
     super.key,
-    this.contactId,
     required this.action,
-    this.contact,
+    this.user,
   });
 
   @override
@@ -89,14 +88,14 @@ class ConfirmationDialog extends StatelessWidget {
         _updateContact(context, contactCubit);
         break;
       case ConfirmationDialogAction.cancel:
-        _cancelContact(context, contactCubit);
+        _cancelContact(context);
         break;
     }
   }
 
   void _deleteContact(BuildContext context, UserCubit contactCubit) {
-    if (contactId == null) return;
-    contactCubit.deleteUser(contactId!).then((_) {
+    if (user == null || user!.id == null) return;
+    contactCubit.deleteUser(user!.id.toString()).then((_) {
       Navigator.pop(context); // Close the dialog
       RouteManager.routerManagerPushUntil(
         context: context,
@@ -111,8 +110,8 @@ class ConfirmationDialog extends StatelessWidget {
   }
 
   void _addContact(BuildContext context, UserCubit contactCubit) {
-    if (contact == null) return;
-    contactCubit.addNewUser(contact!).then((_) {
+    if (user == null) return;
+    contactCubit.addNewUser(user!).then((_) {
       Navigator.pop(context);
       RouteManager.routerManagerPushUntil(
         context: context,
@@ -126,28 +125,38 @@ class ConfirmationDialog extends StatelessWidget {
     });
   }
 
-  void _updateContact(BuildContext context, UserCubit contactCubit) {
-    if (contact == null) return;
-    contactCubit.updateUser(contact!).then((_) {
-      Navigator.pop(context);
-      RouteManager.navigateToWithData(
-        context,
-        () => UserScreen(user: contactCubit.contact),
-      );
+  void _updateContact(BuildContext context, UserCubit userCubit) {
+    if (user == null) return;
+    userCubit.updateUser(user!).then((_) {
+      UserState state = userCubit.state;
+      if (state is UserLoaded) {
+        Navigator.pop(context);
+        RouteManager.navigateToWithData(
+          context,
+          () => UserScreen(user: state.user),
+        );
+      } else if (state is UserFailed) {
+        throw state.reason;
+      }
     }).catchError((error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to add contact: $error')),
+      CustomSnackbar.show(
+        context,
+        'Failed to add contact: $error',
+        type: SnackbarType.error,
       );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Failed to add contact: $error')),
+      // );
       Navigator.pop(context);
     });
   }
 
-  void _cancelContact(BuildContext context, UserCubit contactCubit) {
+  void _cancelContact(BuildContext context) {
     Navigator.pop(context);
-    contact != null
+    user != null
         ? RouteManager.navigateToWithData(
             context,
-            () => UserScreen(user: contact),
+            () => UserScreen(user: user),
           )
         : RouteManager.routerManagerPushUntil(
             context: context,

@@ -1,4 +1,4 @@
-import 'package:dashboard/models/contact.dart';
+import 'package:dashboard/models/user.dart';
 
 abstract class UserState {}
 
@@ -7,8 +7,8 @@ class UserUnknown extends UserState {}
 class UserLoading extends UserState {}
 
 class UserLoaded extends UserState {
-  final DummyUser? contact;
-  UserLoaded(this.contact);
+  final User? user;
+  UserLoaded(this.user);
 }
 
 class UserFailed extends UserState {

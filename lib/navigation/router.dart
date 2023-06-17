@@ -1,5 +1,4 @@
 import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/models/contact.dart';
 import 'package:dashboard/screens/auth/login_screen.dart';
 import 'package:dashboard/screens/auth/signup_screen.dart';
 import 'package:dashboard/screens/dashboard/dashboard_screen.dart';
@@ -22,11 +21,7 @@ class Router {
       case RouteConstants.users:
         return MaterialPageRoute(builder: (_) => UsersScreen(), settings: settings);
       case RouteConstants.user:
-        final user = settings.arguments as DummyUser;
-        return MaterialPageRoute(
-          builder: (_) => UserScreen(user: user),
-          settings: settings,
-        );
+        return MaterialPageRoute(builder: (_) => const UserScreen(), settings: settings);
 
       default:
         return MaterialPageRoute(

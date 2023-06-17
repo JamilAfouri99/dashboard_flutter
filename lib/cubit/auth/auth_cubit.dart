@@ -7,6 +7,7 @@ import 'package:dashboard/models/logged_in_user.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/repositories/token.dart';
 import 'package:dashboard/services/api/auth_api.dart';
+import 'package:dashboard/services/error/network_exceptions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -27,7 +28,7 @@ class AuthCubit extends Cubit<AuthState> {
       final AccessToken? accessToken = await repository.getAccessToken();
 
       if (accessToken == null) {
-        return checkRefreshToken();
+        throw NetworkExceptions.handleAuthenticationFailed();
       }
 
       LoggedInUser response = await authApi.accessToken();
@@ -40,35 +41,6 @@ class AuthCubit extends Cubit<AuthState> {
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
       ));
-    } catch (e) {
-      emit(AuthenticationFailed(e));
-    }
-  }
-
-  // call when I got 401 to generate new tokens (access - refresh)
-  Future<void> checkRefreshToken() async {
-    emit(AuthenticatingState());
-
-    try {
-      final repository = await makeRepository;
-      final RefreshToken? refreshToken = await repository.getRefreshToken();
-
-      if (refreshToken == null) {
-        emit(UnauthenticatedState());
-        // logout(context); //FIXME: complete this part
-        return;
-      }
-
-      LoggedInUser response = await authApi.accessToken();
-      await repository.setTokens(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      );
-
-      AuthenticatedState(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      );
     } catch (e) {
       emit(AuthenticationFailed(e));
     }

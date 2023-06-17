@@ -1,7 +1,9 @@
+import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/configuration/theme.dart';
 import 'package:dashboard/cubit/user/user_cubit.dart';
 import 'package:dashboard/cubit/user/user_state.dart';
-import 'package:dashboard/models/contact.dart';
+import 'package:dashboard/models/user.dart';
+import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/editable_form.dart';
 import 'package:dashboard/screens/user/view_form.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
@@ -10,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserScreen extends StatelessWidget {
-  final DummyUser? user;
+  final User? user;
 
   const UserScreen({super.key, this.user});
 
@@ -18,7 +20,7 @@ class UserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<UserCubit>(
       create: (context) {
-        if (user != null) return UserCubit()..fetch(user!.id);
+        if (user != null) return UserCubit()..fetch(user!.id.toString());
         return UserCubit();
       },
       child: BlocConsumer<UserCubit, UserState>(listener: (context, state) {
@@ -30,7 +32,19 @@ class UserScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.light,
           appBar: AppBar(
-            automaticallyImplyLeading: isEditable || user == null ? false : true,
+            automaticallyImplyLeading: false,
+            leading: isEditable || user == null
+                ? null
+                : IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: AppColors.primary,
+                    ),
+                    onPressed: () => RouteManager.routerManagerPushUntil(
+                      context: context,
+                      routeName: RouteConstants.users,
+                    ),
+                  ),
             centerTitle: true,
             title: Text(
               user == null
@@ -49,15 +63,15 @@ class UserScreen extends StatelessWidget {
               ? const Center(child: CustomProgressIndicator())
               : RefreshIndicator(
                   onRefresh: () {
-                    if (user != null) return context.read<UserCubit>().fetch(user!.id);
+                    if (user != null) return context.read<UserCubit>().fetch(user!.id.toString());
                     return Future(() => null);
                   },
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
                         isEditable || user == null
-                            ? EditableForm(contact: user)
-                            : ViewForm(contact: user!),
+                            ? EditableForm(user: user)
+                            : ViewForm(user: user!),
                       ],
                     ),
                   ),

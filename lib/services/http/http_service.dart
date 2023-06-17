@@ -47,6 +47,26 @@ class HttpService {
     return _handleResponse<T>(response, expectedResponseModel);
   }
 
+  Future<T> patchRequest<T>({
+    required String path,
+    Map<String, dynamic>? queryParameters,
+    dynamic body,
+    required T Function(dynamic) expectedResponseModel,
+    bool withAccessToken = true,
+    bool withRefreshToken = false,
+  }) async {
+    final url = _buildUrl(path, queryParameters);
+    final headers = await _buildHeaders(withAccessToken, withRefreshToken);
+
+    final response = await http.patch(
+      url,
+      headers: headers,
+      body: body != null ? jsonEncode(body) : null,
+    );
+
+    return _handleResponse<T>(response, expectedResponseModel);
+  }
+
   Future<T> putRequest<T>({
     required String path,
     Map<String, dynamic>? queryParameters,

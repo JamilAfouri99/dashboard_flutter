@@ -13,6 +13,7 @@ class ApiConstants {
   static const String accessToken = "/auth/signin/access-token";
   static const String refreshToken = "/auth/signin/refresh-token";
   static const String users = "/users";
+  static Function(String id) get user => (id) => '/users/$id';
   static const String logout = "/auth/logout";
 }
 

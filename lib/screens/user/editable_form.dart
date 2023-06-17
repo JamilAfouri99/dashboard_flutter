@@ -4,17 +4,17 @@ import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/helpers/file_helper.dart';
 import 'package:dashboard/helpers/index.dart';
 import 'package:dashboard/configuration/index.dart';
-import 'package:dashboard/models/contact.dart';
 import 'package:dashboard/models/enums.dart';
+import 'package:dashboard/models/user.dart';
 import 'package:dashboard/screens/user/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class EditableForm extends StatefulWidget {
-  final DummyUser? contact;
+  final User? user;
 
-  const EditableForm({Key? key, this.contact}) : super(key: key);
+  const EditableForm({Key? key, this.user}) : super(key: key);
 
   @override
   State<EditableForm> createState() => _EditableFormState();
@@ -30,28 +30,29 @@ class _EditableFormState extends State<EditableForm> {
   final TextEditingController _birthdayController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   List<TextEditingController> _emailControllers = [TextEditingController()];
-  List<TextEditingController> _phoneControllers = [TextEditingController()];
+  // List<TextEditingController> _phoneControllers = [TextEditingController()];
 
   @override
   void initState() {
     super.initState();
-    if (widget.contact != null) {
-      _imageController.text = widget.contact!.image;
-      _nameController.text = widget.contact!.name;
-      _titleController.text = widget.contact!.title;
-      _companyController.text = widget.contact!.company;
-      _addressController.text = widget.contact!.address;
-      _birthdayController.text = widget.contact!.birthday.ymd;
-      _noteController.text = widget.contact!.note;
-      _categoryController.text = widget.contact!.categories[0];
+    if (widget.user != null) {
+      _imageController.text = widget.user!.avatar ?? '';
+      _nameController.text = widget.user!.firstName ?? '';
+      _titleController.text = widget.user!.profile!.title ?? '';
+      _companyController.text = widget.user!.profile!.company ?? '';
+      _addressController.text = widget.user!.profile!.address ?? '';
+      _birthdayController.text =
+          widget.user!.profile!.birthday != null ? widget.user!.profile!.birthday!.ymd : '';
+      _noteController.text = widget.user!.profile!.notes ?? '';
+      // _categoryController.text = widget.user!.categories[0];
       _emailControllers = List<TextEditingController>.generate(
-        widget.contact!.emails.length,
-        (index) => TextEditingController(text: widget.contact!.emails[index].email),
+        [widget.user!.email].length,
+        (index) => TextEditingController(text: [widget.user!.email][0]),
       );
-      _phoneControllers = List<TextEditingController>.generate(
-        widget.contact!.phones.length,
-        (index) => TextEditingController(text: widget.contact!.phones[index].phone),
-      );
+      // _phoneControllers = List<TextEditingController>.generate(
+      //   widget.user!.phones.length,
+      //   (index) => TextEditingController(text: widget.user!.phones[index].phone),
+      // );
     }
   }
 
@@ -68,9 +69,9 @@ class _EditableFormState extends State<EditableForm> {
     for (var controller in _emailControllers) {
       controller.dispose();
     }
-    for (var controller in _phoneControllers) {
-      controller.dispose();
-    }
+    // for (var controller in _phoneControllers) {
+    //   controller.dispose();
+    // }
   }
 
   Uint8List? binaryImage;
@@ -104,7 +105,7 @@ class _EditableFormState extends State<EditableForm> {
                         color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                       ),
                     ),
-                    child: widget.contact != null && binaryImage != null
+                    child: widget.user != null && binaryImage != null
                         ? Image.memory(binaryImage!)
                         : SvgPicture.asset(ImageConstants.woman),
                   ),
@@ -167,8 +168,8 @@ class _EditableFormState extends State<EditableForm> {
             const SizedBox(height: 16),
             emailsWidget(),
             const SizedBox(height: 16),
-            phonesWidget(),
-            const SizedBox(height: 16),
+            // phonesWidget(),
+            // const SizedBox(height: 16),
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Address',
@@ -219,14 +220,14 @@ class _EditableFormState extends State<EditableForm> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        if (widget.contact == null) {
+                        if (widget.user == null) {
                           return;
                         }
                         showDialog(
                           context: context,
                           builder: (context) => ConfirmationDialog(
                             action: ConfirmationDialogAction.delete,
-                            contactId: widget.contact!.id,
+                            user: widget.user,
                           ),
                         );
                       },
@@ -243,7 +244,7 @@ class _EditableFormState extends State<EditableForm> {
                           context: context,
                           builder: (context) => ConfirmationDialog(
                             action: ConfirmationDialogAction.cancel,
-                            contactId: widget.contact != null ? widget.contact!.id : null,
+                            user: widget.user,
                           ),
                         );
                       },
@@ -256,28 +257,27 @@ class _EditableFormState extends State<EditableForm> {
                         if (form.validate()) {
                           form.save();
 
-                          if (widget.contact != null) {
+                          if (widget.user != null) {
                             showDialog(
                               context: context,
                               builder: (context) => ConfirmationDialog(
-                                contactId: widget.contact!.id,
                                 action: ConfirmationDialogAction.update,
-                                contact: DummyUser(
-                                  id: widget.contact!.id,
-                                  name: _nameController.text,
-                                  image: ImageConstants.woman,
-                                  categories: [_categoryController.text],
-                                  title: _titleController.text,
-                                  company: _companyController.text,
-                                  emails: _emailControllers
-                                      .map((email) => Email(email: email.text, label: ''))
-                                      .toList(),
-                                  phones: _phoneControllers
-                                      .map((phone) => Phone(phone: phone.text, label: ''))
-                                      .toList(),
-                                  address: _addressController.text,
-                                  birthday: DateTime.now(),
-                                  note: _noteController.text,
+                                user: User(
+                                  id: widget.user!.id,
+                                  firstName: _nameController.text,
+                                  avatar: ImageConstants.woman,
+                                  // categories: [_categoryController.text],
+                                  profile: Profile(
+                                    title: _titleController.text,
+                                    company: _companyController.text,
+                                    address: _addressController.text,
+                                    birthday: DateTime.now(),
+                                    notes: _noteController.text,
+                                  ),
+                                  email: _emailControllers.map((email) => email.text).toList()[0],
+                                  // phones: _phoneControllers
+                                  //     .map((phone) => Phone(phone: phone.text, label: ''))
+                                  //     .toList(),
                                 ),
                               ),
                             );
@@ -286,22 +286,22 @@ class _EditableFormState extends State<EditableForm> {
                               context: context,
                               builder: (context) => ConfirmationDialog(
                                 action: ConfirmationDialogAction.add,
-                                contact: DummyUser(
-                                  id: generateSimpleId(),
-                                  name: _nameController.text,
-                                  image: ImageConstants.woman,
-                                  categories: [_categoryController.text],
-                                  title: _titleController.text,
-                                  company: _companyController.text,
-                                  emails: _emailControllers
-                                      .map((email) => Email(email: email.text, label: ''))
-                                      .toList(),
-                                  phones: _phoneControllers
-                                      .map((phone) => Phone(phone: phone.text, label: ''))
-                                      .toList(),
-                                  address: _addressController.text,
-                                  birthday: DateTime.now(),
-                                  note: _noteController.text,
+                                user: User(
+                                  id: widget.user!.id,
+                                  firstName: _nameController.text,
+                                  avatar: ImageConstants.woman,
+                                  // categories: [_categoryController.text],
+                                  profile: Profile(
+                                    title: _titleController.text,
+                                    company: _companyController.text,
+                                    address: _addressController.text,
+                                    birthday: DateTime.now(),
+                                    notes: _noteController.text,
+                                  ),
+                                  email: _emailControllers.map((email) => email.text).toList()[0],
+                                  // phones: _phoneControllers
+                                  //     .map((phone) => Phone(phone: phone.text, label: ''))
+                                  //     .toList(),
                                 ),
                               ),
                             );
@@ -312,7 +312,7 @@ class _EditableFormState extends State<EditableForm> {
                         foregroundColor: AppColors.light,
                         backgroundColor: AppColors.primary,
                       ),
-                      child: Text(widget.contact != null ? 'Update' : 'Save'),
+                      child: Text(widget.user != null ? 'Update' : 'Save'),
                     ),
                   ],
                 ),
@@ -379,52 +379,53 @@ class _EditableFormState extends State<EditableForm> {
   }
 
   Widget phonesWidget() {
-    return Column(
-      children: [
-        for (int i = 0; i < _phoneControllers.length; i++) ...[
-          Row(
-            children: [
-              Expanded(
-                flex: 5,
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Phone',
-                    prefixIcon: Icon(Icons.phone_outlined),
-                  ),
-                  controller: _phoneControllers[i],
-                  validator: (value) => _validator(value),
-                ),
-              ),
-              if (_phoneControllers.length > 1)
-                Expanded(
-                  flex: 1,
-                  child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _phoneControllers.removeAt(i);
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.delete_outline_rounded,
-                      color: AppColors.onError,
-                    ),
-                  ),
-                )
-            ],
-          ),
-          if (_phoneControllers.length > 1) const SizedBox(height: 15),
-        ],
-        ListTile(
-          title: const Text('Add a phone number'),
-          leading: const Icon(Icons.add_circle_rounded),
-          onTap: () {
-            setState(() {
-              _phoneControllers.add(TextEditingController());
-            });
-          },
-        )
-      ],
-    );
+    return Container();
+    // return Column(
+    //   children: [
+    //     for (int i = 0; i < _phoneControllers.length; i++) ...[
+    //       Row(
+    //         children: [
+    //           Expanded(
+    //             flex: 5,
+    //             child: TextFormField(
+    //               decoration: const InputDecoration(
+    //                 labelText: 'Phone',
+    //                 prefixIcon: Icon(Icons.phone_outlined),
+    //               ),
+    //               controller: _phoneControllers[i],
+    //               validator: (value) => _validator(value),
+    //             ),
+    //           ),
+    //           if (_phoneControllers.length > 1)
+    //             Expanded(
+    //               flex: 1,
+    //               child: IconButton(
+    //                 onPressed: () {
+    //                   setState(() {
+    //                     _phoneControllers.removeAt(i);
+    //                   });
+    //                 },
+    //                 icon: const Icon(
+    //                   Icons.delete_outline_rounded,
+    //                   color: AppColors.onError,
+    //                 ),
+    //               ),
+    //             )
+    //         ],
+    //       ),
+    //       if (_phoneControllers.length > 1) const SizedBox(height: 15),
+    //     ],
+    //     ListTile(
+    //       title: const Text('Add a phone number'),
+    //       leading: const Icon(Icons.add_circle_rounded),
+    //       onTap: () {
+    //         setState(() {
+    //           _phoneControllers.add(TextEditingController());
+    //         });
+    //       },
+    //     )
+    //   ],
+    // );
   }
 
   String? _validator(value) {

@@ -3,7 +3,6 @@ import 'package:dashboard/cubit/auth/auth_cubit.dart';
 import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/cubit/users/users_cubit.dart';
 import 'package:dashboard/cubit/users/users_state.dart';
-import 'package:dashboard/mocks/contacts.dart';
 import 'package:dashboard/models/user.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/user_screen.dart';
@@ -133,7 +132,7 @@ Widget _user(User user, BuildContext context) => ListTile(
       ),
       onTap: () => RouteManager.navigateToWithData(
         context,
-        () => UserScreen(user: mocksUsers[0]),
+        () => UserScreen(user: user),
       ),
     );
 
