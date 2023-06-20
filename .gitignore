@@ -48,4 +48,4 @@ app.*.map.json
 .env.development
 .env.production
 
-/todo.md
+todo.md
