@@ -27,6 +27,7 @@ class UserApi {
   Future<User> add(User updatedUser) async {
     return await httpService.postRequest<User>(
       path: ApiConstants.users,
+      body: updatedUser.toJson(),
       expectedResponseModel: (json) {
         return User.fromJson(json);
       },

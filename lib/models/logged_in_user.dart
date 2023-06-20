@@ -22,7 +22,7 @@ class LoggedInUser extends Equatable {
   final String role;
   final String status;
   final int groupId;
-  final int profileId;
+  final int? profileId;
   final AccessToken accessToken;
   final RefreshToken refreshToken;
 

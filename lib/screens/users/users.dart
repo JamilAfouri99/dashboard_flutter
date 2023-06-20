@@ -116,11 +116,18 @@ Widget _users(BuildContext context) {
 Widget _user(User user, BuildContext context) => ListTile(
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(50.0),
-        child: SvgPicture.asset(
-          user.avatar ?? ImageConstants.woman,
-          width: 50.0,
-          height: 50.0,
-        ),
+        child: user.avatar != null
+            ? Image.network(
+                user.avatar!,
+                height: 50,
+                width: 50,
+                errorBuilder: (context, url, error) => const Icon(Icons.error),
+              )
+            : SvgPicture.asset(
+                ImageConstants.woman,
+                width: 50.0,
+                height: 50.0,
+              ),
       ),
       title: Text(
         user.firstName ?? '',

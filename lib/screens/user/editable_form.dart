@@ -3,6 +3,7 @@ import 'package:dashboard/cubit/user/user_cubit.dart';
 import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/helpers/file_helper.dart';
 import 'package:dashboard/helpers/index.dart';
+import 'package:dashboard/helpers/date_time.dart';
 import 'package:dashboard/configuration/index.dart';
 import 'package:dashboard/models/enums.dart';
 import 'package:dashboard/models/user.dart';
@@ -10,6 +11,7 @@ import 'package:dashboard/screens/user/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class EditableForm extends StatefulWidget {
   final User? user;
@@ -22,22 +24,24 @@ class EditableForm extends StatefulWidget {
 
 class _EditableFormState extends State<EditableForm> {
   final TextEditingController _imageController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  // final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _companyController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _birthdayController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  List<TextEditingController> _phoneControllers = [TextEditingController()];
   List<TextEditingController> _emailControllers = [TextEditingController()];
-  // List<TextEditingController> _phoneControllers = [TextEditingController()];
 
   @override
   void initState() {
     super.initState();
     if (widget.user != null) {
       _imageController.text = widget.user!.avatar ?? '';
-      _nameController.text = widget.user!.firstName ?? '';
+      _firstNameController.text = widget.user!.firstName ?? '';
+      _lastNameController.text = widget.user!.lastName ?? '';
       _titleController.text = widget.user!.profile!.title ?? '';
       _companyController.text = widget.user!.profile!.company ?? '';
       _addressController.text = widget.user!.profile!.address ?? '';
@@ -46,13 +50,13 @@ class _EditableFormState extends State<EditableForm> {
       _noteController.text = widget.user!.profile!.notes ?? '';
       // _categoryController.text = widget.user!.categories[0];
       _emailControllers = List<TextEditingController>.generate(
-        [widget.user!.email].length,
-        (index) => TextEditingController(text: [widget.user!.email][0]),
+        widget.user!.profile!.emails!.length,
+        (index) => TextEditingController(text: widget.user!.profile!.emails![index].email),
       );
-      // _phoneControllers = List<TextEditingController>.generate(
-      //   widget.user!.phones.length,
-      //   (index) => TextEditingController(text: widget.user!.phones[index].phone),
-      // );
+      _phoneControllers = List<TextEditingController>.generate(
+        widget.user!.profile!.phones!.length,
+        (index) => TextEditingController(text: widget.user!.profile!.phones![index].phone),
+      );
     }
   }
 
@@ -60,7 +64,8 @@ class _EditableFormState extends State<EditableForm> {
   void dispose() {
     super.dispose();
     _imageController.dispose();
-    _nameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _titleController.dispose();
     _companyController.dispose();
     _addressController.dispose();
@@ -69,9 +74,9 @@ class _EditableFormState extends State<EditableForm> {
     for (var controller in _emailControllers) {
       controller.dispose();
     }
-    // for (var controller in _phoneControllers) {
-    //   controller.dispose();
-    // }
+    for (var controller in _phoneControllers) {
+      controller.dispose();
+    }
   }
 
   Uint8List? binaryImage;
@@ -107,7 +112,18 @@ class _EditableFormState extends State<EditableForm> {
                     ),
                     child: widget.user != null && binaryImage != null
                         ? Image.memory(binaryImage!)
-                        : SvgPicture.asset(ImageConstants.woman),
+                        : widget.user != null && widget.user!.avatar != null
+                            ? Image.network(
+                                widget.user!.avatar!,
+                                height: 50,
+                                width: 50,
+                                errorBuilder: (context, url, error) => const Icon(Icons.error),
+                              )
+                            : SvgPicture.asset(
+                                ImageConstants.woman,
+                                width: 50.0,
+                                height: 50.0,
+                              ),
                   ),
                   Positioned(
                     bottom: 0,
@@ -132,21 +148,30 @@ class _EditableFormState extends State<EditableForm> {
             const SizedBox(height: 16),
             TextFormField(
               decoration: const InputDecoration(
-                labelText: 'Name',
+                labelText: 'First Name',
                 prefixIcon: Icon(Icons.person),
               ),
-              controller: _nameController,
+              controller: _firstNameController,
               validator: (value) => _validator(value),
             ),
             const SizedBox(height: 16),
             TextFormField(
               decoration: const InputDecoration(
-                labelText: 'Category',
-                prefixIcon: Icon(Icons.category_outlined),
+                labelText: 'Last Name',
+                prefixIcon: Icon(Icons.person),
               ),
-              controller: _categoryController,
+              controller: _lastNameController,
               validator: (value) => _validator(value),
             ),
+            // const SizedBox(height: 16),
+            // TextFormField(
+            //   decoration: const InputDecoration(
+            //     labelText: 'Category',
+            //     prefixIcon: Icon(Icons.category_outlined),
+            //   ),
+            //   controller: _categoryController,
+            //   validator: (value) => _validator(value),
+            // ),
             const SizedBox(height: 16),
             TextFormField(
               decoration: const InputDecoration(
@@ -154,7 +179,6 @@ class _EditableFormState extends State<EditableForm> {
                 prefixIcon: Icon(Icons.title),
               ),
               controller: _titleController,
-              validator: (value) => _validator(value),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -163,20 +187,18 @@ class _EditableFormState extends State<EditableForm> {
                 prefixIcon: Icon(Icons.business),
               ),
               controller: _companyController,
-              validator: (value) => _validator(value),
             ),
             const SizedBox(height: 16),
             emailsWidget(),
             const SizedBox(height: 16),
-            // phonesWidget(),
-            // const SizedBox(height: 16),
+            phonesWidget(),
+            const SizedBox(height: 16),
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Address',
                 prefixIcon: Icon(Icons.location_on),
               ),
               controller: _addressController,
-              validator: (value) => _validator(value),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -185,7 +207,6 @@ class _EditableFormState extends State<EditableForm> {
                 prefixIcon: Icon(Icons.calendar_today),
               ),
               controller: _birthdayController,
-              validator: (value) => _validator(value),
               onTap: () async {
                 // Show date picker and update the birthday field
                 DateTime? pickedDate = await showDatePicker(
@@ -209,7 +230,6 @@ class _EditableFormState extends State<EditableForm> {
               controller: _noteController,
               maxLines: null,
               keyboardType: TextInputType.multiline,
-              validator: (value) => _validator(value),
             ),
             const SizedBox(height: 24),
             BlocBuilder<UserCubit, UserState>(builder: (context, state) {
@@ -218,25 +238,25 @@ class _EditableFormState extends State<EditableForm> {
                 padding: const EdgeInsets.symmetric(horizontal: 6),
                 child: Row(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        if (widget.user == null) {
-                          return;
-                        }
-                        showDialog(
-                          context: context,
-                          builder: (context) => ConfirmationDialog(
-                            action: ConfirmationDialogAction.delete,
-                            user: widget.user,
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: AppColors.light,
-                        backgroundColor: AppColors.onError,
-                      ),
-                      child: const Text('Delete'),
-                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     if (widget.user == null) {
+                    //       return;
+                    //     }
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) => ConfirmationDialog(
+                    //         action: ConfirmationDialogAction.delete,
+                    //         user: widget.user,
+                    //       ),
+                    //     );
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     foregroundColor: AppColors.light,
+                    //     backgroundColor: AppColors.onError,
+                    //   ),
+                    //   child: const Text('Delete'),
+                    // ),
                     const Spacer(),
                     TextButton(
                       onPressed: () {
@@ -264,20 +284,26 @@ class _EditableFormState extends State<EditableForm> {
                                 action: ConfirmationDialogAction.update,
                                 user: User(
                                   id: widget.user!.id,
-                                  firstName: _nameController.text,
-                                  avatar: ImageConstants.woman,
+                                  firstName: _firstNameController.text,
+                                  lastName: _lastNameController.text,
+                                  avatar: _imageController.text,
                                   // categories: [_categoryController.text],
+                                  email: _emailControllers[0].text,
                                   profile: Profile(
                                     title: _titleController.text,
                                     company: _companyController.text,
                                     address: _addressController.text,
-                                    birthday: DateTime.now(),
+                                    birthday:
+                                        DateFormat('MMM dd, yyyy').parse(_birthdayController.text),
                                     notes: _noteController.text,
+                                    phones: _phoneControllers
+                                        .map((phone) =>
+                                            Phone(phone: phone.text, label: '', country: ''))
+                                        .toList(),
+                                    emails: _emailControllers
+                                        .map((email) => Email(email: email.text, label: ''))
+                                        .toList(),
                                   ),
-                                  email: _emailControllers.map((email) => email.text).toList()[0],
-                                  // phones: _phoneControllers
-                                  //     .map((phone) => Phone(phone: phone.text, label: ''))
-                                  //     .toList(),
                                 ),
                               ),
                             );
@@ -286,23 +312,7 @@ class _EditableFormState extends State<EditableForm> {
                               context: context,
                               builder: (context) => ConfirmationDialog(
                                 action: ConfirmationDialogAction.add,
-                                user: User(
-                                  id: widget.user!.id,
-                                  firstName: _nameController.text,
-                                  avatar: ImageConstants.woman,
-                                  // categories: [_categoryController.text],
-                                  profile: Profile(
-                                    title: _titleController.text,
-                                    company: _companyController.text,
-                                    address: _addressController.text,
-                                    birthday: DateTime.now(),
-                                    notes: _noteController.text,
-                                  ),
-                                  email: _emailControllers.map((email) => email.text).toList()[0],
-                                  // phones: _phoneControllers
-                                  //     .map((phone) => Phone(phone: phone.text, label: ''))
-                                  //     .toList(),
-                                ),
+                                user: _createdUser(),
                               ),
                             );
                           }
@@ -379,53 +389,75 @@ class _EditableFormState extends State<EditableForm> {
   }
 
   Widget phonesWidget() {
-    return Container();
-    // return Column(
-    //   children: [
-    //     for (int i = 0; i < _phoneControllers.length; i++) ...[
-    //       Row(
-    //         children: [
-    //           Expanded(
-    //             flex: 5,
-    //             child: TextFormField(
-    //               decoration: const InputDecoration(
-    //                 labelText: 'Phone',
-    //                 prefixIcon: Icon(Icons.phone_outlined),
-    //               ),
-    //               controller: _phoneControllers[i],
-    //               validator: (value) => _validator(value),
-    //             ),
-    //           ),
-    //           if (_phoneControllers.length > 1)
-    //             Expanded(
-    //               flex: 1,
-    //               child: IconButton(
-    //                 onPressed: () {
-    //                   setState(() {
-    //                     _phoneControllers.removeAt(i);
-    //                   });
-    //                 },
-    //                 icon: const Icon(
-    //                   Icons.delete_outline_rounded,
-    //                   color: AppColors.onError,
-    //                 ),
-    //               ),
-    //             )
-    //         ],
-    //       ),
-    //       if (_phoneControllers.length > 1) const SizedBox(height: 15),
-    //     ],
-    //     ListTile(
-    //       title: const Text('Add a phone number'),
-    //       leading: const Icon(Icons.add_circle_rounded),
-    //       onTap: () {
-    //         setState(() {
-    //           _phoneControllers.add(TextEditingController());
-    //         });
-    //       },
-    //     )
-    //   ],
-    // );
+    return Column(
+      children: [
+        for (int i = 0; i < _phoneControllers.length; i++) ...[
+          Row(
+            children: [
+              Expanded(
+                flex: 5,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Phone',
+                    prefixIcon: Icon(Icons.phone_outlined),
+                  ),
+                  controller: _phoneControllers[i],
+                  // validator: (value) => _validator(value),
+                ),
+              ),
+              if (_phoneControllers.length > 1)
+                Expanded(
+                  flex: 1,
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _phoneControllers.removeAt(i);
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppColors.onError,
+                    ),
+                  ),
+                )
+            ],
+          ),
+          if (_phoneControllers.length > 1) const SizedBox(height: 15),
+        ],
+        ListTile(
+          title: const Text('Add a phone number'),
+          leading: const Icon(Icons.add_circle_rounded),
+          onTap: () {
+            setState(() {
+              _phoneControllers.add(TextEditingController());
+            });
+          },
+        )
+      ],
+    );
+  }
+
+  User _createdUser() {
+    return User(
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      avatar: _imageController.text.isEmpty ? null : _imageController.text,
+      // categories: [_categoryController.text],
+      email: _emailControllers[0].text,
+      profile: Profile(
+        title: _titleController.text.isEmpty ? null : _titleController.text,
+        company: _companyController.text.isEmpty ? null : _companyController.text,
+        address: _addressController.text.isEmpty ? null : _addressController.text,
+        birthday: _birthdayController.text.isEmpty
+            ? null
+            : DateFormat('MMM dd, yyyy').parse(_birthdayController.text),
+        notes: _noteController.text.isEmpty ? null : _noteController.text,
+        phones: _phoneControllers.isEmpty || _phoneControllers[0].text.isEmpty
+            ? null
+            : _phoneControllers.map((phone) => Phone(phone: phone.text)).toList(),
+        emails: _emailControllers.map((email) => Email(email: email.text)).toList(),
+      ),
+    );
   }
 
   String? _validator(value) {

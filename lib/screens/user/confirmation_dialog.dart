@@ -1,3 +1,4 @@
+// ignore: use_build_context_synchronously
 import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/models/enums.dart';
@@ -109,20 +110,25 @@ class ConfirmationDialog extends StatelessWidget {
     });
   }
 
-  void _addContact(BuildContext context, UserCubit contactCubit) {
+  Future<void> _addContact(BuildContext context, UserCubit contactCubit) async {
     if (user == null) return;
-    contactCubit.addNewUser(user!).then((_) {
+    print(user!.toJson());
+    await contactCubit.addNewUser(user!);
+    final state = contactCubit.state;
+    if (state is UserFailed) {
+      CustomSnackbar.show(
+        context,
+        'Failed to add contact: ${state.reason}',
+        type: SnackbarType.error,
+      );
+      Navigator.pop(context);
+    } else if (state is UserLoaded) {
       Navigator.pop(context);
       RouteManager.routerManagerPushUntil(
         context: context,
         routeName: RouteConstants.users,
       );
-    }).catchError((error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to add contact: $error')),
-      );
-      Navigator.pop(context);
-    });
+    }
   }
 
   void _updateContact(BuildContext context, UserCubit userCubit) {

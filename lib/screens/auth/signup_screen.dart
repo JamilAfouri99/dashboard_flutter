@@ -10,8 +10,9 @@ import 'package:dashboard/cubit/auth/auth_cubit.dart';
 
 class SignUpScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
 
   SignUpScreen({Key? key}) : super(key: key);
 
@@ -31,6 +32,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               Form(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
                       controller: _emailController,
@@ -46,6 +48,32 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     TextFormField(
+                      controller: _firstNameController,
+                      decoration: const InputDecoration(
+                        labelText: 'First Name',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your first name';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: _lastNameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Last Name',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your last name';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    TextFormField(
                       controller: _passwordController,
                       decoration: const InputDecoration(
                         labelText: 'Password',
@@ -54,22 +82,6 @@ class SignUpScreen extends StatelessWidget {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-                    TextFormField(
-                      controller: _confirmPasswordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Confirm Password',
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please confirm your password';
-                        } else if (value != _passwordController.text) {
-                          return 'Passwords do not match';
                         }
                         return null;
                       },
@@ -102,8 +114,14 @@ class SignUpScreen extends StatelessWidget {
                               form.save();
                               final email = _emailController.text;
                               final password = _passwordController.text;
-                              // final confirmed = _confirmPasswordController.text;
-                              context.read<AuthCubit>().signUp(email, password);
+                              final firstName = _firstNameController.text;
+                              final lastName = _lastNameController.text;
+                              context.read<AuthCubit>().signUp(
+                                    email,
+                                    password,
+                                    firstName,
+                                    lastName,
+                                  );
                             }
                           },
                         );

@@ -92,8 +92,14 @@ class NetworkExceptions {
   }
 
   static String _handleConflict(http.Response response) {
-    final message = response.body.isNotEmpty ? response.body : ErrorMessages.conflict;
-    return message;
+    final decodedBody = jsonDecode(response.body);
+    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+      final message = decodedBody['message'];
+      if (message is String && message.isNotEmpty) {
+        return message;
+      }
+    }
+    return ErrorMessages.conflict;
   }
 
   static String _handleDataValidationFailed(http.Response response) {

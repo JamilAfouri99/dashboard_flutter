@@ -59,7 +59,6 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       //TODO: store the user information
-
       emit(AuthenticatedState(
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
@@ -69,11 +68,16 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(String email, String password, String firstName, String lastName) async {
     emit(AuthenticatingState());
 
     try {
-      final response = await authApi.signUp(SignUp(email: email, password: password));
+      final response = await authApi.signUp(SignUp(
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+      ));
 
       repository = await makeRepository;
       await repository?.setTokens(

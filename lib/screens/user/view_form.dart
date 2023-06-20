@@ -32,7 +32,18 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.grey.withOpacity(0.2),
                   ),
                 ),
-                child: SvgPicture.asset(ImageConstants.woman),
+                child: user.avatar != null
+                    ? Image.network(
+                        user.avatar!,
+                        height: 50,
+                        width: 50,
+                        errorBuilder: (context, url, error) => const Icon(Icons.error),
+                      )
+                    : SvgPicture.asset(
+                        ImageConstants.woman,
+                        width: 50.0,
+                        height: 50.0,
+                      ),
               ),
             ],
           ),
@@ -70,18 +81,18 @@ class ViewForm extends StatelessWidget {
             leading: const Icon(Icons.work_outline),
             title: Text(
               user.profile!.title ?? '',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           ListTile(
             leading: const Icon(Icons.business),
             title: Text(
               user.profile!.company ?? '',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           _emailsWidget(context),
-          // _phonesWidget(context),
+          _phonesWidget(context),
           ListTile(
             leading: const Icon(Icons.pin_drop_outlined),
             title: Text(
@@ -93,7 +104,7 @@ class ViewForm extends StatelessWidget {
             leading: const Icon(Icons.cake_outlined),
             title: Text(
               user.profile!.birthday != null ? user.profile!.birthday!.ymd : '',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           ListTile(
@@ -113,47 +124,56 @@ class ViewForm extends StatelessWidget {
       child: ListTile(
         leading: const Icon(Icons.mail_outline_outlined),
         // subtitle: Text(email.label),
-        title: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: DropdownButton<String>(
-            value: user.email,
-            isDense: false,
-            onChanged: (_) {},
-            items: [user.email].map<DropdownMenuItem<String>>((email) {
-              return DropdownMenuItem<String>(
-                value: email,
-                child: Text(
-                  email ?? '',
-                  style: Theme.of(context).textTheme.bodyLarge,
+        title: user.profile!.emails!.length > 1
+            ? FittedBox(
+                fit: BoxFit.scaleDown,
+                child: DropdownButton<String>(
+                  value: user.email,
+                  isDense: false,
+                  onChanged: (_) {},
+                  items: user.profile!.emails!.map<DropdownMenuItem<String>>((value) {
+                    return DropdownMenuItem<String>(
+                      value: value.email,
+                      child: Text(
+                        value.email ?? '',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    );
+                  }).toList(),
                 ),
-              );
-            }).toList(),
-          ),
-        ),
+              )
+            : Text(
+                user.email ?? '',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
       ),
     );
   }
 
   Widget _phonesWidget(BuildContext context) {
-    return Container();
-    // return DropdownButtonHideUnderline(
-    //   child: ListTile(
-    //     leading: const Icon(Icons.phone_outlined),
-    //     // subtitle: Text(phone.label),
-    //     title: DropdownButton<String>(
-    //       onChanged: (_) {},
-    //       value: user.phones[0].phone,
-    //       items: user.phones.map<DropdownMenuItem<String>>((Phone value) {
-    //         return DropdownMenuItem<String>(
-    //           value: value.phone,
-    //           child: Text(
-    //             value.phone,
-    //             style: Theme.of(context).textTheme.bodyLarge,
-    //           ),
-    //         );
-    //       }).toList(),
-    //     ),
-    //   ),
-    // );
+    return DropdownButtonHideUnderline(
+      child: ListTile(
+        leading: const Icon(Icons.phone_outlined),
+        // subtitle: Text(phone.label),
+        title: user.profile!.phones!.length > 1
+            ? DropdownButton<String>(
+                onChanged: (_) {},
+                value: user.profile!.phones![0].phone,
+                items: user.profile!.phones!.map<DropdownMenuItem<String>>((Phone value) {
+                  return DropdownMenuItem<String>(
+                    value: value.phone,
+                    child: Text(
+                      value.phone ?? '',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  );
+                }).toList(),
+              )
+            : Text(
+                user.profile!.phones![0].phone ?? '',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+      ),
+    );
   }
 }
