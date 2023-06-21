@@ -32,24 +32,25 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.grey.withOpacity(0.2),
                   ),
                 ),
-                child: user.avatar != null
-                    ? Image.network(
-                        user.avatar!,
-                        height: 50,
-                        width: 50,
-                        errorBuilder: (context, url, error) => const Icon(Icons.error),
-                      )
-                    : SvgPicture.asset(
-                        ImageConstants.woman,
-                        width: 50.0,
-                        height: 50.0,
-                      ),
+                child:
+                    user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
+                        ? Image.network(
+                            user.avatar!,
+                            height: 50,
+                            width: 50,
+                            errorBuilder: (context, url, error) => const Icon(Icons.error),
+                          )
+                        : SvgPicture.asset(
+                            ImageConstants.woman,
+                            width: 50.0,
+                            height: 50.0,
+                          ),
               ),
             ],
           ),
           const SizedBox(height: 16),
           Text(
-            user.firstName ?? '',
+            user.firstName,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 8),
@@ -80,14 +81,14 @@ class ViewForm extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.work_outline),
             title: Text(
-              user.profile!.title ?? '',
+              user.profile.title ?? '',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           ListTile(
             leading: const Icon(Icons.business),
             title: Text(
-              user.profile!.company ?? '',
+              user.profile.company ?? '',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
@@ -96,21 +97,21 @@ class ViewForm extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.pin_drop_outlined),
             title: Text(
-              user.profile!.address ?? '',
+              user.profile.address ?? '',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           ListTile(
             leading: const Icon(Icons.cake_outlined),
             title: Text(
-              user.profile!.birthday != null ? user.profile!.birthday!.ymd : '',
+              user.profile.birthday != null ? user.profile.birthday!.ymd : '',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           ListTile(
             leading: const Icon(Icons.view_headline_rounded),
             title: Text(
-              user.profile!.notes ?? '',
+              user.profile.notes ?? '',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
@@ -124,26 +125,27 @@ class ViewForm extends StatelessWidget {
       child: ListTile(
         leading: const Icon(Icons.mail_outline_outlined),
         // subtitle: Text(email.label),
-        title: user.profile!.emails!.length > 1
-            ? FittedBox(
-                fit: BoxFit.scaleDown,
-                child: DropdownButton<String>(
-                  value: user.email,
-                  isDense: false,
-                  onChanged: (_) {},
-                  items: user.profile!.emails!.map<DropdownMenuItem<String>>((value) {
-                    return DropdownMenuItem<String>(
-                      value: value.email,
+        title: user.profile.emails != null && user.profile.emails!.length > 1
+            ? DropdownButton<String>(
+                value: user.email,
+                isDense: false,
+                onChanged: (_) {},
+                items: user.profile.emails!.map<DropdownMenuItem<String>>((value) {
+                  return DropdownMenuItem<String>(
+                    value: value.email,
+                    child: SizedBox(
+                      width: 200,
                       child: Text(
                         value.email ?? '',
+                        overflow: TextOverflow.clip,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                    );
-                  }).toList(),
-                ),
+                    ),
+                  );
+                }).toList(),
               )
             : Text(
-                user.email ?? '',
+                user.email,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
       ),
@@ -155,11 +157,11 @@ class ViewForm extends StatelessWidget {
       child: ListTile(
         leading: const Icon(Icons.phone_outlined),
         // subtitle: Text(phone.label),
-        title: user.profile!.phones!.length > 1
+        title: user.profile.phones != null && user.profile.phones!.length > 1
             ? DropdownButton<String>(
                 onChanged: (_) {},
-                value: user.profile!.phones![0].phone,
-                items: user.profile!.phones!.map<DropdownMenuItem<String>>((Phone value) {
+                value: user.profile.phones![0].phone,
+                items: user.profile.phones!.map<DropdownMenuItem<String>>((Phone value) {
                   return DropdownMenuItem<String>(
                     value: value.phone,
                     child: Text(
@@ -170,7 +172,7 @@ class ViewForm extends StatelessWidget {
                 }).toList(),
               )
             : Text(
-                user.profile!.phones![0].phone ?? '',
+                user.profile.phones != null ? user.profile.phones![0].phone ?? '' : '',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
       ),

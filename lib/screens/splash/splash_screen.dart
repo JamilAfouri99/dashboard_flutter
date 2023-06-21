@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
               context: context,
             );
           } else if (state is AuthenticationFailed) {
-            CustomSnackbar.show(context, state.reason.toString());
+            CustomSnackbar.show(context, state.reason.toString(), type: SnackbarType.error);
             RouteManager.routerManagerPopAndPushNamed(
               routeName: RouteConstants.login,
               context: context,

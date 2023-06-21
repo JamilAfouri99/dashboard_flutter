@@ -109,6 +109,8 @@ class HttpService {
 
   T _handleResponse<T>(http.Response response, T Function(dynamic) expectedResponseModel) {
     if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.body.isEmpty) return expectedResponseModel(null);
+
       final parsedResponse = jsonDecode(response.body);
       return expectedResponseModel(parsedResponse);
     } else {
@@ -124,19 +126,23 @@ class HttpService {
 
     if (withAccessToken) {
       final tokenRepo = await _localRepository;
-      String token;
+      String? token;
 
       if (withRefreshToken) {
         RefreshToken? apiKey = await tokenRepo.getRefreshToken();
-        token = apiKey!.token;
+        token = apiKey?.token;
       } else {
         AccessToken? apiKey = await tokenRepo.getAccessToken();
-        token = apiKey!.token;
+        token = apiKey?.token;
       }
 
       // Check if the access token is expired, if so get it from refresh token
-      final bool isExpired = isTokenExpired(token);
-      if (isExpired) token = (await _latestAccessTokenHandler(tokenRepo)).token;
+      if (token == null || token.isEmpty) {
+        token = (await _latestAccessTokenHandler(tokenRepo)).token;
+      } else {
+        final bool isExpired = isTokenExpired(token);
+        if (isExpired) token = (await _latestAccessTokenHandler(tokenRepo)).token;
+      }
 
       headers['Authorization'] = 'Bearer $token';
     }

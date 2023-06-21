@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dashboard/cubit/auth/auth_cubit.dart';
 import 'package:dashboard/services/navigation_service.dart';
-import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -87,8 +86,14 @@ class NetworkExceptions {
   }
 
   static String _handleMethodNotAllowed(http.Response response) {
-    final message = response.body.isNotEmpty ? response.body : ErrorMessages.methodNotAllowed;
-    return message;
+    final decodedBody = jsonDecode(response.body);
+    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+      final message = decodedBody['message'];
+      if (message is String && message.isNotEmpty) {
+        return message;
+      }
+    }
+    return ErrorMessages.methodNotAllowed;
   }
 
   static String _handleConflict(http.Response response) {
@@ -103,13 +108,25 @@ class NetworkExceptions {
   }
 
   static String _handleDataValidationFailed(http.Response response) {
-    final message = response.body.isNotEmpty ? response.body : ErrorMessages.dataValidationFailed;
-    return message;
+    final decodedBody = jsonDecode(response.body);
+    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+      final message = decodedBody['message'];
+      if (message is String && message.isNotEmpty) {
+        return message;
+      }
+    }
+    return ErrorMessages.dataValidationFailed;
   }
 
   static String _handleInternalServerError(http.Response response) {
-    final message = response.body.isNotEmpty ? response.body : ErrorMessages.internalServerError;
-    return message;
+    final decodedBody = jsonDecode(response.body);
+    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+      final message = decodedBody['message'];
+      if (message is String && message.isNotEmpty) {
+        return message;
+      }
+    }
+    return ErrorMessages.internalServerError;
   }
 
   static String _handleDefaultError(http.Response response) {
@@ -140,8 +157,7 @@ class NetworkExceptions {
   }
 
   static String handleAuthenticationFailed() {
-    context.read<AuthCubit>().logout(context);
-    CustomSnackbar.show(context, ErrorMessages.authenticationFailed);
+    context.read<AuthCubit>().unAuth(context);
     return ErrorMessages.authenticationFailed;
   }
 }

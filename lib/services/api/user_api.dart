@@ -1,6 +1,7 @@
 import 'package:dashboard/configuration/config.dart';
 import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/models/user.dart';
+import 'package:dashboard/models/user_request.dart';
 import 'package:dashboard/services/http/http_service.dart';
 
 class UserApi {
@@ -15,7 +16,7 @@ class UserApi {
     );
   }
 
-  Future<User> update(User updatedUser) async {
+  Future<User> update(UserRequest updatedUser) async {
     return await httpService.patchRequest<User>(
       path: ApiConstants.user(updatedUser.id.toString()),
       expectedResponseModel: (json) {
@@ -24,7 +25,7 @@ class UserApi {
     );
   }
 
-  Future<User> add(User updatedUser) async {
+  Future<User> add(UserRequest updatedUser) async {
     return await httpService.postRequest<User>(
       path: ApiConstants.users,
       body: updatedUser.toJson(),

@@ -28,7 +28,7 @@ class AuthCubit extends Cubit<AuthState> {
       final AccessToken? accessToken = await repository.getAccessToken();
 
       if (accessToken == null) {
-        throw NetworkExceptions.handleAuthenticationFailed();
+        throw ErrorMessages.authenticationFailed;
       }
 
       LoggedInUser response = await authApi.accessToken();
@@ -100,13 +100,26 @@ class AuthCubit extends Cubit<AuthState> {
     emit(UnknownAuthState());
     RouteManager.routerManagerPushUntil(routeName: RouteConstants.splash, context: context);
 
+    await authApi.logout();
+
     repository = await makeRepository;
     await repository?.removeTokens();
     repository = null;
 
-    await authApi.logout();
-
     emit(UnauthenticatedState());
+  }
+
+  Future<void> unAuth(context) async {
+    emit(UnknownAuthState());
+    RouteManager.routerManagerPushUntil(routeName: RouteConstants.splash, context: context);
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    repository = await makeRepository;
+    await repository?.removeTokens();
+    repository = null;
+
+    emit(AuthenticationFailed(ErrorMessages.authenticationFailed));
   }
 
   Future<void> remoteLogout(context) async {

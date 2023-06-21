@@ -7,6 +7,7 @@ import 'package:dashboard/helpers/date_time.dart';
 import 'package:dashboard/configuration/index.dart';
 import 'package:dashboard/models/enums.dart';
 import 'package:dashboard/models/user.dart';
+import 'package:dashboard/models/user_request.dart';
 import 'package:dashboard/screens/user/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,22 +41,22 @@ class _EditableFormState extends State<EditableForm> {
     super.initState();
     if (widget.user != null) {
       _imageController.text = widget.user!.avatar ?? '';
-      _firstNameController.text = widget.user!.firstName ?? '';
-      _lastNameController.text = widget.user!.lastName ?? '';
-      _titleController.text = widget.user!.profile!.title ?? '';
-      _companyController.text = widget.user!.profile!.company ?? '';
-      _addressController.text = widget.user!.profile!.address ?? '';
+      _firstNameController.text = widget.user!.firstName;
+      _lastNameController.text = widget.user!.lastName;
+      _titleController.text = widget.user!.profile.title ?? '';
+      _companyController.text = widget.user!.profile.company ?? '';
+      _addressController.text = widget.user!.profile.address ?? '';
       _birthdayController.text =
-          widget.user!.profile!.birthday != null ? widget.user!.profile!.birthday!.ymd : '';
-      _noteController.text = widget.user!.profile!.notes ?? '';
+          widget.user!.profile.birthday != null ? widget.user!.profile.birthday!.ymd : '';
+      _noteController.text = widget.user!.profile.notes ?? '';
       // _categoryController.text = widget.user!.categories[0];
       _emailControllers = List<TextEditingController>.generate(
-        widget.user!.profile!.emails!.length,
-        (index) => TextEditingController(text: widget.user!.profile!.emails![index].email),
+        widget.user!.profile.emails!.length,
+        (index) => TextEditingController(text: widget.user!.profile.emails![index].email),
       );
       _phoneControllers = List<TextEditingController>.generate(
-        widget.user!.profile!.phones!.length,
-        (index) => TextEditingController(text: widget.user!.profile!.phones![index].phone),
+        widget.user!.profile.phones!.length,
+        (index) => TextEditingController(text: widget.user!.profile.phones![index].phone),
       );
     }
   }
@@ -96,7 +97,7 @@ class _EditableFormState extends State<EditableForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => _pickImage(),
+              // onTap: () => _pickImage(), // TODO: once the backend support this, will enable it
               child: Stack(
                 children: [
                   Container(
@@ -110,20 +111,24 @@ class _EditableFormState extends State<EditableForm> {
                         color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                       ),
                     ),
-                    child: widget.user != null && binaryImage != null
-                        ? Image.memory(binaryImage!)
-                        : widget.user != null && widget.user!.avatar != null
-                            ? Image.network(
-                                widget.user!.avatar!,
-                                height: 50,
-                                width: 50,
-                                errorBuilder: (context, url, error) => const Icon(Icons.error),
-                              )
-                            : SvgPicture.asset(
-                                ImageConstants.woman,
-                                width: 50.0,
-                                height: 50.0,
-                              ),
+                    child:
+                        (widget.user != null && widget.user!.avatar != null) || binaryImage != null
+                            ? Image.memory(binaryImage!)
+                            : widget.user != null &&
+                                    widget.user!.avatar != null &&
+                                    widget.user!.avatar!.isNotEmpty &&
+                                    widget.user!.avatar!.contains('https')
+                                ? Image.network(
+                                    widget.user!.avatar!,
+                                    height: 50,
+                                    width: 50,
+                                    errorBuilder: (context, url, error) => const Icon(Icons.error),
+                                  )
+                                : SvgPicture.asset(
+                                    ImageConstants.woman,
+                                    width: 50.0,
+                                    height: 50.0,
+                                  ),
                   ),
                   Positioned(
                     bottom: 0,
@@ -207,6 +212,7 @@ class _EditableFormState extends State<EditableForm> {
                 prefixIcon: Icon(Icons.calendar_today),
               ),
               controller: _birthdayController,
+              validator: (value) => _validator(value),
               onTap: () async {
                 // Show date picker and update the birthday field
                 DateTime? pickedDate = await showDatePicker(
@@ -262,9 +268,8 @@ class _EditableFormState extends State<EditableForm> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (context) => ConfirmationDialog(
+                          builder: (context) => const ConfirmationDialog(
                             action: ConfirmationDialogAction.cancel,
-                            user: widget.user,
                           ),
                         );
                       },
@@ -282,7 +287,7 @@ class _EditableFormState extends State<EditableForm> {
                               context: context,
                               builder: (context) => ConfirmationDialog(
                                 action: ConfirmationDialogAction.update,
-                                user: User(
+                                user: UserRequest(
                                   id: widget.user!.id,
                                   firstName: _firstNameController.text,
                                   lastName: _lastNameController.text,
@@ -402,7 +407,7 @@ class _EditableFormState extends State<EditableForm> {
                     prefixIcon: Icon(Icons.phone_outlined),
                   ),
                   controller: _phoneControllers[i],
-                  // validator: (value) => _validator(value),
+                  validator: (value) => _validator(value),
                 ),
               ),
               if (_phoneControllers.length > 1)
@@ -437,8 +442,8 @@ class _EditableFormState extends State<EditableForm> {
     );
   }
 
-  User _createdUser() {
-    return User(
+  UserRequest _createdUser() {
+    return UserRequest(
       firstName: _firstNameController.text,
       lastName: _lastNameController.text,
       avatar: _imageController.text.isEmpty ? null : _imageController.text,

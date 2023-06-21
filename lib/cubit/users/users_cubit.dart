@@ -22,7 +22,7 @@ class UsersCubit extends Cubit<UsersState> {
     emit(UsersLoading());
     try {
       final UsersResponse response = await usersApi.fetch(page: page, perPage: perPage);
-      List<User> users = response.users ?? [];
+      List<User> users = response.users;
 
       users = _usersSorting(users);
       emit(UsersLoaded(users, response.pagination));
@@ -33,8 +33,8 @@ class UsersCubit extends Cubit<UsersState> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final response = await usersApi.fetch(page: pageKey, perPage: 10);
-      List<User> users = response.users ?? [];
+      final response = await usersApi.fetch(page: pageKey, perPage: _pageSize);
+      List<User> users = response.users;
 
       users = _usersSorting(users);
 
@@ -58,9 +58,7 @@ class UsersCubit extends Cubit<UsersState> {
         filteredUsers = (state as UsersLoaded).users;
       } else {
         filteredUsers = (state as UsersLoaded).users.where((user) {
-          final fullName = user.firstName != null && user.lastName != null
-              ? '${user.firstName} ${user.lastName}'.toLowerCase()
-              : '';
+          final fullName = '${user.firstName} ${user.lastName}'.toLowerCase();
           return fullName.contains(sanitizedSearchText);
         }).toList();
       }
@@ -71,7 +69,7 @@ class UsersCubit extends Cubit<UsersState> {
   List<User> _usersSorting(List<User> users) {
     final Map<String, List<User>> groupedContacts = groupByFirstLetter(
       users,
-      (contact) => contact.firstName![0].toUpperCase(),
+      (contact) => contact.firstName[0].toUpperCase(),
     );
     final Map<String, List<User>> sortedContracts = sortMapByKeys(groupedContacts);
 

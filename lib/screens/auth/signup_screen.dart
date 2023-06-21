@@ -3,7 +3,6 @@ import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/widgets/custom_button.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
-import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dashboard/cubit/auth/auth_cubit.dart';
@@ -89,13 +88,7 @@ class SignUpScreen extends StatelessWidget {
                     const SizedBox(height: 16.0),
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
-                        if (state is AuthenticationFailed) {
-                          CustomSnackbar.show(
-                            context,
-                            state.reason.toString(),
-                            type: SnackbarType.error,
-                          );
-                        } else if (state is AuthenticatedState) {
+                        if (state is AuthenticatedState) {
                           RouteManager.routerManagerPushUntil(
                             routeName: RouteConstants.users,
                             context: context,

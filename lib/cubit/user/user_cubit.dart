@@ -1,5 +1,6 @@
 import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/models/user.dart';
+import 'package:dashboard/models/user_request.dart';
 import 'package:dashboard/services/api/user_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +22,7 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> updateUser(User updatedUser) async {
+  Future<void> updateUser(UserRequest updatedUser) async {
     emit(UserLoading());
     try {
       final user = await userApi.update(updatedUser);
@@ -31,7 +32,7 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> addNewUser(User addedUser) async {
+  Future<void> addNewUser(UserRequest addedUser) async {
     emit(UserLoading());
     try {
       final user = await userApi.add(addedUser);

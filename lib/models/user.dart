@@ -5,24 +5,22 @@ class UsersResponse {
   static const usersProperty = 'data';
   static const paginationProperty = 'meta';
 
-  List<User>? users;
-  Pagination? pagination;
+  final List<User> users;
+  final Pagination pagination;
 
-  UsersResponse({this.users, this.pagination});
+  UsersResponse({required this.users, required this.pagination});
 
-  factory UsersResponse.fromJson(Map<String, dynamic> json) => UsersResponse(
-        users: json[usersProperty] != null
-            ? List.generate(
-                json[usersProperty].length,
-                (i) => User.fromJson(json[usersProperty][i]),
-              )
-            : null,
-        pagination: json[paginationProperty] != null
-            ? Pagination.fromJson(
-                json[paginationProperty],
-              )
-            : null,
-      );
+  factory UsersResponse.fromJson(Map<String, dynamic> json) {
+    return UsersResponse(
+      users: List.generate(
+        json[usersProperty].length,
+        (i) => User.fromJson(json[usersProperty][i]),
+      ),
+      pagination: Pagination.fromJson(
+        json[paginationProperty],
+      ),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         usersProperty: users,
@@ -44,52 +42,48 @@ class User {
   static const groupProperty = 'group';
   static const profileProperty = 'profile';
 
-  int? id;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  String? email;
-  String? firstName;
-  String? lastName;
-  String? avatar;
-  String? role;
-  String? status;
-  int? groupId;
-  Group? group;
-  Profile? profile;
+  final int id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String email;
+  final String firstName;
+  final String lastName;
+  final String? avatar;
+  final String role;
+  final String status;
+  final int? groupId;
+  final Group group;
+  final Profile profile;
 
   User({
-    this.id,
-    this.createdAt,
-    this.updatedAt,
-    this.email,
-    this.firstName,
-    this.lastName,
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
     this.avatar,
-    this.role,
-    this.status,
+    required this.role,
+    required this.status,
     this.groupId,
-    this.group,
-    this.profile,
+    required this.group,
+    required this.profile,
   });
 
-  User.fromJson(Map<String, dynamic> json) {
-    id = json[idProperty];
-    createdAt = json[createdAtProperty] != null
-        ? DateTime.parse(json[createdAtProperty])
-        : json[createdAtProperty];
-    updatedAt = json[updatedAtProperty] != null
-        ? DateTime.parse(json[updatedAtProperty])
-        : json[updatedAtProperty];
-    email = json[emailProperty];
-    firstName = json[firstNameProperty];
-    lastName = json[lastNameProperty];
-    avatar = json[avatarProperty];
-    role = json[roleProperty];
-    status = json[statusProperty];
-    groupId = json[groupIdProperty];
-    group = json[groupProperty] != null ? Group.fromJson(json[groupProperty]) : null;
-    profile = json[profileProperty] != null ? Profile.fromJson(json[profileProperty]) : null;
-  }
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        id: json[idProperty],
+        createdAt: DateTime.parse(json[createdAtProperty]),
+        updatedAt: DateTime.parse(json[updatedAtProperty]),
+        email: json[emailProperty],
+        firstName: json[firstNameProperty],
+        lastName: json[lastNameProperty],
+        avatar: json[avatarProperty],
+        role: json[roleProperty],
+        status: json[statusProperty],
+        groupId: json[groupIdProperty],
+        group: Group.fromJson(json[groupProperty]),
+        profile: Profile.fromJson(json[profileProperty]),
+      );
 
   Map<String, dynamic> toJson() => {
         firstNameProperty: firstName,
@@ -99,8 +93,8 @@ class User {
         // roleProperty: role,
         statusProperty: status,
         groupIdProperty: groupId,
-        groupProperty: group != null ? group!.toJson() : null,
-        profileProperty: profile != null ? profile!.toJson() : null,
+        groupProperty: group.toJson(),
+        profileProperty: profile.toJson(),
       };
 }
 
@@ -152,18 +146,18 @@ class Profile {
   static const emailsProperty = 'emails';
   static const phonesProperty = 'phoneNumbers';
 
-  int? id;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  String? banner;
-  String? title;
-  String? company;
-  DateTime? birthday;
-  String? address;
-  String? notes;
-  int? userId;
-  List<Email>? emails;
-  List<Phone>? phones;
+  final int? id;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? banner;
+  final String? title;
+  final String? company;
+  final DateTime? birthday;
+  final String? address;
+  final String? notes;
+  final int? userId;
+  final List<Email>? emails;
+  final List<Phone>? phones;
 
   Profile({
     this.id,
@@ -180,42 +174,46 @@ class Profile {
     this.phones,
   });
 
-  Profile.fromJson(Map<String, dynamic> json) {
-    id = json[idProperty];
-    createdAt = json[createdAtProperty] != null
-        ? DateTime.parse(json[createdAtProperty])
-        : json[createdAtProperty];
-    updatedAt = json[updatedAtProperty] != null
-        ? DateTime.parse(json[updatedAtProperty])
-        : json[updatedAtProperty];
-    banner = json[bannerProperty];
-    title = json[titleProperty];
-    company = json[companyProperty];
-    birthday = json[birthdayProperty] != null
-        ? DateTime.parse(json[birthdayProperty])
-        : json[birthdayProperty];
-    address = json[addressProperty];
-    notes = json[notesProperty];
-    userId = json[userIdProperty];
-    emails = List.generate(
-      json[emailsProperty].length,
-      (index) => Email.fromJson(
-        json[emailsProperty][index],
-      ),
-    );
-    phones = List.generate(
-      json[phonesProperty].length,
-      (index) => Phone.fromJson(
-        json[phonesProperty][index],
-      ),
-    );
-  }
+  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+        id: json[idProperty],
+        createdAt: json[createdAtProperty] != null
+            ? DateTime.parse(json[createdAtProperty])
+            : json[createdAtProperty],
+        updatedAt: json[updatedAtProperty] != null
+            ? DateTime.parse(json[updatedAtProperty])
+            : json[updatedAtProperty],
+        banner: json[bannerProperty],
+        title: json[titleProperty],
+        company: json[companyProperty],
+        birthday: json[birthdayProperty] != null
+            ? DateTime.parse(json[birthdayProperty])
+            : json[birthdayProperty],
+        address: json[addressProperty],
+        notes: json[notesProperty],
+        userId: json[userIdProperty],
+        emails: json[emailsProperty] != null
+            ? List.generate(
+                json[emailsProperty].length,
+                (index) => Email.fromJson(
+                  json[emailsProperty][index],
+                ),
+              )
+            : json[emailsProperty],
+        phones: json[phonesProperty] != null
+            ? List.generate(
+                json[phonesProperty].length,
+                (index) => Phone.fromJson(
+                  json[phonesProperty][index],
+                ),
+              )
+            : json[phonesProperty],
+      );
 
   Map<String, dynamic> toJson() => {
         bannerProperty: banner,
         titleProperty: title,
         companyProperty: company,
-        birthdayProperty: birthday!.toFormattedDateString,
+        birthdayProperty: birthday != null ? birthday!.toFormattedDateString : birthday,
         addressProperty: address,
         notesProperty: notes,
         emailsProperty: emails != null

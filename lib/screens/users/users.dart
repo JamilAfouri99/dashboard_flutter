@@ -25,7 +25,7 @@ class UsersScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Contacts', style: Theme.of(context).textTheme.titleLarge),
+          title: Text('Users', style: Theme.of(context).textTheme.titleLarge),
           actions: [
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) {
@@ -113,35 +113,37 @@ Widget _users(BuildContext context) {
   );
 }
 
-Widget _user(User user, BuildContext context) => ListTile(
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(50.0),
-        child: user.avatar != null
-            ? Image.network(
-                user.avatar!,
-                height: 50,
-                width: 50,
-                errorBuilder: (context, url, error) => const Icon(Icons.error),
-              )
-            : SvgPicture.asset(
-                ImageConstants.woman,
-                width: 50.0,
-                height: 50.0,
-              ),
-      ),
-      title: Text(
-        user.firstName ?? '',
-        style: Theme.of(context).textTheme.bodyLarge,
-      ),
-      subtitle: Text(
-        user.role ?? '',
-        style: Theme.of(context).textTheme.bodySmall,
-      ),
-      onTap: () => RouteManager.navigateToWithData(
-        context,
-        () => UserScreen(user: user),
-      ),
-    );
+Widget _user(User user, BuildContext context) {
+  return ListTile(
+    leading: ClipRRect(
+      borderRadius: BorderRadius.circular(50.0),
+      child: user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
+          ? Image.network(
+              user.avatar!,
+              height: 50,
+              width: 50,
+              errorBuilder: (context, url, error) => const Icon(Icons.error),
+            )
+          : SvgPicture.asset(
+              ImageConstants.woman,
+              width: 50.0,
+              height: 50.0,
+            ),
+    ),
+    title: Text(
+      user.firstName,
+      style: Theme.of(context).textTheme.bodyLarge,
+    ),
+    subtitle: Text(
+      user.role,
+      style: Theme.of(context).textTheme.bodySmall,
+    ),
+    onTap: () => RouteManager.navigateToWithData(
+      context,
+      () => UserScreen(user: user),
+    ),
+  );
+}
 
 FloatingActionButton _floatingActionButton(BuildContext context) => FloatingActionButton(
       backgroundColor: AppColors.primary,

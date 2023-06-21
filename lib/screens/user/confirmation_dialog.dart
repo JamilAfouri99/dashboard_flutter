@@ -2,9 +2,10 @@
 import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/models/enums.dart';
-import 'package:dashboard/models/user.dart';
+import 'package:dashboard/models/user_request.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/user_screen.dart';
+import 'package:dashboard/screens/users/users.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ import 'package:dashboard/cubit/user/user_cubit.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final ConfirmationDialogAction action;
-  final User? user;
+  final UserRequest? user;
 
   const ConfirmationDialog({
     super.key,
@@ -162,7 +163,7 @@ class ConfirmationDialog extends StatelessWidget {
     user != null
         ? RouteManager.navigateToWithData(
             context,
-            () => UserScreen(user: user),
+            () => UsersScreen(),
           )
         : RouteManager.routerManagerPushUntil(
             context: context,

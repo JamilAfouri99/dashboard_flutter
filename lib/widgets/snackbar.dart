@@ -1,17 +1,22 @@
 import 'package:dashboard/configuration/theme.dart';
+import 'package:dashboard/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class CustomSnackbar {
   static void show(BuildContext context, String message, {SnackbarType type = SnackbarType.info}) {
-    final snackbar = SnackBar(
-      content: Text(
-        message,
-        style: const TextStyle(color: AppColors.light),
-      ),
-      backgroundColor: _getSnackbarColor(type),
-      behavior: SnackBarBehavior.floating,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    final key = NavigationService.snackbarKey;
+    if (key != null) {
+      final snackbar = SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: AppColors.light),
+        ),
+        backgroundColor: _getSnackbarColor(type),
+        behavior: SnackBarBehavior.floating,
+      );
+      key.currentState?.clearSnackBars();
+      key.currentState?.showSnackBar(snackbar);
+    }
   }
 
   static Color _getSnackbarColor(SnackbarType type) {
