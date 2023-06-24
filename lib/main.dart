@@ -1,3 +1,4 @@
+import 'package:dashboard/helpers/download_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +21,8 @@ Future<void> main() async {
 
   await LocalizationService.saveLocale(const Locale("en", "AE"));
   final savedLocale = await LocalizationService.savedLocale();
+
+  // await downloadApp();
 
   runApp(MyApp(savedLocale));
 }

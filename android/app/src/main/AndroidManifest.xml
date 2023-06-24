@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.dashboard">
     <application
-        android:label="dashboard"
+        android:label="QCarder"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -30,6 +30,18 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- <meta-data
+            android:name="flutter_deeplinking_enabled"
+            android:value="true" />
+        <intent-filter android:autoVerify="true">
+        </intent-filter>
+        <data
+            android:scheme="http"
+            android:host="dashcase.net" />
+        <data android:scheme="https" />
+        <ation android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <category android:name="android.intent.category.DEFAULT"/> -->
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

@@ -1,10 +1,14 @@
 {
     "cSpell.words": [
         "autovalidate",
+        "hexcode",
+        "myflutterapp",
+        "openapi",
         "prefs",
+        "qcarder",
         "Roboto",
         "signin",
         "signup"
     ],
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
