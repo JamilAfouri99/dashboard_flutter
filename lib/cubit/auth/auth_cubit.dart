@@ -1,138 +1,133 @@
 import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/models/sign_in.dart';
 import 'package:dashboard/models/tokens.dart';
-import 'package:dashboard/models/sign_up.dart';
-import 'package:dashboard/models/logged_in_user.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/repositories/token.dart';
-import 'package:dashboard/services/api/auth_api.dart';
 import 'package:dashboard/services/error/network_exceptions.dart';
+import 'package:dashboard/services/http/remote_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qcarder_api/api.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final makeRepository = TokensRepository.make();
   final AuthApi authApi;
-  TokensRepository? repository;
+  final ApiClient apiClient;
 
-  AuthCubit()
-      : authApi = AuthApi(),
+  late TokensRepository repository;
+  late RemoteService remoteService;
+
+  AuthCubit(ApiClient apiClient)
+      : this.authApi = AuthApi(apiClient),
+        this.apiClient = apiClient,
         super(UnknownAuthState());
 
   // call in splash screen
   Future<void> checkAccessToken() async {
+    repository = await makeRepository;
+    remoteService = RemoteService(apiClient);
+
     emit(AuthenticatingState());
+    final result = await remoteService.asyncTryCatch(
+      () => authApi.signinUsingAccessToken(),
+    );
 
-    try {
-      final repository = await makeRepository;
-      final AccessToken? accessToken = await repository.getAccessToken();
-
-      if (accessToken == null) {
-        throw ErrorMessages.authenticationFailed;
-      }
-
-      LoggedInUser response = await authApi.accessToken();
+    if (result.isSuccess && result.value != null) {
       await repository.setTokens(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
+        accessToken: AccessToken(result.value!.accessToken),
+        refreshToken: RefreshToken(result.value!.refreshToken),
       );
 
       emit(AuthenticatedState(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
+        accessToken: AccessToken(result.value!.accessToken),
+        refreshToken: RefreshToken(result.value!.refreshToken),
       ));
-    } catch (e) {
-      emit(AuthenticationFailed(e));
+    }
+
+    if (result.isError || result.value == null) {
+      emit(AuthenticationFailed(result.error));
     }
   }
 
-  Future<void> signIn(String email, String password) async {
+  Future<void> signIn(SigninDto signInReq) async {
     emit(AuthenticatingState());
 
-    try {
-      final response = await authApi.signIn(SignIn(email: email, password: password));
+    final result = await remoteService.asyncTryCatch(
+      () => authApi.signin(signInReq),
+      isAccessToken: false,
+    );
 
-      repository = await makeRepository;
-      await repository?.setTokens(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
+    if (result.isSuccess && result.value != null) {
+      await repository.setTokens(
+        accessToken: AccessToken(result.value!.accessToken),
+        refreshToken: RefreshToken(result.value!.refreshToken),
+      );
+      //TODO: store the user information
+      emit(AuthenticatedState(
+        accessToken: AccessToken(result.value!.accessToken),
+        refreshToken: RefreshToken(result.value!.refreshToken),
+      ));
+    }
+
+    if (result.isError || result.value == null) {
+      emit(AuthenticationFailed(result.error));
+    }
+  }
+
+  Future<void> signUp(SignupDto signupReq) async {
+    emit(AuthenticatingState());
+
+    final result = await remoteService.asyncTryCatch(
+      () => authApi.signup(signupReq),
+      isAccessToken: false,
+    );
+
+    if (result.isSuccess && result.value != null) {
+      await repository.setTokens(
+        accessToken: AccessToken(result.value!.accessToken),
+        refreshToken: RefreshToken(result.value!.refreshToken),
       );
 
       //TODO: store the user information
-      emit(AuthenticatedState(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      ));
-    } catch (e) {
-      emit(AuthenticationFailed(e));
-    }
-  }
-
-  Future<void> signUp(String email, String password, String firstName, String lastName) async {
-    emit(AuthenticatingState());
-
-    try {
-      final response = await authApi.signUp(SignUp(
-        email: email,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-      ));
-
-      repository = await makeRepository;
-      await repository?.setTokens(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      );
-
-      //TODO: store the user information
 
       emit(AuthenticatedState(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
+        accessToken: AccessToken(result.value!.accessToken),
+        refreshToken: RefreshToken(result.value!.refreshToken),
       ));
-    } catch (e) {
-      emit(AuthenticationFailed(e));
     }
-  }
 
-  Future<void> logout(context) async {
-    emit(UnknownAuthState());
-    RouteManager.routerManagerPushUntil(routeName: RouteConstants.splash, context: context);
-
-    await authApi.logout();
-
-    repository = await makeRepository;
-    await repository?.removeTokens();
-    repository = null;
-
-    emit(UnauthenticatedState());
-  }
-
-  Future<void> unAuth(context) async {
-    emit(UnknownAuthState());
-    RouteManager.routerManagerPushUntil(routeName: RouteConstants.splash, context: context);
-
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    repository = await makeRepository;
-    await repository?.removeTokens();
-    repository = null;
-
-    emit(AuthenticationFailed(ErrorMessages.authenticationFailed));
+    if (result.isError || result.value == null) {
+      emit(AuthenticationFailed(result.error));
+    }
   }
 
   Future<void> remoteLogout(context) async {
     emit(UnknownAuthState());
-    RouteManager.routerManagerPushUntil(routeName: RouteConstants.splash, context: context);
+    RouteManager.routerManagerPushUntil(
+      routeName: RouteConstants.splash,
+      context: context,
+    );
 
-    repository = await makeRepository;
-    await repository?.removeTokens();
-    repository = null;
-    // call the endpoint
+    final result = await remoteService.asyncTryCatch(() => authApi.logout());
+    await Future.delayed(Duration(milliseconds: 500));
 
-    await Future.delayed(const Duration(seconds: 2));
+    await repository.removeTokens();
+    if (!result.isError) emit(UnauthenticatedState());
+    if (result.isError) {
+      final error = NetworkExceptions.getHttpException(result.error);
+      emit(AuthenticationFailed(error));
+    }
+  }
 
-    emit(UnauthenticatedState());
+  Future<void> localLogout(context) async {
+    emit(UnknownAuthState());
+    RouteManager.routerManagerPushUntil(
+      routeName: RouteConstants.splash,
+      context: context,
+    );
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    await repository.removeTokens();
+
+    emit(AuthenticationFailed(ErrorMessages.authenticationFailed));
   }
 }

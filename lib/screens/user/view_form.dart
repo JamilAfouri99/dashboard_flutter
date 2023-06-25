@@ -17,41 +17,41 @@ class ViewForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                clipBehavior: Clip.hardEdge,
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    width: 4,
-                    color: AppColors.grey.withOpacity(0.2),
-                  ),
-                ),
-                child:
-                    user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
-                        ? Image.network(
-                            user.avatar!,
-                            height: 50,
-                            width: 50,
-                            errorBuilder: (context, url, error) => const Icon(Icons.error),
-                          )
-                        : SvgPicture.asset(
-                            ImageConstants.woman,
-                            width: 50.0,
-                            height: 50.0,
-                          ),
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                width: 4,
+                color: AppColors.grey.withOpacity(0.2),
               ),
-            ],
+            ),
+            child: ClipOval(
+              child:
+                  user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
+                      ? Image.network(
+                          user.avatar!,
+                          height: 120,
+                          width: 120,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: AppColors.primary,
+                          ),
+                        )
+                      : SvgPicture.asset(
+                          ImageConstants.woman,
+                          width: 80.0,
+                          height: 80.0,
+                        ),
+            ),
           ),
+
           const SizedBox(height: 16),
           Text(
             user.firstName,
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: AppColors.primary),
           ),
           const SizedBox(height: 8),
           // SizedBox(
@@ -74,47 +74,77 @@ class ViewForm extends StatelessWidget {
           //   ),
           //   ],
           // )),
-          Divider(
-            height: 30,
-            color: AppColors.grey.withOpacity(0.3),
-          ),
-          ListTile(
-            leading: const Icon(Icons.work_outline),
-            title: Text(
-              user.profile.title ?? '',
-              style: Theme.of(context).textTheme.bodyMedium,
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: AppColors.light,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
+              ],
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.business),
-            title: Text(
-              user.profile.company ?? '',
-              style: Theme.of(context).textTheme.bodyMedium,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(
+                    Icons.work_outline,
+                    color: AppColors.primary,
+                  ),
+                  title: Text(
+                    user.profile.title ?? '',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.business,
+                    color: AppColors.primary,
+                  ),
+                  title: Text(
+                    user.profile.company ?? '',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+                _emailsWidget(context),
+                _phonesWidget(context),
+                ListTile(
+                  leading: const Icon(
+                    Icons.pin_drop_outlined,
+                    color: AppColors.primary,
+                  ),
+                  title: Text(
+                    user.profile.address ?? '',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.cake_outlined,
+                    color: AppColors.primary,
+                  ),
+                  title: Text(
+                    user.profile.birthday != null ? user.profile.birthday!.ymd : '',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.view_headline_rounded,
+                    color: AppColors.primary,
+                  ),
+                  title: Text(
+                    user.profile.notes ?? '',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
             ),
-          ),
-          _emailsWidget(context),
-          _phonesWidget(context),
-          ListTile(
-            leading: const Icon(Icons.pin_drop_outlined),
-            title: Text(
-              user.profile.address ?? '',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.cake_outlined),
-            title: Text(
-              user.profile.birthday != null ? user.profile.birthday!.ymd : '',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.view_headline_rounded),
-            title: Text(
-              user.profile.notes ?? '',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
+          )
         ],
       ),
     );
@@ -123,7 +153,10 @@ class ViewForm extends StatelessWidget {
   Widget _emailsWidget(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: ListTile(
-        leading: const Icon(Icons.mail_outline_outlined),
+        leading: const Icon(
+          Icons.mail_outline_outlined,
+          color: AppColors.primary,
+        ),
         // subtitle: Text(email.label),
         title: user.profile.emails != null && user.profile.emails!.length > 1
             ? DropdownButton<String>(
@@ -155,7 +188,10 @@ class ViewForm extends StatelessWidget {
   Widget _phonesWidget(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: ListTile(
-        leading: const Icon(Icons.phone_outlined),
+        leading: const Icon(
+          Icons.phone_outlined,
+          color: AppColors.primary,
+        ),
         // subtitle: Text(phone.label),
         title: user.profile.phones != null && user.profile.phones!.length > 1
             ? DropdownButton<String>(

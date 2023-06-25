@@ -18,7 +18,7 @@ class DashboardScreen extends StatelessWidget {
                 return IconButton(
                   icon: const Icon(Icons.logout),
                   onPressed: () async {
-                    await context.read<AuthCubit>().logout(context);
+                    await context.read<AuthCubit>().remoteLogout(context);
                   },
                 );
               },

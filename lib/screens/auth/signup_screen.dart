@@ -1,3 +1,4 @@
+import 'package:dashboard/configuration/image_constants.dart';
 import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/navigation/router_manager.dart';
@@ -6,6 +7,8 @@ import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dashboard/cubit/auth/auth_cubit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qcarder_api/api.dart';
 
 class SignUpScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
@@ -25,9 +28,13 @@ class SignUpScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 32),
-                child: FlutterLogo(size: 150),
+                child: SvgPicture.asset(
+                  ImageConstants.fullLogo,
+                  width: 90,
+                  height: 90,
+                ),
               ),
               Form(
                 child: Column(
@@ -109,12 +116,12 @@ class SignUpScreen extends StatelessWidget {
                               final password = _passwordController.text;
                               final firstName = _firstNameController.text;
                               final lastName = _lastNameController.text;
-                              context.read<AuthCubit>().signUp(
-                                    email,
-                                    password,
-                                    firstName,
-                                    lastName,
-                                  );
+                              context.read<AuthCubit>().signUp(SignupDto(
+                                    email: email,
+                                    password: password,
+                                    firstName: firstName,
+                                    lastName: lastName,
+                                  ));
                             }
                           },
                         );

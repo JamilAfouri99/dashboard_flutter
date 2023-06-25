@@ -30,7 +30,7 @@ class UserScreen extends StatelessWidget {
       }, builder: (context, state) {
         final isEditable = context.read<UserCubit>().isEditable;
         return Scaffold(
-          backgroundColor: AppColors.light,
+          // backgroundColor: AppColors.light,
           appBar: AppBar(
             automaticallyImplyLeading: false,
             leading: isEditable || user == null
@@ -45,6 +45,7 @@ class UserScreen extends StatelessWidget {
                       routeName: RouteConstants.users,
                     ),
                   ),
+            elevation: 0,
             centerTitle: true,
             title: Text(
               user == null

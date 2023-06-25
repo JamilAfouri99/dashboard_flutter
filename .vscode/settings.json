@@ -8,7 +8,8 @@
         "qcarder",
         "Roboto",
         "signin",
-        "signup"
+        "signup",
+        "vsync"
     ],
     "java.configuration.updateBuildConfiguration": "automatic"
 }

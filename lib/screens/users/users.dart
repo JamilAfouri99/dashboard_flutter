@@ -32,7 +32,7 @@ class UsersScreen extends StatelessWidget {
                 return IconButton(
                   icon: const Icon(Icons.logout),
                   onPressed: () async {
-                    await context.read<AuthCubit>().logout(context);
+                    await context.read<AuthCubit>().remoteLogout(context);
                   },
                 );
               },
@@ -106,7 +106,9 @@ class UsersScreen extends StatelessWidget {
 Widget _users(BuildContext context) {
   return PagedListView<int, User>.separated(
     pagingController: context.read<UsersCubit>().pagingController,
-    separatorBuilder: (context, index) => const Divider(),
+    separatorBuilder: (context, index) => Divider(
+      color: AppColors.primary.withOpacity(0.3),
+    ),
     builderDelegate: PagedChildBuilderDelegate<User>(
       itemBuilder: (context, user, index) => _user(user, context),
     ),
