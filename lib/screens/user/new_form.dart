@@ -15,17 +15,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:qcarder_api/api.dart';
 
-class EditableForm extends StatefulWidget {
-  final User user;
-
-  const EditableForm({Key? key, required this.user}) : super(key: key);
+class NewForm extends StatefulWidget {
+  const NewForm({Key? key}) : super(key: key);
 
   @override
-  State<EditableForm> createState() => _EditableFormState();
+  State<NewForm> createState() => _NewFormState();
 }
 
-class _EditableFormState extends State<EditableForm> {
+class _NewFormState extends State<NewForm> {
   final TextEditingController _imageController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _displayNameController = TextEditingController();
   // final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
@@ -37,34 +37,11 @@ class _EditableFormState extends State<EditableForm> {
   List<TextEditingController> _emailControllers = [TextEditingController()];
 
   @override
-  void initState() {
-    super.initState();
-    _imageController.text = widget.user.avatar;
-    _displayNameController.text = widget.user.profile.displayName;
-    _titleController.text = widget.user.profile.title;
-    _companyController.text = widget.user.profile.company;
-    _addressController.text = widget.user.profile.address;
-    _birthdayController.text = widget.user.profile.birthday.ymd;
-    _noteController.text = widget.user.profile.notes;
-    // _categoryController.text = widget.user!.categories[0];
-    _emailControllers = List<TextEditingController>.generate(
-      widget.user.profile.emails.length,
-      (index) => TextEditingController(
-        text: widget.user.profile.emails[index].email,
-      ),
-    );
-    _phoneControllers = List<TextEditingController>.generate(
-      widget.user.profile.phoneNumbers.length,
-      (index) => TextEditingController(
-        text: widget.user.profile.phoneNumbers[index].phoneNumber,
-      ),
-    );
-  }
-
-  @override
   void dispose() {
     super.dispose();
     _imageController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _displayNameController.dispose();
     _titleController.dispose();
     _companyController.dispose();
@@ -100,33 +77,24 @@ class _EditableFormState extends State<EditableForm> {
               child: Stack(
                 children: [
                   Container(
-                    width: 100,
-                    height: 100,
+                    clipBehavior: Clip.hardEdge,
+                    width: 80,
+                    height: 80,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
                         width: 4,
-                        color: AppColors.grey.withOpacity(0.2),
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
                       ),
                     ),
-                    child: ClipOval(
-                      child:
-                          //  widget.user != null || binaryImage != null
-                          //     ? Image.memory(binaryImage!)
-                          //     :
-
-                          widget.user.avatar.isNotEmpty && widget.user.avatar.contains('https')
-                              ? Image.network(
-                                  widget.user.avatar,
-                                  height: 80,
-                                  width: 80,
-                                  errorBuilder: (context, url, error) => const Icon(Icons.error),
-                                )
-                              : SvgPicture.asset(
-                                  ImageConstants.user,
-                                  width: 80,
-                                  height: 80,
-                                ),
+                    child:
+                        //  widget.user != null || binaryImage != null
+                        //     ? Image.memory(binaryImage!)
+                        //     :
+                        SvgPicture.asset(
+                      ImageConstants.user,
+                      width: 50.0,
+                      height: 50.0,
                     ),
                   ),
                   Positioned(
@@ -136,18 +104,36 @@ class _EditableFormState extends State<EditableForm> {
                       width: 30,
                       height: 30,
                       decoration: const BoxDecoration(
-                        color: Colors.blue,
+                        color: AppColors.primary,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.edit,
-                        color: Colors.white,
+                        color: AppColors.light,
                         size: 18,
                       ),
                     ),
                   ),
                 ],
               ),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'First Name',
+                prefixIcon: Icon(Icons.person),
+              ),
+              controller: _firstNameController,
+              validator: (value) => _validator(value),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Last Name',
+                prefixIcon: Icon(Icons.person),
+              ),
+              controller: _lastNameController,
+              validator: (value) => _validator(value),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -253,35 +239,35 @@ class _EditableFormState extends State<EditableForm> {
                     //   ),
                     //   child: const Text('Delete'),
                     // ),
-                    // const Spacer(),
+
                     SizedBox(
                       width: 150,
                       child: CustomButton(
-                          title: 'Cancel',
-                          isInverted: true,
-                          onPressed: () => showDialog(
-                                context: context,
-                                builder: (context) => ConfirmationDialog(
-                                  action: ConfirmationDialogAction.cancel,
-                                  user: widget.user,
-                                ),
-                              )),
+                        title: 'Cancel',
+                        isInverted: true,
+                        onPressed: () => showDialog(
+                          context: context,
+                          builder: (context) => ConfirmationDialog(
+                            action: ConfirmationDialogAction.cancel,
+                          ),
+                        ),
+                      ),
                     ),
                     const Spacer(),
                     SizedBox(
                       width: 150,
                       child: CustomButton(
-                        title: 'Update',
+                        title: 'Create',
                         onPressed: () {
                           final form = Form.of(context);
                           if (form.validate()) {
                             form.save();
+
                             showDialog(
                               context: context,
                               builder: (context) => ConfirmationDialog(
-                                action: ConfirmationDialogAction.update,
-                                user: widget.user,
-                                updateProfile: _updateProfile(),
+                                action: ConfirmationDialogAction.add,
+                                newUser: _createUser(),
                               ),
                             );
                           }
@@ -401,7 +387,7 @@ class _EditableFormState extends State<EditableForm> {
     );
   }
 
-  PatchUserProfileDto _updateProfile() {
+  PatchUserProfileDto _createProfile() {
     return PatchUserProfileDto(
       address: _addressController.text,
       banner: '', //FIXME: to be deleted from BE
@@ -417,6 +403,15 @@ class _EditableFormState extends State<EditableForm> {
           .map((phone) =>
               PhoneNumber(phoneNumber: phone.text, label: 'null', country: 'null')) //FIXME
           .toList(),
+    );
+  }
+
+  PostUserDto _createUser() {
+    return PostUserDto(
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      email: _emailControllers[0].text,
+      profile: _createProfile(),
     );
   }
 

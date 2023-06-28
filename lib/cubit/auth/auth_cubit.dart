@@ -5,26 +5,26 @@ import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/repositories/token.dart';
 import 'package:dashboard/services/error/network_exceptions.dart';
 import 'package:dashboard/services/http/remote_service.dart';
+import 'package:dashboard/services/global_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder_api/api.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final makeRepository = TokensRepository.make();
-  final AuthApi authApi;
-  final ApiClient apiClient;
+  final ApiClient apiClient = ClientService.apiClient;
 
+  late AuthApi authApi;
   late TokensRepository repository;
   late RemoteService remoteService;
 
-  AuthCubit(ApiClient apiClient)
-      : this.authApi = AuthApi(apiClient),
-        this.apiClient = apiClient,
-        super(UnknownAuthState());
+  AuthCubit() : super(UnknownAuthState()) {
+    this.authApi = AuthApi(apiClient);
+    this.remoteService = RemoteService();
+  }
 
   // call in splash screen
   Future<void> checkAccessToken() async {
     repository = await makeRepository;
-    remoteService = RemoteService(apiClient);
 
     emit(AuthenticatingState());
     final result = await remoteService.asyncTryCatch(

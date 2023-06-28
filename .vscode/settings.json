@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "autovalidate",
+        "Debouncer",
         "hexcode",
         "myflutterapp",
         "openapi",
@@ -9,7 +10,10 @@
         "Roboto",
         "signin",
         "signup",
-        "vsync"
+        "SSSZ",
+        "vsync",
+        "ymdhms",
+        "ymdthmss"
     ],
     "java.configuration.updateBuildConfiguration": "automatic"
 }

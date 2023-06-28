@@ -19,7 +19,7 @@ class Router {
       case RouteConstants.home:
         return MaterialPageRoute(builder: (_) => const DashboardScreen(), settings: settings);
       case RouteConstants.users:
-        return MaterialPageRoute(builder: (_) => UsersScreen(), settings: settings);
+        return MaterialPageRoute(builder: (_) => const UsersScreen(), settings: settings);
       case RouteConstants.user:
         return MaterialPageRoute(builder: (_) => const UserScreen(), settings: settings);
 

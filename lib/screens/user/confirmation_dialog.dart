@@ -1,25 +1,27 @@
-// ignore: use_build_context_synchronously
 import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/cubit/user/user_state.dart';
 import 'package:dashboard/models/enums.dart';
-import 'package:dashboard/models/user_request.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/user_screen.dart';
-import 'package:dashboard/screens/users/users.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:dashboard/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dashboard/cubit/user/user_cubit.dart';
+import 'package:qcarder_api/api.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final ConfirmationDialogAction action;
-  final UserRequest? user;
+  final User? user;
+  final PostUserDto? newUser;
+  final PatchUserProfileDto? updateProfile;
 
   const ConfirmationDialog({
     super.key,
     required this.action,
     this.user,
+    this.newUser,
+    this.updateProfile,
   });
 
   @override
@@ -84,10 +86,10 @@ class ConfirmationDialog extends StatelessWidget {
         _deleteContact(context, contactCubit);
         break;
       case ConfirmationDialogAction.add:
-        _addContact(context, contactCubit);
+        _createUser(context, contactCubit);
         break;
       case ConfirmationDialogAction.update:
-        _updateContact(context, contactCubit);
+        _updateProfile(context, contactCubit);
         break;
       case ConfirmationDialogAction.cancel:
         _cancelContact(context);
@@ -96,7 +98,7 @@ class ConfirmationDialog extends StatelessWidget {
   }
 
   void _deleteContact(BuildContext context, UserCubit contactCubit) {
-    if (user == null || user!.id == null) return;
+    if (user == null) return;
     contactCubit.deleteUser(user!.id.toString()).then((_) {
       Navigator.pop(context); // Close the dialog
       RouteManager.routerManagerPushUntil(
@@ -111,10 +113,9 @@ class ConfirmationDialog extends StatelessWidget {
     });
   }
 
-  Future<void> _addContact(BuildContext context, UserCubit contactCubit) async {
-    if (user == null) return;
-    print(user!.toJson());
-    await contactCubit.addNewUser(user!);
+  Future<void> _createUser(BuildContext context, UserCubit contactCubit) async {
+    if (newUser == null) return;
+    await contactCubit.createUser(newUser!);
     final state = contactCubit.state;
     if (state is UserFailed) {
       CustomSnackbar.show(
@@ -132,9 +133,9 @@ class ConfirmationDialog extends StatelessWidget {
     }
   }
 
-  void _updateContact(BuildContext context, UserCubit userCubit) {
-    if (user == null) return;
-    userCubit.updateUser(user!).then((_) {
+  void _updateProfile(BuildContext context, UserCubit userCubit) {
+    if (user == null || updateProfile == null) return;
+    userCubit.updateProfile(user!, updateProfile!).then((_) {
       UserState state = userCubit.state;
       if (state is UserLoaded) {
         Navigator.pop(context);
@@ -160,14 +161,12 @@ class ConfirmationDialog extends StatelessWidget {
 
   void _cancelContact(BuildContext context) {
     Navigator.pop(context);
-    user != null
-        ? RouteManager.navigateToWithData(
-            context,
-            () => UsersScreen(),
-          )
-        : RouteManager.routerManagerPushUntil(
+    context.read<UserCubit>().isNewForm();
+    user == null
+        ? RouteManager.routerManagerPushUntil(
             context: context,
             routeName: RouteConstants.users,
-          );
+          )
+        : RouteManager.navigateToWithData(context, () => UserScreen(user: user));
   }
 }

@@ -6,7 +6,7 @@ class RouteManager {
   }
 
   static routerManagerPushUntil({required String routeName, required BuildContext context}) {
-    Navigator.of(context).pushNamedAndRemoveUntil(routeName, (route) => false);
+    Navigator.pushNamedAndRemoveUntil(context, routeName, (route) => false);
   }
 
   static routerManagerPopAndPushNamed({required String routeName, required BuildContext context}) {

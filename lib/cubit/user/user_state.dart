@@ -1,4 +1,4 @@
-import 'package:dashboard/models/user.dart';
+import 'package:qcarder_api/api.dart';
 
 abstract class UserState {}
 

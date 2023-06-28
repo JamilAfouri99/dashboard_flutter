@@ -3,18 +3,19 @@ import 'package:dashboard/helpers/token_validator.dart';
 import 'package:dashboard/models/tokens.dart';
 import 'package:dashboard/repositories/token.dart';
 import 'package:dashboard/services/error/network_exceptions.dart';
+import 'package:dashboard/services/global_services.dart';
 import 'package:qcarder_api/api.dart';
 
 class RemoteService {
   final makeRepository = TokensRepository.make();
   TokensRepository? tokensRepo;
 
-  final ApiClient apiClient;
-  final AuthApi authApi;
+  final ApiClient apiClient = ClientService.apiClient;
+  late AuthApi authApi;
 
-  RemoteService(ApiClient apiClient)
-      : this.apiClient = apiClient,
-        this.authApi = AuthApi();
+  RemoteService() {
+    this.authApi = AuthApi(apiClient);
+  }
 
   Future<Result<T>> asyncTryCatch<T>(
     Future<T> Function() action, {
@@ -86,6 +87,8 @@ class RemoteService {
   Future<Result<void>> _refreshTokenHandler(
       TokensRepository tokensRepository, RefreshToken refreshToken) async {
     try {
+      apiClient.addDefaultHeader('Authorization', 'Bearer ${refreshToken.token}');
+
       final AuthUser? response = await authApi.signinUsingRefreshToken();
       if (response == null) throw NetworkExceptions.handleAuthenticationFailed();
       await tokensRepository.setTokens(

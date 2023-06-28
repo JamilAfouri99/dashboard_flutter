@@ -1,10 +1,9 @@
-import 'package:dashboard/configuration/config.dart';
 import 'package:dashboard/cubit/auth/auth_cubit.dart';
 import 'package:dashboard/configuration/theme.dart';
 import 'package:dashboard/configuration/constants.dart';
 import 'package:dashboard/cubit/user/user_cubit.dart';
 import 'package:dashboard/cubit/users/users_cubit.dart';
-import 'package:dashboard/services/navigation_service.dart';
+import 'package:dashboard/services/global_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder_api/api.dart';
@@ -17,13 +16,13 @@ import 'package:openapi_generator_annotations/openapi_generator_annotations.dart
   generatorName: Generator.dart,
   outputDirectory: 'apis',
   overwriteExistingFiles: true,
-  skipSpecValidation: true,
+  skipSpecValidation: false,
   alwaysRun: true,
 )
 class MyApp extends StatefulWidget {
   final Locale locale;
   final ApiClient apiClient;
-  MyApp(this.locale, {super.key}) : apiClient = ApiClient(basePath: EnvConfig.instance.baseUrl);
+  MyApp(this.locale, {super.key}) : apiClient = ClientService.apiClient;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -37,9 +36,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    print('hash auth: ${widget.apiClient.hashCode}');
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => AuthCubit(widget.apiClient)..checkAccessToken()),
+        BlocProvider(create: (_) => AuthCubit()..checkAccessToken()),
         BlocProvider(create: (_) => UsersCubit()),
         BlocProvider(create: (_) => UserCubit()),
       ],
@@ -49,8 +49,8 @@ class _MyAppState extends State<MyApp> {
         initialRoute: RouteConstants.splash,
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
-        navigatorKey: NavigationService.navigatorKey,
-        scaffoldMessengerKey: NavigationService.snackbarKey,
+        navigatorKey: KeysService.navigatorKey,
+        scaffoldMessengerKey: KeysService.snackbarKey,
         supportedLocales: const [
           Locale('en', ''), // English, no country code
           Locale('ar', ''), // Arabic, no country code

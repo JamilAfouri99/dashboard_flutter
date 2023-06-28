@@ -1,9 +1,9 @@
-import 'package:dashboard/configuration/index.dart';
+import 'package:dashboard/configuration/image_constants.dart';
+import 'package:dashboard/configuration/theme.dart';
 import 'package:dashboard/cubit/auth/auth_cubit.dart';
 import 'package:dashboard/cubit/auth/auth_state.dart';
 import 'package:dashboard/cubit/users/users_cubit.dart';
 import 'package:dashboard/cubit/users/users_state.dart';
-import 'package:dashboard/models/user.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/user_screen.dart';
 import 'package:dashboard/widgets/custom_progress_indicator.dart';
@@ -12,25 +12,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:qcarder_api/api.dart';
 
 class UsersScreen extends StatelessWidget {
-  UsersScreen({super.key});
-
-  final TextEditingController _searchController = TextEditingController();
+  const UsersScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<UsersCubit>(
-      create: (context) => UsersCubit()..fetch(),
+      create: (_) => UsersCubit()..fetch(),
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: AppColors.primary,
           centerTitle: true,
-          title: Text('Users', style: Theme.of(context).textTheme.titleLarge),
+          title: Text(
+            'Users',
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.light),
+          ),
           actions: [
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) {
                 return IconButton(
-                  icon: const Icon(Icons.logout),
+                  icon: const Icon(Icons.logout, color: AppColors.light),
+                  tooltip: 'Logout',
                   onPressed: () async {
                     await context.read<AuthCubit>().remoteLogout(context);
                   },
@@ -62,10 +66,9 @@ class UsersScreen extends StatelessWidget {
                   BlocBuilder<UsersCubit, UsersState>(
                     builder: (context, state) => Expanded(
                       child: TextField(
-                        controller: _searchController,
-                        onChanged: (value) => context.read<UsersCubit>().searchUsers(value),
+                        onChanged: (value) => context.read<UsersCubit>().updateSearch(value),
                         decoration: InputDecoration(
-                          hintText: 'Search contacts',
+                          hintText: 'Search users',
                           border: InputBorder.none,
                           hintStyle: TextStyle(color: AppColors.grey.withOpacity(0.5)),
                         ),
@@ -119,25 +122,25 @@ Widget _user(User user, BuildContext context) {
   return ListTile(
     leading: ClipRRect(
       borderRadius: BorderRadius.circular(50.0),
-      child: user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
+      child: user.avatar.isNotEmpty && user.avatar.contains('https')
           ? Image.network(
-              user.avatar!,
+              user.avatar,
               height: 50,
               width: 50,
               errorBuilder: (context, url, error) => const Icon(Icons.error),
             )
           : SvgPicture.asset(
-              ImageConstants.woman,
+              ImageConstants.user,
               width: 50.0,
               height: 50.0,
             ),
     ),
     title: Text(
-      user.firstName,
+      user.profile.displayName,
       style: Theme.of(context).textTheme.bodyLarge,
     ),
     subtitle: Text(
-      user.role,
+      user.profile.title,
       style: Theme.of(context).textTheme.bodySmall,
     ),
     onTap: () => RouteManager.navigateToWithData(
@@ -154,4 +157,5 @@ FloatingActionButton _floatingActionButton(BuildContext context) => FloatingActi
         () => const UserScreen(),
       ),
       child: const Icon(Icons.add),
+      tooltip: 'Add user',
     );

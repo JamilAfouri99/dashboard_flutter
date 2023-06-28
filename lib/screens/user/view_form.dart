@@ -1,9 +1,9 @@
 import 'package:dashboard/configuration/image_constants.dart';
 import 'package:dashboard/configuration/theme.dart';
 import 'package:dashboard/helpers/date_time.dart';
-import 'package:dashboard/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qcarder_api/api.dart';
 
 class ViewForm extends StatelessWidget {
   final User user;
@@ -28,29 +28,28 @@ class ViewForm extends StatelessWidget {
               ),
             ),
             child: ClipOval(
-              child:
-                  user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
-                      ? Image.network(
-                          user.avatar!,
-                          height: 120,
-                          width: 120,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, url, error) => const Icon(
-                            Icons.error,
-                            color: AppColors.primary,
-                          ),
-                        )
-                      : SvgPicture.asset(
-                          ImageConstants.woman,
-                          width: 80.0,
-                          height: 80.0,
-                        ),
+              child: user.avatar.isNotEmpty && user.avatar.contains('https')
+                  ? Image.network(
+                      user.avatar,
+                      height: 120,
+                      width: 120,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, url, error) => const Icon(
+                        Icons.error,
+                        color: AppColors.primary,
+                      ),
+                    )
+                  : SvgPicture.asset(
+                      ImageConstants.user,
+                      width: 80.0,
+                      height: 80.0,
+                    ),
             ),
           ),
 
           const SizedBox(height: 16),
           Text(
-            user.firstName,
+            user.profile.displayName,
             style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: AppColors.primary),
           ),
           const SizedBox(height: 8),
@@ -96,7 +95,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.title ?? '',
+                    user.profile.title,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -106,7 +105,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.company ?? '',
+                    user.profile.company,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -118,7 +117,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.address ?? '',
+                    user.profile.address,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -128,7 +127,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.birthday != null ? user.profile.birthday!.ymd : '',
+                    user.profile.birthday.ymd,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -138,7 +137,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.notes ?? '',
+                    user.profile.notes,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -158,18 +157,18 @@ class ViewForm extends StatelessWidget {
           color: AppColors.primary,
         ),
         // subtitle: Text(email.label),
-        title: user.profile.emails != null && user.profile.emails!.length > 1
+        title: user.profile.emails.length > 1
             ? DropdownButton<String>(
                 value: user.email,
                 isDense: false,
                 onChanged: (_) {},
-                items: user.profile.emails!.map<DropdownMenuItem<String>>((value) {
+                items: user.profile.emails.map<DropdownMenuItem<String>>((value) {
                   return DropdownMenuItem<String>(
                     value: value.email,
                     child: SizedBox(
                       width: 200,
                       child: Text(
-                        value.email ?? '',
+                        value.email,
                         overflow: TextOverflow.clip,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
@@ -193,22 +192,22 @@ class ViewForm extends StatelessWidget {
           color: AppColors.primary,
         ),
         // subtitle: Text(phone.label),
-        title: user.profile.phones != null && user.profile.phones!.length > 1
+        title: user.profile.phoneNumbers.length > 1
             ? DropdownButton<String>(
                 onChanged: (_) {},
-                value: user.profile.phones![0].phone,
-                items: user.profile.phones!.map<DropdownMenuItem<String>>((Phone value) {
+                value: user.profile.phoneNumbers[0].phoneNumber,
+                items: user.profile.phoneNumbers.map<DropdownMenuItem<String>>((PhoneNumber value) {
                   return DropdownMenuItem<String>(
-                    value: value.phone,
+                    value: value.phoneNumber,
                     child: Text(
-                      value.phone ?? '',
+                      value.phoneNumber,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   );
                 }).toList(),
               )
             : Text(
-                user.profile.phones != null ? user.profile.phones![0].phone ?? '' : '',
+                user.profile.phoneNumbers[0].phoneNumber,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
       ),

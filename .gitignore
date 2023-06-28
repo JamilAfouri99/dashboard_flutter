@@ -48,4 +48,6 @@ app.*.map.json
 .env.development
 .env.production
 
+# Personal
 todo.md
+result.json

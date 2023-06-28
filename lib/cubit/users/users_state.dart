@@ -1,4 +1,4 @@
-import 'package:dashboard/models/user.dart';
+import 'package:qcarder_api/api.dart';
 
 abstract class UsersState {}
 
@@ -7,10 +7,9 @@ class UsersUnknown extends UsersState {}
 class UsersLoading extends UsersState {}
 
 class UsersLoaded extends UsersState {
-  final List<User> users;
-  final Pagination? pagination;
+  final PaginatedUsers paginatedUsers;
 
-  UsersLoaded(this.users, this.pagination);
+  UsersLoaded(this.paginatedUsers);
 }
 
 class UsersFailed extends UsersState {

@@ -17,8 +17,8 @@ class PaginationMetaData {
     required this.lastPage,
     required this.currentPage,
     required this.perPage,
-    required this.prev,
-    required this.next,
+    this.prev,
+    this.next,
   });
 
   num total;
@@ -29,9 +29,9 @@ class PaginationMetaData {
 
   num perPage;
 
-  num prev;
+  num? prev;
 
-  num next;
+  num? next;
 
   @override
   bool operator ==(Object other) =>
@@ -79,23 +79,23 @@ class PaginationMetaData {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      assert(() {
-        requiredKeys.forEach((key) {
-          assert(json.containsKey(key),
-              'Required key "PaginationMetaData[$key]" is missing from JSON.');
-          assert(json[key] != null,
-              'Required key "PaginationMetaData[$key]" has a null value in JSON.');
-        });
-        return true;
-      }());
+      // assert(() {
+      //   requiredKeys.forEach((key) {
+      //     assert(json.containsKey(key),
+      //         'Required key "PaginationMetaData[$key]" is missing from JSON.');
+      //     assert(json[key] != null,
+      //         'Required key "PaginationMetaData[$key]" has a null value in JSON.');
+      //   });
+      //   return true;
+      // }());
 
       return PaginationMetaData(
         total: num.parse(json[r'total'].toString()),
         lastPage: num.parse(json[r'lastPage'].toString()),
         currentPage: num.parse(json[r'currentPage'].toString()),
         perPage: num.parse(json[r'perPage'].toString()),
-        prev: num.parse(json[r'prev'].toString()),
-        next: num.parse(json[r'next'].toString()),
+        prev: json[r'prev'] == null ? null : num.parse(json[r'prev'].toString()),
+        next: json[r'next'] == null ? null : num.parse(json[r'next'].toString()),
       );
     }
     return null;

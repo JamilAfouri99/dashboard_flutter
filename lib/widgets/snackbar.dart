@@ -1,10 +1,10 @@
 import 'package:dashboard/configuration/theme.dart';
-import 'package:dashboard/services/navigation_service.dart';
+import 'package:dashboard/services/global_services.dart';
 import 'package:flutter/material.dart';
 
 class CustomSnackbar {
   static void show(BuildContext context, String message, {SnackbarType type = SnackbarType.info}) {
-    final key = NavigationService.snackbarKey;
+    final key = KeysService.snackbarKey;
     if (key != null) {
       final snackbar = SnackBar(
         content: Text(
