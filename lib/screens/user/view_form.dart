@@ -28,22 +28,23 @@ class ViewForm extends StatelessWidget {
               ),
             ),
             child: ClipOval(
-              child: user.avatar.isNotEmpty && user.avatar.contains('https')
-                  ? Image.network(
-                      user.avatar,
-                      height: 120,
-                      width: 120,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, url, error) => const Icon(
-                        Icons.error,
-                        color: AppColors.primary,
-                      ),
-                    )
-                  : SvgPicture.asset(
-                      ImageConstants.user,
-                      width: 80.0,
-                      height: 80.0,
-                    ),
+              child:
+                  user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
+                      ? Image.network(
+                          user.avatar ?? '',
+                          height: 120,
+                          width: 120,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: AppColors.primary,
+                          ),
+                        )
+                      : SvgPicture.asset(
+                          ImageConstants.user,
+                          width: 80.0,
+                          height: 80.0,
+                        ),
             ),
           ),
 
@@ -95,7 +96,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.title,
+                    user.profile.title ?? '',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -105,7 +106,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.company,
+                    user.profile.company ?? '',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -117,7 +118,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.address,
+                    user.profile.address ?? '',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -127,7 +128,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.birthday.ymd,
+                    user.profile.birthday != null ? user.profile.birthday!.ymd : '',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -137,7 +138,7 @@ class ViewForm extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   title: Text(
-                    user.profile.notes,
+                    user.profile.notes ?? '',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -157,12 +158,12 @@ class ViewForm extends StatelessWidget {
           color: AppColors.primary,
         ),
         // subtitle: Text(email.label),
-        title: user.profile.emails.length > 1
+        title: user.profile.emails != null && user.profile.emails!.length > 1
             ? DropdownButton<String>(
                 value: user.email,
                 isDense: false,
                 onChanged: (_) {},
-                items: user.profile.emails.map<DropdownMenuItem<String>>((value) {
+                items: user.profile.emails!.map<DropdownMenuItem<String>>((value) {
                   return DropdownMenuItem<String>(
                     value: value.email,
                     child: SizedBox(
@@ -192,11 +193,12 @@ class ViewForm extends StatelessWidget {
           color: AppColors.primary,
         ),
         // subtitle: Text(phone.label),
-        title: user.profile.phoneNumbers.length > 1
+        title: user.profile.phoneNumbers != null && user.profile.phoneNumbers!.length > 1
             ? DropdownButton<String>(
                 onChanged: (_) {},
-                value: user.profile.phoneNumbers[0].phoneNumber,
-                items: user.profile.phoneNumbers.map<DropdownMenuItem<String>>((PhoneNumber value) {
+                value: user.profile.phoneNumbers![0].phoneNumber,
+                items:
+                    user.profile.phoneNumbers!.map<DropdownMenuItem<String>>((PhoneNumber value) {
                   return DropdownMenuItem<String>(
                     value: value.phoneNumber,
                     child: Text(
@@ -207,7 +209,7 @@ class ViewForm extends StatelessWidget {
                 }).toList(),
               )
             : Text(
-                user.profile.phoneNumbers[0].phoneNumber,
+                user.profile.phoneNumbers != null ? user.profile.phoneNumbers![0].phoneNumber : '',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
       ),

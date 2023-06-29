@@ -17,6 +17,8 @@ class NetworkExceptions {
         return _handleHttpResponse(error);
       } else if (error is AssertionError) {
         return _handleAssertionError(error);
+      } else if (error is TypeError) {
+        return _handleTypeError(error);
       } else if (error is String) {
         return error;
       } else {
@@ -43,6 +45,10 @@ class NetworkExceptions {
 
   static String _handleAssertionError(AssertionError error) {
     return error.message.toString();
+  }
+
+  static String _handleTypeError(TypeError error) {
+    return error.toString();
   }
 
   static String _handleHttpResponse(ApiException response) {
@@ -149,6 +155,7 @@ class NetworkExceptions {
   }
 
   static String _handleNotAllowed(ApiException response) {
+    // context.read<AuthCubit>().localLogout(context);
     final decodedBody = jsonDecode(response.message ?? '');
     if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
       final message = decodedBody['message'];

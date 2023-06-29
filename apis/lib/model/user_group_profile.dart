@@ -17,7 +17,7 @@ class UserGroupProfile {
     required this.createdAt,
     required this.updatedAt,
     required this.groupId,
-    required this.banner,
+    this.banner,
   });
 
   num id;
@@ -28,7 +28,7 @@ class UserGroupProfile {
 
   num groupId;
 
-  String banner;
+  String? banner;
 
   @override
   bool operator ==(Object other) =>
@@ -73,22 +73,22 @@ class UserGroupProfile {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      assert(() {
-        requiredKeys.forEach((key) {
-          assert(
-              json.containsKey(key), 'Required key "UserGroupProfile[$key]" is missing from JSON.');
-          assert(
-              json[key] != null, 'Required key "UserGroupProfile[$key]" has a null value in JSON.');
-        });
-        return true;
-      }());
+      // assert(() {
+      //   requiredKeys.forEach((key) {
+      //     assert(
+      //         json.containsKey(key), 'Required key "UserGroupProfile[$key]" is missing from JSON.');
+      //     assert(
+      //         json[key] != null, 'Required key "UserGroupProfile[$key]" has a null value in JSON.');
+      //   });
+      //   return true;
+      // }());
 
       return UserGroupProfile(
         id: num.parse(json[r'id'].toString()),
         createdAt: mapDateTime(json, r'createdAt', '')!,
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
         groupId: num.parse(json[r'groupId'].toString()),
-        banner: mapValueOfType<String>(json, r'banner')!,
+        banner: json[r'banner'] != null ? mapValueOfType<String>(json, r'banner') : json[r'banner'],
       );
     }
     return null;

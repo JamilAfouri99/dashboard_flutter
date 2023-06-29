@@ -19,11 +19,11 @@ class User {
     required this.email,
     required this.firstName,
     required this.lastName,
-    required this.avatar,
+    this.avatar,
     required this.role,
     required this.status,
-    required this.group,
-    required this.groupId,
+    this.group,
+    this.groupId,
     required this.profile,
   });
 
@@ -39,15 +39,15 @@ class User {
 
   String lastName;
 
-  String avatar;
+  String? avatar;
 
   UserRoleEnum role;
 
   UserStatusEnum status;
 
-  UserGroup group;
+  UserGroup? group;
 
-  num groupId;
+  num? groupId;
 
   UserProfile profile;
 
@@ -115,13 +115,13 @@ class User {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      assert(() {
-        requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "User[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "User[$key]" has a null value in JSON.');
-        });
-        return true;
-      }());
+      // assert(() {
+      //   requiredKeys.forEach((key) {
+      //     assert(json.containsKey(key), 'Required key "User[$key]" is missing from JSON.');
+      //     assert(json[key] != null, 'Required key "User[$key]" has a null value in JSON.');
+      //   });
+      //   return true;
+      // }());
 
       return User(
         id: num.parse(json[r'id'].toString()),
@@ -130,11 +130,12 @@ class User {
         email: mapValueOfType<String>(json, r'email')!,
         firstName: mapValueOfType<String>(json, r'firstName')!,
         lastName: mapValueOfType<String>(json, r'lastName')!,
-        avatar: mapValueOfType<String>(json, r'avatar')!,
-        role: UserRoleEnum.fromJson(json[r'role'])!,
+        avatar: json[r'avatar'] != null ? mapValueOfType<String>(json, r'avatar') : json[r'avatar'],
+        role: json[r'role'] != null ? UserRoleEnum.fromJson(json[r'role']) : json[r'role'],
         status: UserStatusEnum.fromJson(json[r'status'])!,
-        group: UserGroup.fromJson(json[r'group'])!,
-        groupId: num.parse(json[r'groupId'].toString()),
+        group: json[r'group'] != null ? UserGroup.fromJson(json[r'group']) : json[r'group'],
+        groupId:
+            json[r'groupId'] != null ? num.parse(json[r'groupId'].toString()) : json[r'groupId'],
         profile: UserProfile.fromJson(json[r'profile'])!,
       );
     }

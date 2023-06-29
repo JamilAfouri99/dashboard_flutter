@@ -18,12 +18,12 @@ class UserProfile {
     required this.updatedAt,
     required this.userId,
     required this.displayName,
-    required this.banner,
-    required this.title,
-    required this.company,
-    required this.birthday,
-    required this.address,
-    required this.notes,
+    this.banner,
+    this.title,
+    this.company,
+    this.birthday,
+    this.address,
+    this.notes,
     this.emails = const [],
     this.phoneNumbers = const [],
   });
@@ -38,21 +38,21 @@ class UserProfile {
 
   String displayName;
 
-  String banner;
+  String? banner;
 
-  String title;
+  String? title;
 
-  String company;
+  String? company;
 
-  DateTime birthday;
+  DateTime? birthday;
 
-  String address;
+  String? address;
 
-  String notes;
+  String? notes;
 
-  List<Email> emails;
+  List<Email>? emails;
 
-  List<PhoneNumber> phoneNumbers;
+  List<PhoneNumber>? phoneNumbers;
 
   @override
   bool operator ==(Object other) =>
@@ -103,7 +103,8 @@ class UserProfile {
     json[r'banner'] = this.banner;
     json[r'title'] = this.title;
     json[r'company'] = this.company;
-    json[r'birthday'] = this.birthday.toUtc().toIso8601String();
+    json[r'birthday'] =
+        json[r'birthday'] != null ? this.birthday!.toUtc().toIso8601String() : json[r'birthday'];
     json[r'address'] = this.address;
     json[r'notes'] = this.notes;
     json[r'emails'] = this.emails;
@@ -121,13 +122,13 @@ class UserProfile {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      assert(() {
-        requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "UserProfile[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "UserProfile[$key]" has a null value in JSON.');
-        });
-        return true;
-      }());
+      // assert(() {
+      //   requiredKeys.forEach((key) {
+      //     assert(json.containsKey(key), 'Required key "UserProfile[$key]" is missing from JSON.');
+      //     assert(json[key] != null, 'Required key "UserProfile[$key]" has a null value in JSON.');
+      //   });
+      //   return true;
+      // }());
 
       return UserProfile(
         id: num.parse(json[r'id'].toString()),
@@ -135,14 +136,21 @@ class UserProfile {
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
         userId: num.parse(json[r'userId'].toString()),
         displayName: mapValueOfType<String>(json, r'displayName')!,
-        banner: mapValueOfType<String>(json, r'banner')!,
-        title: mapValueOfType<String>(json, r'title')!,
-        company: mapValueOfType<String>(json, r'company')!,
-        birthday: mapDateTime(json, r'birthday', '')!,
-        address: mapValueOfType<String>(json, r'address')!,
-        notes: mapValueOfType<String>(json, r'notes')!,
-        emails: Email.listFromJson(json[r'emails'])!,
-        phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers'])!,
+        banner: json[r'banner'] != null ? mapValueOfType<String>(json, r'banner') : json[r'banner'],
+        title: json[r'title'] != null ? mapValueOfType<String>(json, r'title') : json[r'title'],
+        company:
+            json[r'company'] != null ? mapValueOfType<String>(json, r'company') : json[r'company'],
+        birthday:
+            json[r'birthday'] != null ? mapDateTime(json, r'birthday', '') : json[r'birthday'],
+        address:
+            json[r'address'] != null ? mapValueOfType<String>(json, r'address') : json[r'address'],
+        notes: json[r'notes'] != null ? mapValueOfType<String>(json, r'notes') : json[r'notes'],
+        emails: json[r'emails'] != null && json[r'emails'].length > 0
+            ? Email.listFromJson(json[r'emails'])
+            : json[r'emails'],
+        phoneNumbers: json[r'phoneNumbers'] != null && json[r'phoneNumbers'].length > 0
+            ? PhoneNumber.listFromJson(json[r'phoneNumbers'])
+            : json[r'phoneNumbers'],
       );
     }
     return null;

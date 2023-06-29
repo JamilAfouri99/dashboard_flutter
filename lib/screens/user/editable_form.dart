@@ -39,24 +39,27 @@ class _EditableFormState extends State<EditableForm> {
   @override
   void initState() {
     super.initState();
-    _imageController.text = widget.user.avatar;
+    _imageController.text = widget.user.avatar ?? '';
     _displayNameController.text = widget.user.profile.displayName;
-    _titleController.text = widget.user.profile.title;
-    _companyController.text = widget.user.profile.company;
-    _addressController.text = widget.user.profile.address;
-    _birthdayController.text = widget.user.profile.birthday.ymd;
-    _noteController.text = widget.user.profile.notes;
+    _titleController.text = widget.user.profile.title ?? '';
+    _companyController.text = widget.user.profile.company ?? '';
+    _addressController.text = widget.user.profile.address ?? '';
+    _birthdayController.text =
+        widget.user.profile.birthday != null ? widget.user.profile.birthday!.ymd : '';
+    _noteController.text = widget.user.profile.notes ?? '';
     // _categoryController.text = widget.user!.categories[0];
     _emailControllers = List<TextEditingController>.generate(
-      widget.user.profile.emails.length,
+      widget.user.profile.emails != null ? widget.user.profile.emails!.length : 1,
       (index) => TextEditingController(
-        text: widget.user.profile.emails[index].email,
+        text: widget.user.profile.emails != null ? widget.user.profile.emails![index].email : '',
       ),
     );
     _phoneControllers = List<TextEditingController>.generate(
-      widget.user.profile.phoneNumbers.length,
+      widget.user.profile.phoneNumbers != null ? widget.user.profile.phoneNumbers!.length : 1,
       (index) => TextEditingController(
-        text: widget.user.profile.phoneNumbers[index].phoneNumber,
+        text: widget.user.profile.phoneNumbers != null
+            ? widget.user.profile.phoneNumbers![index].phoneNumber
+            : '',
       ),
     );
   }
@@ -115,9 +118,11 @@ class _EditableFormState extends State<EditableForm> {
                           //     ? Image.memory(binaryImage!)
                           //     :
 
-                          widget.user.avatar.isNotEmpty && widget.user.avatar.contains('https')
+                          widget.user.avatar != null &&
+                                  widget.user.avatar!.isNotEmpty &&
+                                  widget.user.avatar!.contains('https')
                               ? Image.network(
-                                  widget.user.avatar,
+                                  widget.user.avatar ?? '',
                                   height: 80,
                                   width: 80,
                                   errorBuilder: (context, url, error) => const Icon(Icons.error),

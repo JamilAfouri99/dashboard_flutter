@@ -6,8 +6,8 @@ import 'package:dashboard/cubit/users/users_cubit.dart';
 import 'package:dashboard/cubit/users/users_state.dart';
 import 'package:dashboard/navigation/router_manager.dart';
 import 'package:dashboard/screens/user/user_screen.dart';
-import 'package:dashboard/widgets/custom_progress_indicator.dart';
 import 'package:dashboard/widgets/failed_widget.dart';
+import 'package:dashboard/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -95,7 +95,7 @@ class UsersScreen extends StatelessWidget {
                       child: _users(context),
                     );
                   }
-                  return const Center(child: CustomProgressIndicator());
+                  return _usersShimmer(context);
                 },
               ),
             ),
@@ -114,6 +114,7 @@ Widget _users(BuildContext context) {
     ),
     builderDelegate: PagedChildBuilderDelegate<User>(
       itemBuilder: (context, user, index) => _user(user, context),
+      firstPageProgressIndicatorBuilder: (context) => _usersShimmer(context),
     ),
   );
 }
@@ -122,9 +123,9 @@ Widget _user(User user, BuildContext context) {
   return ListTile(
     leading: ClipRRect(
       borderRadius: BorderRadius.circular(50.0),
-      child: user.avatar.isNotEmpty && user.avatar.contains('https')
+      child: user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
           ? Image.network(
-              user.avatar,
+              user.avatar ?? '',
               height: 50,
               width: 50,
               errorBuilder: (context, url, error) => const Icon(Icons.error),
@@ -140,12 +141,59 @@ Widget _user(User user, BuildContext context) {
       style: Theme.of(context).textTheme.bodyLarge,
     ),
     subtitle: Text(
-      user.profile.title,
+      user.profile.title ?? '',
       style: Theme.of(context).textTheme.bodySmall,
     ),
     onTap: () => RouteManager.navigateToWithData(
       context,
       () => UserScreen(user: user),
+    ),
+  );
+}
+
+Widget _usersShimmer(BuildContext context) {
+  return Shimmer(
+    linearGradient: shimmerGradient,
+    child: ShimmerLoading(
+      isLoading: true,
+      child: SingleChildScrollView(
+        child: Column(
+          children: List.generate(
+            10,
+            (index) => ListTile(
+              leading: const CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.grey,
+              ),
+              title: Container(
+                height: 10,
+                color: Colors.grey,
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 10,
+                    color: Colors.grey,
+                  ),
+                  Container(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 10,
+                    width: MediaQuery.of(context).size.width * 0.2,
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+              isThreeLine: true,
+            ),
+          ),
+        ),
+      ),
     ),
   );
 }

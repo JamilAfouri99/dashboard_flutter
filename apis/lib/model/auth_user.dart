@@ -19,10 +19,10 @@ class AuthUser {
     required this.email,
     required this.firstName,
     required this.lastName,
-    required this.avatar,
+    this.avatar,
     required this.role,
     required this.status,
-    required this.groupId,
+    this.groupId,
     required this.accessToken,
     required this.refreshToken,
   });
@@ -39,13 +39,13 @@ class AuthUser {
 
   String lastName;
 
-  String avatar;
+  String? avatar;
 
   AuthUserRoleEnum role;
 
   AuthUserStatusEnum status;
 
-  num groupId;
+  num? groupId;
 
   String accessToken;
 
@@ -115,13 +115,13 @@ class AuthUser {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      assert(() {
-        requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "AuthUser[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "AuthUser[$key]" has a null value in JSON.');
-        });
-        return true;
-      }());
+      // assert(() {
+      //   requiredKeys.forEach((key) {
+      //     assert(json.containsKey(key), 'Required key "AuthUser[$key]" is missing from JSON.');
+      //     assert(json[key] != null, 'Required key "AuthUser[$key]" has a null value in JSON.');
+      //   });
+      //   return true;
+      // }());
 
       return AuthUser(
         id: num.parse(json[r'id'].toString()),
@@ -130,10 +130,11 @@ class AuthUser {
         email: mapValueOfType<String>(json, r'email')!,
         firstName: mapValueOfType<String>(json, r'firstName')!,
         lastName: mapValueOfType<String>(json, r'lastName')!,
-        avatar: mapValueOfType<String>(json, r'avatar')!,
+        avatar: json[r'avatar'] != null ? mapValueOfType<String>(json, r'avatar') : json[r'avatar'],
         role: AuthUserRoleEnum.fromJson(json[r'role'])!,
         status: AuthUserStatusEnum.fromJson(json[r'status'])!,
-        groupId: num.parse(json[r'groupId'].toString()),
+        groupId:
+            json[r'groupId'] != null ? num.parse(json[r'groupId'].toString()) : json[r'groupId'],
         accessToken: mapValueOfType<String>(json, r'access_token')!,
         refreshToken: mapValueOfType<String>(json, r'refresh_token')!,
       );
