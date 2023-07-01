@@ -5,6 +5,7 @@ class RouteConstants {
   static const String signUp = '/signUp';
   static const String users = '/users';
   static const String user = '/user';
+  static const String nfc = '/nfc';
 }
 
 class ApiConstants {

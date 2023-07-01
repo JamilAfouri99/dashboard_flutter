@@ -1,4 +1,4 @@
-import 'package:dashboard/configuration/config.dart';
+import 'package:qcarder/configuration/config.dart';
 import 'package:flutter/material.dart';
 import 'package:qcarder_api/api.dart';
 

@@ -1,4 +1,4 @@
-import 'package:dashboard/models/tokens.dart';
+import 'package:qcarder/models/tokens.dart';
 
 abstract class AuthState {}
 

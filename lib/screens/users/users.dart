@@ -1,13 +1,13 @@
-import 'package:dashboard/configuration/image_constants.dart';
-import 'package:dashboard/configuration/theme.dart';
-import 'package:dashboard/cubit/auth/auth_cubit.dart';
-import 'package:dashboard/cubit/auth/auth_state.dart';
-import 'package:dashboard/cubit/users/users_cubit.dart';
-import 'package:dashboard/cubit/users/users_state.dart';
-import 'package:dashboard/navigation/router_manager.dart';
-import 'package:dashboard/screens/user/user_screen.dart';
-import 'package:dashboard/widgets/failed_widget.dart';
-import 'package:dashboard/widgets/shimmer_widget.dart';
+import 'package:qcarder/configuration/image_constants.dart';
+import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/cubit/auth/auth_cubit.dart';
+import 'package:qcarder/cubit/auth/auth_state.dart';
+import 'package:qcarder/cubit/users/users_cubit.dart';
+import 'package:qcarder/cubit/users/users_state.dart';
+import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/screens/user/user_screen.dart';
+import 'package:qcarder/widgets/failed_widget.dart';
+import 'package:qcarder/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -79,6 +79,13 @@ class UsersScreen extends StatelessWidget {
               ),
             ),
             // List of contacts
+            // TextButton(
+            //   onPressed: () => RouteManager.routerManager(
+            //     routeName: RouteConstants.nfc,
+            //     context: context,
+            //   ),
+            //   child: Text('To NFC'),
+            // ),
             Expanded(
               child: BlocBuilder<UsersCubit, UsersState>(
                 builder: (context, state) {

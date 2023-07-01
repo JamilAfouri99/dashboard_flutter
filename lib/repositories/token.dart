@@ -1,4 +1,4 @@
-import 'package:dashboard/models/tokens.dart';
+import 'package:qcarder/models/tokens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokensRepository {

@@ -1,4 +1,4 @@
-package com.example.dashboard
+package com.example.qcarder
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,6 @@
-import 'package:dashboard/configuration/image_constants.dart';
-import 'package:dashboard/configuration/theme.dart';
-import 'package:dashboard/helpers/date_time.dart';
+import 'package:qcarder/configuration/image_constants.dart';
+import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/helpers/date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qcarder_api/api.dart';

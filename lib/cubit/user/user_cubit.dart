@@ -1,6 +1,6 @@
-import 'package:dashboard/cubit/user/user_state.dart';
-import 'package:dashboard/services/http/remote_service.dart';
-import 'package:dashboard/services/global_services.dart';
+import 'package:qcarder/cubit/user/user_state.dart';
+import 'package:qcarder/services/http/remote_service.dart';
+import 'package:qcarder/services/global_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder_api/api.dart';
 

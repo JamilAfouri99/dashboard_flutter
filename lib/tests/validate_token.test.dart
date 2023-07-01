@@ -1,6 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:flutter_test/flutter_test.dart' show expect, test;
-import 'package:dashboard/helpers/token_validator.dart';
+import 'package:qcarder/helpers/token_validator.dart';
 
 void main() {
   test('isTokenExpired should return true if token is expired', () {

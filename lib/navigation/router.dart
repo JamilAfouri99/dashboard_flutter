@@ -1,10 +1,11 @@
-import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/screens/auth/login_screen.dart';
-import 'package:dashboard/screens/auth/signup_screen.dart';
-import 'package:dashboard/screens/dashboard/dashboard_screen.dart';
-import 'package:dashboard/screens/splash/splash_screen.dart';
-import 'package:dashboard/screens/user/user_screen.dart';
-import 'package:dashboard/screens/users/users.dart';
+import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/screens/auth/login_screen.dart';
+import 'package:qcarder/screens/auth/signup_screen.dart';
+import 'package:qcarder/screens/dashboard/dashboard_screen.dart';
+import 'package:qcarder/screens/nfc/nfc_screen.dart';
+import 'package:qcarder/screens/splash/splash_screen.dart';
+import 'package:qcarder/screens/user/user_screen.dart';
+import 'package:qcarder/screens/users/users.dart';
 import 'package:flutter/material.dart';
 
 class Router {
@@ -22,6 +23,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => const UsersScreen(), settings: settings);
       case RouteConstants.user:
         return MaterialPageRoute(builder: (_) => const UserScreen(), settings: settings);
+      case RouteConstants.nfc:
+        return MaterialPageRoute(builder: (_) => NfcScreen(), settings: settings);
 
       default:
         return MaterialPageRoute(

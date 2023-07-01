@@ -94,7 +94,7 @@ BEGIN
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "QCarder" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "dashboard.exe" "\0"
+            VALUE "OriginalFilename", "qcarder.exe" "\0"
             VALUE "ProductName", "QCarder" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END

@@ -1,4 +1,4 @@
-import 'package:dashboard/models/environment.dart';
+import 'package:qcarder/models/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

@@ -1,13 +1,13 @@
-import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/cubit/user/user_state.dart';
-import 'package:dashboard/models/enums.dart';
-import 'package:dashboard/navigation/router_manager.dart';
-import 'package:dashboard/screens/user/user_screen.dart';
-import 'package:dashboard/widgets/custom_progress_indicator.dart';
-import 'package:dashboard/widgets/snackbar.dart';
+import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/cubit/user/user_state.dart';
+import 'package:qcarder/models/enums.dart';
+import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/screens/user/user_screen.dart';
+import 'package:qcarder/widgets/custom_progress_indicator.dart';
+import 'package:qcarder/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dashboard/cubit/user/user_cubit.dart';
+import 'package:qcarder/cubit/user/user_cubit.dart';
 import 'package:qcarder_api/api.dart';
 
 class ConfirmationDialog extends StatelessWidget {

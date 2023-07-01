@@ -1,12 +1,12 @@
-import 'package:dashboard/configuration/image_constants.dart';
-import 'package:dashboard/cubit/auth/auth_state.dart';
-import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/navigation/router_manager.dart';
-import 'package:dashboard/widgets/custom_button.dart';
-import 'package:dashboard/widgets/custom_progress_indicator.dart';
+import 'package:qcarder/configuration/image_constants.dart';
+import 'package:qcarder/cubit/auth/auth_state.dart';
+import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/widgets/custom_button.dart';
+import 'package:qcarder/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dashboard/cubit/auth/auth_cubit.dart';
+import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qcarder_api/api.dart';
 

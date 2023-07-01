@@ -1,9 +1,9 @@
-import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/configuration/image_constants.dart';
-import 'package:dashboard/cubit/auth/auth_cubit.dart';
-import 'package:dashboard/cubit/auth/auth_state.dart';
-import 'package:dashboard/navigation/router_manager.dart';
-import 'package:dashboard/widgets/snackbar.dart';
+import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/configuration/image_constants.dart';
+import 'package:qcarder/cubit/auth/auth_cubit.dart';
+import 'package:qcarder/cubit/auth/auth_state.dart';
+import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';

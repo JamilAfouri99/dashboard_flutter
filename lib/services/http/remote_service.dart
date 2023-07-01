@@ -1,9 +1,9 @@
-import 'package:dashboard/helpers/index.dart';
-import 'package:dashboard/helpers/token_validator.dart';
-import 'package:dashboard/models/tokens.dart';
-import 'package:dashboard/repositories/token.dart';
-import 'package:dashboard/services/error/network_exceptions.dart';
-import 'package:dashboard/services/global_services.dart';
+import 'package:qcarder/helpers/index.dart';
+import 'package:qcarder/helpers/token_validator.dart';
+import 'package:qcarder/models/tokens.dart';
+import 'package:qcarder/repositories/token.dart';
+import 'package:qcarder/services/error/network_exceptions.dart';
+import 'package:qcarder/services/global_services.dart';
 import 'package:qcarder_api/api.dart';
 
 class RemoteService {

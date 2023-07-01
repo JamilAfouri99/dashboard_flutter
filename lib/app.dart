@@ -1,9 +1,9 @@
-import 'package:dashboard/cubit/auth/auth_cubit.dart';
-import 'package:dashboard/configuration/theme.dart';
-import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/cubit/user/user_cubit.dart';
-import 'package:dashboard/cubit/users/users_cubit.dart';
-import 'package:dashboard/services/global_services.dart';
+import 'package:qcarder/cubit/auth/auth_cubit.dart';
+import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/cubit/user/user_cubit.dart';
+import 'package:qcarder/cubit/users/users_cubit.dart';
+import 'package:qcarder/services/global_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder_api/api.dart';
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => UserCubit()),
       ],
       child: MaterialApp(
-        title: 'Dashboard',
+        title: 'qcarder',
         onGenerateRoute: router.Router.generateRoute,
         initialRoute: RouteConstants.splash,
         debugShowCheckedModeBanner: false,

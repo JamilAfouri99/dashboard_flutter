@@ -14,15 +14,6 @@
             ]
         },
         {
-            "name": "staging",
-            "request": "launch",
-            "type": "dart",
-            "args": [
-                "--dart-define",
-                "ENV=staging",
-            ]
-        },
-        {
             "name": "production",
             "request": "launch",
             "type": "dart",

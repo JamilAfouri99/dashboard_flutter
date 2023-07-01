@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:dashboard/widgets/snackbar.dart';
+import 'package:qcarder/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';

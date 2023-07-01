@@ -1,5 +1,5 @@
-import 'package:dashboard/configuration/theme.dart';
-import 'package:dashboard/services/global_services.dart';
+import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/services/global_services.dart';
 import 'package:flutter/material.dart';
 
 class CustomSnackbar {

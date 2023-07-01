@@ -1,11 +1,11 @@
-import 'package:dashboard/cubit/auth/auth_state.dart';
-import 'package:dashboard/configuration/constants.dart';
-import 'package:dashboard/models/tokens.dart';
-import 'package:dashboard/navigation/router_manager.dart';
-import 'package:dashboard/repositories/token.dart';
-import 'package:dashboard/services/error/network_exceptions.dart';
-import 'package:dashboard/services/http/remote_service.dart';
-import 'package:dashboard/services/global_services.dart';
+import 'package:qcarder/cubit/auth/auth_state.dart';
+import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/models/tokens.dart';
+import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/repositories/token.dart';
+import 'package:qcarder/services/error/network_exceptions.dart';
+import 'package:qcarder/services/http/remote_service.dart';
+import 'package:qcarder/services/global_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder_api/api.dart';
 

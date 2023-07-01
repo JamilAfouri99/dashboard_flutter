@@ -1,5 +1,5 @@
-import 'package:dashboard/cubit/auth/auth_cubit.dart';
-import 'package:dashboard/cubit/auth/auth_state.dart';
+import 'package:qcarder/cubit/auth/auth_cubit.dart';
+import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +29,7 @@ class DashboardScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Center(
-              child: Text('Hello from Dashboard'),
+              child: Text('Hello from qcarder'),
             ),
           ],
         ));

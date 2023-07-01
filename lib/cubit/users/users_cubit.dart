@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:dashboard/cubit/users/users_state.dart';
-import 'package:dashboard/helpers/index.dart';
-import 'package:dashboard/helpers/search_validation.dart';
-import 'package:dashboard/services/http/remote_service.dart';
-import 'package:dashboard/services/global_services.dart';
+import 'package:qcarder/cubit/users/users_state.dart';
+import 'package:qcarder/helpers/index.dart';
+import 'package:qcarder/helpers/search_validation.dart';
+import 'package:qcarder/services/http/remote_service.dart';
+import 'package:qcarder/services/global_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:qcarder_api/api.dart';
