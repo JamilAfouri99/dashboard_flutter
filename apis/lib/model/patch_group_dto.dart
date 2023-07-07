@@ -10,40 +10,40 @@
 
 part of openapi.api;
 
-class Email {
-  /// Returns a new [Email] instance.
-  Email({
-    required this.email,
-    this.label,
+class PatchGroupDto {
+  /// Returns a new [PatchGroupDto] instance.
+  PatchGroupDto({
+    this.name,
   });
 
-  String email;
-
-  String? label;
+  String? name;
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is Email && other.email == email && other.label == label;
+      identical(this, other) || other is PatchGroupDto && other.name == name;
 
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
-      (email.hashCode) + (label.hashCode);
+      (name == null ? 0 : name!.hashCode);
 
   @override
-  String toString() => 'Email[email=$email, label=$label]';
+  String toString() => 'PatchGroupDto[name=$name]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'email'] = this.email;
-    json[r'label'] = this.label;
+    if (this.name != null) {
+      json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
+    }
     return json;
   }
 
-  /// Returns a new [Email] instance and imports its values from
+  /// Returns a new [PatchGroupDto] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static Email? fromJson(dynamic value) {
+  static PatchGroupDto? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -52,28 +52,27 @@ class Email {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Email[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Email[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "PatchGroupDto[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "PatchGroupDto[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return Email(
-        email: mapValueOfType<String>(json, r'email')!,
-        label: json[r'label'] == null ? null : mapValueOfType<String>(json, r'label')!,
+      return PatchGroupDto(
+        name: json[r'name'] == null ? null : mapValueOfType<String>(json, r'name'),
       );
     }
     return null;
   }
 
-  static List<Email>? listFromJson(
+  static List<PatchGroupDto>? listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <Email>[];
+    final result = <PatchGroupDto>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = Email.fromJson(row);
+        final value = PatchGroupDto.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -82,12 +81,12 @@ class Email {
     return result.toList(growable: growable);
   }
 
-  static Map<String, Email> mapFromJson(dynamic json) {
-    final map = <String, Email>{};
+  static Map<String, PatchGroupDto> mapFromJson(dynamic json) {
+    final map = <String, PatchGroupDto>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Email.fromJson(entry.value);
+        final value = PatchGroupDto.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -96,16 +95,16 @@ class Email {
     return map;
   }
 
-  // maps a json object with a list of Email-objects as value to a dart map
-  static Map<String, List<Email>> mapListFromJson(
+  // maps a json object with a list of PatchGroupDto-objects as value to a dart map
+  static Map<String, List<PatchGroupDto>> mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final map = <String, List<Email>>{};
+    final map = <String, List<PatchGroupDto>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Email.listFromJson(
+        final value = PatchGroupDto.listFromJson(
           entry.value,
           growable: growable,
         );
@@ -118,7 +117,5 @@ class Email {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
-    'email',
-  };
+  static const requiredKeys = <String>{};
 }

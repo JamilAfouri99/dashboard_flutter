@@ -14,7 +14,6 @@ class PatchUserProfileDto {
   /// Returns a new [PatchUserProfileDto] instance.
   PatchUserProfileDto({
     this.displayName,
-    this.banner,
     this.title,
     this.company,
     this.birthday,
@@ -22,95 +21,57 @@ class PatchUserProfileDto {
     this.notes,
     this.emails = const [],
     this.phoneNumbers = const [],
+    this.links = const [],
   });
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
   String? displayName;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? banner;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
   String? title;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
   String? company;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
   DateTime? birthday;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
   String? address;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
   String? notes;
 
-  List<Email> emails;
+  List<Email>? emails;
 
-  List<PhoneNumber> phoneNumbers;
+  List<PhoneNumber>? phoneNumbers;
+
+  List<Link>? links;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PatchUserProfileDto &&
-     other.displayName == displayName &&
-     other.banner == banner &&
-     other.title == title &&
-     other.company == company &&
-     other.birthday == birthday &&
-     other.address == address &&
-     other.notes == notes &&
-     other.emails == emails &&
-     other.phoneNumbers == phoneNumbers;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PatchUserProfileDto &&
+          other.displayName == displayName &&
+          other.title == title &&
+          other.company == company &&
+          other.birthday == birthday &&
+          other.address == address &&
+          other.notes == notes &&
+          other.emails == emails &&
+          other.phoneNumbers == phoneNumbers &&
+          other.links == links;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (displayName == null ? 0 : displayName!.hashCode) +
-    (banner == null ? 0 : banner!.hashCode) +
-    (title == null ? 0 : title!.hashCode) +
-    (company == null ? 0 : company!.hashCode) +
-    (birthday == null ? 0 : birthday!.hashCode) +
-    (address == null ? 0 : address!.hashCode) +
-    (notes == null ? 0 : notes!.hashCode) +
-    (emails.hashCode) +
-    (phoneNumbers.hashCode);
+      // ignore: unnecessary_parenthesis
+      (displayName == null ? 0 : displayName!.hashCode) +
+      (title == null ? 0 : title!.hashCode) +
+      (company == null ? 0 : company!.hashCode) +
+      (birthday == null ? 0 : birthday!.hashCode) +
+      (address == null ? 0 : address!.hashCode) +
+      (notes == null ? 0 : notes!.hashCode) +
+      (emails == null ? 0 : emails!.hashCode) +
+      (phoneNumbers == null ? 0 : phoneNumbers!.hashCode) +
+      (links == null ? 0 : links!.hashCode);
 
   @override
-  String toString() => 'PatchUserProfileDto[displayName=$displayName, banner=$banner, title=$title, company=$company, birthday=$birthday, address=$address, notes=$notes, emails=$emails, phoneNumbers=$phoneNumbers]';
+  String toString() =>
+      'PatchUserProfileDto[displayName=$displayName, title=$title, company=$company, birthday=$birthday, address=$address, notes=$notes, emails=$emails, phoneNumbers=$phoneNumbers, links=$links]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -118,11 +79,6 @@ class PatchUserProfileDto {
       json[r'displayName'] = this.displayName;
     } else {
       json[r'displayName'] = null;
-    }
-    if (this.banner != null) {
-      json[r'banner'] = this.banner;
-    } else {
-      json[r'banner'] = null;
     }
     if (this.title != null) {
       json[r'title'] = this.title;
@@ -149,8 +105,21 @@ class PatchUserProfileDto {
     } else {
       json[r'notes'] = null;
     }
+    if (this.emails != null) {
       json[r'emails'] = this.emails;
+    } else {
+      json[r'emails'] = null;
+    }
+    if (this.phoneNumbers != null) {
       json[r'phoneNumbers'] = this.phoneNumbers;
+    } else {
+      json[r'phoneNumbers'] = null;
+    }
+    if (this.links != null) {
+      json[r'links'] = this.links;
+    } else {
+      json[r'links'] = null;
+    }
     return json;
   }
 
@@ -166,28 +135,36 @@ class PatchUserProfileDto {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PatchUserProfileDto[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PatchUserProfileDto[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PatchUserProfileDto[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PatchUserProfileDto[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return PatchUserProfileDto(
-        displayName: mapValueOfType<String>(json, r'displayName'),
-        banner: mapValueOfType<String>(json, r'banner'),
-        title: mapValueOfType<String>(json, r'title'),
-        company: mapValueOfType<String>(json, r'company'),
-        birthday: mapDateTime(json, r'birthday', ''),
-        address: mapValueOfType<String>(json, r'address'),
-        notes: mapValueOfType<String>(json, r'notes'),
-        emails: Email.listFromJson(json[r'emails']) ?? const [],
-        phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers']) ?? const [],
+        displayName:
+            json[r'displayName'] == null ? null : mapValueOfType<String>(json, r'displayName'),
+        title: json[r'title'] == null ? null : mapValueOfType<String>(json, r'title'),
+        company: json[r'company'] == null ? null : mapValueOfType<String>(json, r'company'),
+        birthday: json[r'birthday'] == null ? null : mapDateTime(json, r'birthday', ''),
+        address: json[r'address'] == null ? null : mapValueOfType<String>(json, r'address'),
+        notes: json[r'notes'] == null ? null : mapValueOfType<String>(json, r'notes'),
+        emails: json[r'emails'] == null ? null : Email.listFromJson(json[r'emails']) ?? const [],
+        phoneNumbers: json[r'phoneNumbers'] == null
+            ? null
+            : PhoneNumber.listFromJson(json[r'phoneNumbers']) ?? const [],
+        links: json[r'links'] == null ? null : Link.listFromJson(json[r'links']) ?? const [],
       );
     }
     return null;
   }
 
-  static List<PatchUserProfileDto>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PatchUserProfileDto>? listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PatchUserProfileDto>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -215,12 +192,18 @@ class PatchUserProfileDto {
   }
 
   // maps a json object with a list of PatchUserProfileDto-objects as value to a dart map
-  static Map<String, List<PatchUserProfileDto>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PatchUserProfileDto>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PatchUserProfileDto>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = PatchUserProfileDto.listFromJson(entry.value, growable: growable,);
+        final value = PatchUserProfileDto.listFromJson(
+          entry.value,
+          growable: growable,
+        );
         if (value != null) {
           map[entry.key] = value;
         }
@@ -230,7 +213,5 @@ class PatchUserProfileDto {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
-  };
+  static const requiredKeys = <String>{};
 }
-

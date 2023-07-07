@@ -16,7 +16,7 @@ void main() {
   // final instance = UserProfile();
 
   group('test UserProfile', () {
-    // num id
+    // String id
     test('to test the property `id`', () async {
       // TODO
     });
@@ -31,7 +31,7 @@ void main() {
       // TODO
     });
 
-    // num userId
+    // String userId
     test('to test the property `userId`', () async {
       // TODO
     });
@@ -78,6 +78,11 @@ void main() {
 
     // List<PhoneNumber> phoneNumbers (default value: const [])
     test('to test the property `phoneNumbers`', () async {
+      // TODO
+    });
+
+    // List<Link> links (default value: const [])
+    test('to test the property `links`', () async {
       // TODO
     });
 

@@ -6,13 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FileHelper {
-  static Future<Uint8List?> takePicture(BuildContext context) async {
+  static Future<File?> pickImage(BuildContext context) async {
     try {
       XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
         final fileTemp = File(pickedImage.path);
-        final bytes = fileTemp.readAsBytesSync();
-        return bytes;
+        // final bytes = fileTemp.readAsBytesSync();
+        // return bytes;
+        return fileTemp;
       }
     } catch (error) {
       log('error', error: error);

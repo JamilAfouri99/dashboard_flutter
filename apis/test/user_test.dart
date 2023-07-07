@@ -16,7 +16,7 @@ void main() {
   // final instance = User();
 
   group('test User', () {
-    // num id
+    // String id
     test('to test the property `id`', () async {
       // TODO
     });
@@ -61,7 +61,7 @@ void main() {
       // TODO
     });
 
-    // UserGroup group
+    // Group group
     test('to test the property `group`', () async {
       // TODO
     });

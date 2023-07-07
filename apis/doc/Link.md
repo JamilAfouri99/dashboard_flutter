@@ -1,4 +1,4 @@
-# qcarder_api.model.PatchUserDto
+# qcarder_api.model.Link
 
 ## Load the model package
 ```dart
@@ -8,11 +8,8 @@ import 'package:qcarder_api/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **String** |  | [optional] 
-**firstName** | **String** |  | [optional] 
-**lastName** | **String** |  | [optional] 
-**role** | **String** |  | [optional] 
-**status** | **String** |  | [optional] 
+**link** | **String** |  | 
+**label** | **String** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

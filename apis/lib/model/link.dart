@@ -10,40 +10,42 @@
 
 part of openapi.api;
 
-class Email {
-  /// Returns a new [Email] instance.
-  Email({
-    required this.email,
-    this.label,
+class Link {
+  /// Returns a new [Link] instance.
+  Link({
+    required this.link,
+    required this.label,
   });
 
-  String email;
+  String link;
 
-  String? label;
+  String label;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is Email && other.email == email && other.label == label;
+  bool operator ==(Object other) => identical(this, other) || other is Link &&
+     other.link == link &&
+     other.label == label;
 
   @override
   int get hashCode =>
-      // ignore: unnecessary_parenthesis
-      (email.hashCode) + (label.hashCode);
+    // ignore: unnecessary_parenthesis
+    (link.hashCode) +
+    (label.hashCode);
 
   @override
-  String toString() => 'Email[email=$email, label=$label]';
+  String toString() => 'Link[link=$link, label=$label]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'email'] = this.email;
-    json[r'label'] = this.label;
+      json[r'link'] = this.link;
+      json[r'label'] = this.label;
     return json;
   }
 
-  /// Returns a new [Email] instance and imports its values from
+  /// Returns a new [Link] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static Email? fromJson(dynamic value) {
+  static Link? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -52,28 +54,25 @@ class Email {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Email[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Email[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "Link[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "Link[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return Email(
-        email: mapValueOfType<String>(json, r'email')!,
-        label: json[r'label'] == null ? null : mapValueOfType<String>(json, r'label')!,
+      return Link(
+        link: mapValueOfType<String>(json, r'link')!,
+        label: mapValueOfType<String>(json, r'label')!,
       );
     }
     return null;
   }
 
-  static List<Email>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <Email>[];
+  static List<Link>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <Link>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = Email.fromJson(row);
+        final value = Link.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -82,12 +81,12 @@ class Email {
     return result.toList(growable: growable);
   }
 
-  static Map<String, Email> mapFromJson(dynamic json) {
-    final map = <String, Email>{};
+  static Map<String, Link> mapFromJson(dynamic json) {
+    final map = <String, Link>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Email.fromJson(entry.value);
+        final value = Link.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -96,19 +95,13 @@ class Email {
     return map;
   }
 
-  // maps a json object with a list of Email-objects as value to a dart map
-  static Map<String, List<Email>> mapListFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final map = <String, List<Email>>{};
+  // maps a json object with a list of Link-objects as value to a dart map
+  static Map<String, List<Link>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<Link>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Email.listFromJson(
-          entry.value,
-          growable: growable,
-        );
+        final value = Link.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -119,6 +112,8 @@ class Email {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'email',
+    'link',
+    'label',
   };
 }
+

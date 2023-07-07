@@ -8,7 +8,7 @@ import 'package:qcarder_api/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **num** |  | 
+**id** | **String** |  | 
 **createdAt** | [**DateTime**](DateTime.md) |  | 
 **updatedAt** | [**DateTime**](DateTime.md) |  | 
 **email** | **String** |  | 
@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 **avatar** | **String** |  | 
 **role** | **String** |  | 
 **status** | **String** |  | 
-**group** | [**UserGroup**](UserGroup.md) |  | 
+**group** | [**Group**](Group.md) |  | 
 **groupId** | **num** |  | 
 **profile** | [**UserProfile**](UserProfile.md) |  | 
 

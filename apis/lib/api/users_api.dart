@@ -63,30 +63,28 @@ class UsersApi {
     return null;
   }
 
-  /// Performs an HTTP 'PATCH /users/{userId}' operation and returns the [Response].
+  /// Performs an HTTP 'DELETE /users/{userId}' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [num] userId (required):
-  ///
-  /// * [PatchUserDto] patchUserDto (required):
-  Future<Response> editUserWithHttpInfo(num userId, PatchUserDto patchUserDto,) async {
+  /// * [String] userId (required):
+  Future<Response> deleteUserWithHttpInfo(String userId,) async {
     // ignore: prefer_const_declarations
     final path = r'/users/{userId}'
-      .replaceAll('{userId}', userId.toString());
+      .replaceAll('{userId}', userId);
 
     // ignore: prefer_final_locals
-    Object? postBody = patchUserDto;
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>['application/json'];
+    const contentTypes = <String>[];
 
 
     return apiClient.invokeAPI(
       path,
-      'PATCH',
+      'DELETE',
       queryParams,
       postBody,
       headerParams,
@@ -97,79 +95,12 @@ class UsersApi {
 
   /// Parameters:
   ///
-  /// * [num] userId (required):
-  ///
-  /// * [PatchUserDto] patchUserDto (required):
-  Future<PatchUserResponseDto?> editUser(num userId, PatchUserDto patchUserDto,) async {
-    final response = await editUserWithHttpInfo(userId, patchUserDto,);
+  /// * [String] userId (required):
+  Future<void> deleteUser(String userId,) async {
+    final response = await deleteUserWithHttpInfo(userId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'PatchUserResponseDto',) as PatchUserResponseDto;
-    
-    }
-    return null;
-  }
-
-  /// Performs an HTTP 'PATCH /users/{userId}/profile/{profileId}' operation and returns the [Response].
-  /// Parameters:
-  ///
-  /// * [num] userId (required):
-  ///
-  /// * [num] profileId (required):
-  ///
-  /// * [PatchUserProfileDto] patchUserProfileDto (required):
-  Future<Response> editUserProfileWithHttpInfo(num userId, num profileId, PatchUserProfileDto patchUserProfileDto,) async {
-    // ignore: prefer_const_declarations
-    final path = r'/users/{userId}/profile/{profileId}'
-      .replaceAll('{userId}', userId.toString())
-      .replaceAll('{profileId}', profileId.toString());
-
-    // ignore: prefer_final_locals
-    Object? postBody = patchUserProfileDto;
-
-    final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
-    final formParams = <String, String>{};
-
-    const contentTypes = <String>['application/json'];
-
-
-    return apiClient.invokeAPI(
-      path,
-      'PATCH',
-      queryParams,
-      postBody,
-      headerParams,
-      formParams,
-      contentTypes.isEmpty ? null : contentTypes.first,
-    );
-  }
-
-  /// Parameters:
-  ///
-  /// * [num] userId (required):
-  ///
-  /// * [num] profileId (required):
-  ///
-  /// * [PatchUserProfileDto] patchUserProfileDto (required):
-  Future<UserProfile?> editUserProfile(num userId, num profileId, PatchUserProfileDto patchUserProfileDto,) async {
-    final response = await editUserProfileWithHttpInfo(userId, profileId, patchUserProfileDto,);
-    if (response.statusCode >= HttpStatus.badRequest) {
-      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
-    }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'UserProfile',) as UserProfile;
-    
-    }
-    return null;
   }
 
   /// Performs an HTTP 'GET /users/me' operation and returns the [Response].
@@ -216,11 +147,11 @@ class UsersApi {
   /// Performs an HTTP 'GET /users/{userId}' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [num] userId (required):
-  Future<Response> getUserByIdWithHttpInfo(num userId,) async {
+  /// * [String] userId (required):
+  Future<Response> getUserByIdWithHttpInfo(String userId,) async {
     // ignore: prefer_const_declarations
     final path = r'/users/{userId}'
-      .replaceAll('{userId}', userId.toString());
+      .replaceAll('{userId}', userId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -245,8 +176,8 @@ class UsersApi {
 
   /// Parameters:
   ///
-  /// * [num] userId (required):
-  Future<User?> getUserById(num userId,) async {
+  /// * [String] userId (required):
+  Future<User?> getUserById(String userId,) async {
     final response = await getUserByIdWithHttpInfo(userId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -326,5 +257,227 @@ class UsersApi {
     
     }
     return null;
+  }
+
+  /// Performs an HTTP 'PATCH /users/{userId}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [PatchUserDto] patchUserDto (required):
+  Future<Response> patchUserWithHttpInfo(String userId, PatchUserDto patchUserDto,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/users/{userId}'
+      .replaceAll('{userId}', userId);
+
+    // ignore: prefer_final_locals
+    Object? postBody = patchUserDto;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'PATCH',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [PatchUserDto] patchUserDto (required):
+  Future<PatchUserResponseDto?> patchUser(String userId, PatchUserDto patchUserDto,) async {
+    final response = await patchUserWithHttpInfo(userId, patchUserDto,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'PatchUserResponseDto',) as PatchUserResponseDto;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'PATCH /users/{userId}/profile/{profileId}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [String] profileId (required):
+  ///
+  /// * [PatchUserProfileDto] patchUserProfileDto (required):
+  Future<Response> patchUserProfileWithHttpInfo(String userId, String profileId, PatchUserProfileDto patchUserProfileDto,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/users/{userId}/profile/{profileId}'
+      .replaceAll('{userId}', userId)
+      .replaceAll('{profileId}', profileId);
+
+    // ignore: prefer_final_locals
+    Object? postBody = patchUserProfileDto;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'PATCH',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [String] profileId (required):
+  ///
+  /// * [PatchUserProfileDto] patchUserProfileDto (required):
+  Future<UserProfile?> patchUserProfile(String userId, String profileId, PatchUserProfileDto patchUserProfileDto,) async {
+    final response = await patchUserProfileWithHttpInfo(userId, profileId, patchUserProfileDto,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'UserProfile',) as UserProfile;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /users/{userId}/files' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [MultipartFile] avatar (required):
+  Future<Response> postUserFilesWithHttpInfo(String userId, MultipartFile avatar,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/users/{userId}/files'
+      .replaceAll('{userId}', userId);
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['multipart/form-data'];
+
+    bool hasFields = false;
+    final mp = MultipartRequest('POST', Uri.parse(path));
+    if (avatar != null) {
+      hasFields = true;
+      mp.fields[r'avatar'] = avatar.field;
+      mp.files.add(avatar);
+    }
+    if (hasFields) {
+      postBody = mp;
+    }
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [MultipartFile] avatar (required):
+  Future<void> postUserFiles(String userId, MultipartFile avatar,) async {
+    final response = await postUserFilesWithHttpInfo(userId, avatar,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /users/{userId}/profile/{profileId}/files' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [String] profileId (required):
+  ///
+  /// * [MultipartFile] banner (required):
+  Future<Response> postUserProfileFilesWithHttpInfo(String userId, String profileId, MultipartFile banner,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/users/{userId}/profile/{profileId}/files'
+      .replaceAll('{userId}', userId)
+      .replaceAll('{profileId}', profileId);
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['multipart/form-data'];
+
+    bool hasFields = false;
+    final mp = MultipartRequest('POST', Uri.parse(path));
+    if (banner != null) {
+      hasFields = true;
+      mp.fields[r'banner'] = banner.field;
+      mp.files.add(banner);
+    }
+    if (hasFields) {
+      postBody = mp;
+    }
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [String] profileId (required):
+  ///
+  /// * [MultipartFile] banner (required):
+  Future<void> postUserProfileFiles(String userId, String profileId, MultipartFile banner,) async {
+    final response = await postUserProfileFilesWithHttpInfo(userId, profileId, banner,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
   }
 }

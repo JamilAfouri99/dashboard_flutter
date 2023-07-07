@@ -17,7 +17,7 @@ class UserCubit extends Cubit<UserState> {
 
   bool isEditable = false;
 
-  Future<void> getUserById(num userId) async {
+  Future<void> getUserById(String userId) async {
     emit(UserLoading());
     final result = await remoteService.asyncTryCatch(() => usersApi.getUserById(userId));
     if (result.isSuccess && result.value != null) {
@@ -34,7 +34,7 @@ class UserCubit extends Cubit<UserState> {
   ) async {
     emit(UserLoading());
     final result = await remoteService.asyncTryCatch(
-      () => usersApi.editUserProfile(user.id, user.profile.id, updateUserProfile),
+      () => usersApi.patchUserProfile(user.id, user.profile.id, updateUserProfile),
     );
     if (result.isSuccess && result.value != null) {
       user.profile = result.value!;
@@ -47,7 +47,7 @@ class UserCubit extends Cubit<UserState> {
 
   Future<void> updateUser(User user, PatchUserDto updateUser) async {
     emit(UserLoading());
-    final result = await remoteService.asyncTryCatch(() => usersApi.editUser(user.id, updateUser));
+    final result = await remoteService.asyncTryCatch(() => usersApi.patchUser(user.id, updateUser));
     if (result.isSuccess && result.value != null) {
       //FIXME: return the updaetd user
       emit(UserLoaded(user));
@@ -65,10 +65,10 @@ class UserCubit extends Cubit<UserState> {
     emit(UserLoading());
 
     final userUpdateResult = await remoteService.asyncTryCatch(
-      () => usersApi.editUser(user.id, updateUser),
+      () => usersApi.patchUser(user.id, updateUser),
     );
     final profileUpdateResult = await remoteService.asyncTryCatch(
-      () => usersApi.editUserProfile(user.id, user.profile.id, updateUserProfile),
+      () => usersApi.patchUserProfile(user.id, user.profile.id, updateUserProfile),
     );
 
     if (userUpdateResult.isSuccess &&
@@ -98,10 +98,11 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> deleteUser(String userId) async {
-    // TODO: implement success status and connect the api
     emit(UserLoading());
     try {
-      await Future.delayed(Duration(milliseconds: 500));
+      await remoteService.asyncTryCatch(
+        () => usersApi.deleteUser(userId),
+      );
       emit(UserLoaded(null));
     } catch (error) {
       emit(UserFailed(error.toString()));

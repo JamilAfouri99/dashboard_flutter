@@ -11,8 +11,9 @@ class ViewForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.2),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,7 +51,7 @@ class ViewForm extends StatelessWidget {
 
           const SizedBox(height: 16),
           Text(
-            user.profile.displayName,
+            user.profile.displayName ?? '',
             style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: AppColors.primary),
           ),
           const SizedBox(height: 8),

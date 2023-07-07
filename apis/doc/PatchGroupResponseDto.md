@@ -1,4 +1,4 @@
-# qcarder_api.model.UserGroup
+# qcarder_api.model.PatchGroupResponseDto
 
 ## Load the model package
 ```dart
@@ -8,11 +8,10 @@ import 'package:qcarder_api/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **num** |  | 
-**createdAt** | [**DateTime**](DateTime.md) |  | 
-**updatedAt** | [**DateTime**](DateTime.md) |  | 
-**name** | **String** |  | 
-**profile** | [**UserGroupProfile**](UserGroupProfile.md) |  | 
+**id** | **String** |  | [optional] 
+**createdAt** | [**DateTime**](DateTime.md) |  | [optional] 
+**updatedAt** | [**DateTime**](DateTime.md) |  | [optional] 
+**name** | **String** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

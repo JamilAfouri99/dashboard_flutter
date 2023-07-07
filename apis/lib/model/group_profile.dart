@@ -10,9 +10,9 @@
 
 part of openapi.api;
 
-class UserGroupProfile {
-  /// Returns a new [UserGroupProfile] instance.
-  UserGroupProfile({
+class GroupProfile {
+  /// Returns a new [GroupProfile] instance.
+  GroupProfile({
     required this.id,
     required this.createdAt,
     required this.updatedAt,
@@ -20,20 +20,20 @@ class UserGroupProfile {
     this.banner,
   });
 
-  num id;
+  String id;
 
   DateTime createdAt;
 
   DateTime updatedAt;
 
-  num groupId;
+  String groupId;
 
   String? banner;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserGroupProfile &&
+      other is GroupProfile &&
           other.id == id &&
           other.createdAt == createdAt &&
           other.updatedAt == updatedAt &&
@@ -47,11 +47,11 @@ class UserGroupProfile {
       (createdAt.hashCode) +
       (updatedAt.hashCode) +
       (groupId.hashCode) +
-      (banner.hashCode);
+      (banner == null ? 0 : banner!.hashCode);
 
   @override
   String toString() =>
-      'UserGroupProfile[id=$id, createdAt=$createdAt, updatedAt=$updatedAt, groupId=$groupId, banner=$banner]';
+      'GroupProfile[id=$id, createdAt=$createdAt, updatedAt=$updatedAt, groupId=$groupId, banner=$banner]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -59,49 +59,51 @@ class UserGroupProfile {
     json[r'createdAt'] = this.createdAt.toUtc().toIso8601String();
     json[r'updatedAt'] = this.updatedAt.toUtc().toIso8601String();
     json[r'groupId'] = this.groupId;
-    json[r'banner'] = this.banner;
+    if (this.banner != null) {
+      json[r'banner'] = this.banner;
+    } else {
+      json[r'banner'] = null;
+    }
     return json;
   }
 
-  /// Returns a new [UserGroupProfile] instance and imports its values from
+  /// Returns a new [GroupProfile] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static UserGroupProfile? fromJson(dynamic value) {
+  static GroupProfile? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      // assert(() {
-      //   requiredKeys.forEach((key) {
-      //     assert(
-      //         json.containsKey(key), 'Required key "UserGroupProfile[$key]" is missing from JSON.');
-      //     assert(
-      //         json[key] != null, 'Required key "UserGroupProfile[$key]" has a null value in JSON.');
-      //   });
-      //   return true;
-      // }());
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "GroupProfile[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "GroupProfile[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
-      return UserGroupProfile(
-        id: num.parse(json[r'id'].toString()),
+      return GroupProfile(
+        id: mapValueOfType<String>(json, r'id')!,
         createdAt: mapDateTime(json, r'createdAt', '')!,
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
-        groupId: num.parse(json[r'groupId'].toString()),
-        banner: json[r'banner'] != null ? mapValueOfType<String>(json, r'banner') : json[r'banner'],
+        groupId: mapValueOfType<String>(json, r'groupId')!,
+        banner: json[r'banner'] == null ? null : mapValueOfType<String>(json, r'banner'),
       );
     }
     return null;
   }
 
-  static List<UserGroupProfile>? listFromJson(
+  static List<GroupProfile>? listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <UserGroupProfile>[];
+    final result = <GroupProfile>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = UserGroupProfile.fromJson(row);
+        final value = GroupProfile.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -110,12 +112,12 @@ class UserGroupProfile {
     return result.toList(growable: growable);
   }
 
-  static Map<String, UserGroupProfile> mapFromJson(dynamic json) {
-    final map = <String, UserGroupProfile>{};
+  static Map<String, GroupProfile> mapFromJson(dynamic json) {
+    final map = <String, GroupProfile>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = UserGroupProfile.fromJson(entry.value);
+        final value = GroupProfile.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -124,16 +126,16 @@ class UserGroupProfile {
     return map;
   }
 
-  // maps a json object with a list of UserGroupProfile-objects as value to a dart map
-  static Map<String, List<UserGroupProfile>> mapListFromJson(
+  // maps a json object with a list of GroupProfile-objects as value to a dart map
+  static Map<String, List<GroupProfile>> mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final map = <String, List<UserGroupProfile>>{};
+    final map = <String, List<GroupProfile>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = UserGroupProfile.listFromJson(
+        final value = GroupProfile.listFromJson(
           entry.value,
           growable: growable,
         );
@@ -151,6 +153,5 @@ class UserGroupProfile {
     'createdAt',
     'updatedAt',
     'groupId',
-    'banner',
   };
 }

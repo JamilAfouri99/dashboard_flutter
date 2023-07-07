@@ -11,12 +11,12 @@
 import 'package:qcarder_api/api.dart';
 import 'package:test/test.dart';
 
-// tests for UserGroup
+// tests for Group
 void main() {
-  // final instance = UserGroup();
+  // final instance = Group();
 
-  group('test UserGroup', () {
-    // num id
+  group('test Group', () {
+    // String id
     test('to test the property `id`', () async {
       // TODO
     });
@@ -36,7 +36,7 @@ void main() {
       // TODO
     });
 
-    // UserGroupProfile profile
+    // GroupProfile profile
     test('to test the property `profile`', () async {
       // TODO
     });

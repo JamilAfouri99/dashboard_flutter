@@ -11,12 +11,12 @@
 import 'package:qcarder_api/api.dart';
 import 'package:test/test.dart';
 
-// tests for UserGroupProfile
+// tests for PatchGroupResponseDto
 void main() {
-  // final instance = UserGroupProfile();
+  // final instance = PatchGroupResponseDto();
 
-  group('test UserGroupProfile', () {
-    // num id
+  group('test PatchGroupResponseDto', () {
+    // String id
     test('to test the property `id`', () async {
       // TODO
     });
@@ -31,13 +31,8 @@ void main() {
       // TODO
     });
 
-    // num groupId
-    test('to test the property `groupId`', () async {
-      // TODO
-    });
-
-    // String banner
-    test('to test the property `banner`', () async {
+    // String name
+    test('to test the property `name`', () async {
       // TODO
     });
 

@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:qcarder/configuration/image_constants.dart';
 import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
@@ -56,9 +56,9 @@ class _NewFormState extends State<NewForm> {
     }
   }
 
-  Uint8List? binaryImage;
+  File? avatar;
   Future<void> _pickImage() async {
-    binaryImage = await FileHelper.takePicture(context);
+    avatar = await FileHelper.pickImage(context);
     setState(() {});
   }
 
@@ -247,7 +247,7 @@ class _NewFormState extends State<NewForm> {
                         isInverted: true,
                         onPressed: () => showDialog(
                           context: context,
-                          builder: (context) => ConfirmationDialog(
+                          builder: (context) => const ConfirmationDialog(
                             action: ConfirmationDialogAction.cancel,
                           ),
                         ),
@@ -390,7 +390,6 @@ class _NewFormState extends State<NewForm> {
   PatchUserProfileDto _createProfile() {
     return PatchUserProfileDto(
       address: _addressController.text,
-      banner: '', //FIXME: to be deleted from BE
       birthday: DateFormat('MMM d, yyyy').parse(_birthdayController.text),
       company: _companyController.text,
       displayName: _displayNameController.text,

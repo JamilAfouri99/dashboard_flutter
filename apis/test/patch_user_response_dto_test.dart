@@ -16,7 +16,7 @@ void main() {
   // final instance = PatchUserResponseDto();
 
   group('test PatchUserResponseDto', () {
-    // num id
+    // String id
     test('to test the property `id`', () async {
       // TODO
     });

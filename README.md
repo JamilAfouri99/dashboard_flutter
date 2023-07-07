@@ -101,5 +101,3 @@ TODO:
 
 ## Deployment
 TODO:
-# regenerate qcarder apis
-`dart run build_runner build --delete-conflicting-outputs`

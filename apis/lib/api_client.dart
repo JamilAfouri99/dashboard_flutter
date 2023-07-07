@@ -185,10 +185,20 @@ class ApiClient {
           return AuthUser.fromJson(value);
         case 'Email':
           return Email.fromJson(value);
+        case 'Group':
+          return Group.fromJson(value);
+        case 'GroupProfile':
+          return GroupProfile.fromJson(value);
+        case 'Link':
+          return Link.fromJson(value);
         case 'PaginatedUsers':
           return PaginatedUsers.fromJson(value);
         case 'PaginationMetaData':
           return PaginationMetaData.fromJson(value);
+        case 'PatchGroupDto':
+          return PatchGroupDto.fromJson(value);
+        case 'PatchGroupResponseDto':
+          return PatchGroupResponseDto.fromJson(value);
         case 'PatchUserDto':
           return PatchUserDto.fromJson(value);
         case 'PatchUserProfileDto':
@@ -207,10 +217,6 @@ class ApiClient {
           return Unauthorized.fromJson(value);
         case 'User':
           return User.fromJson(value);
-        case 'UserGroup':
-          return UserGroup.fromJson(value);
-        case 'UserGroupProfile':
-          return UserGroupProfile.fromJson(value);
         case 'UserProfile':
           return UserProfile.fromJson(value);
         default:

@@ -17,8 +17,8 @@ class PaginationMetaData {
     required this.lastPage,
     required this.currentPage,
     required this.perPage,
-    this.prev,
-    this.next,
+    required this.prev,
+    required this.next,
   });
 
   num total;
@@ -51,8 +51,8 @@ class PaginationMetaData {
       (lastPage.hashCode) +
       (currentPage.hashCode) +
       (perPage.hashCode) +
-      (prev.hashCode) +
-      (next.hashCode);
+      (prev == null ? 0 : prev!.hashCode) +
+      (next == null ? 0 : next!.hashCode);
 
   @override
   String toString() =>
@@ -64,8 +64,16 @@ class PaginationMetaData {
     json[r'lastPage'] = this.lastPage;
     json[r'currentPage'] = this.currentPage;
     json[r'perPage'] = this.perPage;
-    json[r'prev'] = this.prev;
-    json[r'next'] = this.next;
+    if (this.prev != null) {
+      json[r'prev'] = this.prev;
+    } else {
+      json[r'prev'] = null;
+    }
+    if (this.next != null) {
+      json[r'next'] = this.next;
+    } else {
+      json[r'next'] = null;
+    }
     return json;
   }
 
@@ -79,15 +87,15 @@ class PaginationMetaData {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      // assert(() {
-      //   requiredKeys.forEach((key) {
-      //     assert(json.containsKey(key),
-      //         'Required key "PaginationMetaData[$key]" is missing from JSON.');
-      //     assert(json[key] != null,
-      //         'Required key "PaginationMetaData[$key]" has a null value in JSON.');
-      //   });
-      //   return true;
-      // }());
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key),
+              'Required key "PaginationMetaData[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PaginationMetaData[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
       return PaginationMetaData(
         total: num.parse(json[r'total'].toString()),
@@ -158,7 +166,5 @@ class PaginationMetaData {
     'lastPage',
     'currentPage',
     'perPage',
-    'prev',
-    'next',
   };
 }

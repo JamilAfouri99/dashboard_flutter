@@ -1,8 +1,11 @@
 import 'package:qcarder/configuration/constants.dart';
 import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
 import 'package:qcarder/cubit/user/user_state.dart';
+import 'package:qcarder/models/enums.dart';
 import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/screens/user/confirmation_dialog.dart';
 import 'package:qcarder/screens/user/editable_form.dart';
 import 'package:qcarder/screens/user/new_form.dart';
 import 'package:qcarder/screens/user/view_form.dart';
@@ -19,11 +22,13 @@ class UserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<UserCubit>(
-      create: (_) {
-        if (user != null) return UserCubit()..getUserById(user!.id);
-        return UserCubit();
-      },
+    return MultiBlocProvider(
+      providers: [
+        user != null
+            ? BlocProvider(create: (_) => UserCubit()..getUserById(user!.id))
+            : BlocProvider(create: (_) => UserCubit()),
+        BlocProvider(create: (context) => AvatarCubit()),
+      ],
       child: BlocConsumer<UserCubit, UserState>(
         listener: (context, state) {
           if (state is UserFailed) {
@@ -51,6 +56,35 @@ class UserScreen extends StatelessWidget {
                         );
                       },
                     ),
+              actions: [
+                if (user != null)
+                  PopupMenuButton<String>(
+                    color: AppColors.light,
+                    onSelected: (String result) {
+                      switch (result) {
+                        case 'delete':
+                          showDialog(
+                            context: context,
+                            builder: (context) => ConfirmationDialog(
+                              action: ConfirmationDialogAction.delete,
+                              user: user,
+                            ),
+                          );
+                          break;
+                        default:
+                      }
+                    },
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                      const PopupMenuItem<String>(
+                        value: 'delete',
+                        child: Text(
+                          'Delete User',
+                          style: TextStyle(color: AppColors.onError),
+                        ),
+                      ),
+                    ],
+                  )
+              ],
               elevation: 0,
               centerTitle: true,
               title: Text(
@@ -68,23 +102,27 @@ class UserScreen extends StatelessWidget {
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             body: state is UserLoading
                 ? _userShimmer(context)
-                : RefreshIndicator(
-                    onRefresh: () {
-                      if (user != null) return context.read<UserCubit>().getUserById(user!.id);
-                      return Future(() => null);
-                    },
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          user == null
-                              ? NewForm()
-                              : isEditable
-                                  ? EditableForm(user: user!)
-                                  : ViewForm(user: user!),
-                        ],
+                : state is UserFailed
+                    ? Center(child: Text(state.reason.toString()))
+                    : RefreshIndicator(
+                        onRefresh: () {
+                          if (user != null) {
+                            return context.read<UserCubit>().getUserById(user!.id);
+                          }
+                          return Future(() => null);
+                        },
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              state is UserLoaded
+                                  ? isEditable
+                                      ? EditableForm(user: state.user ?? user!)
+                                      : ViewForm(user: state.user ?? user!)
+                                  : const NewForm()
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
           );
         },
       ),
@@ -97,7 +135,7 @@ class UserScreen extends StatelessWidget {
           isLoading: true,
           child: Column(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 width: 100,
                 height: 100,
@@ -127,7 +165,7 @@ class UserScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Container(
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),

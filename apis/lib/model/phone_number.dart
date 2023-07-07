@@ -58,19 +58,18 @@ class PhoneNumber {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      // assert(() {
-      //   requiredKeys.forEach((key) {
-      //     assert(json.containsKey(key), 'Required key "PhoneNumber[$key]" is missing from JSON.');
-      //     assert(json[key] != null, 'Required key "PhoneNumber[$key]" has a null value in JSON.');
-      //   });
-      //   return true;
-      // }());
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "PhoneNumber[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "PhoneNumber[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
       return PhoneNumber(
         phoneNumber: mapValueOfType<String>(json, r'phoneNumber')!,
-        country:
-            json[r'country'] != null ? mapValueOfType<String>(json, r'country') : json[r'country'],
-        label: json[r'label'] != null ? mapValueOfType<String>(json, r'label') : json[r'label'],
+        country: json[r'country'] == null ? null : mapValueOfType<String>(json, r'country')!,
+        label: json[r'label'] == null ? null : mapValueOfType<String>(json, r'label')!,
       );
     }
     return null;
@@ -130,7 +129,5 @@ class PhoneNumber {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'phoneNumber',
-    'country',
-    'label',
   };
 }

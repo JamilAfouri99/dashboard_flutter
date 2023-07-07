@@ -3,6 +3,7 @@ import 'package:qcarder/cubit/user/user_state.dart';
 import 'package:qcarder/models/enums.dart';
 import 'package:qcarder/navigation/router_manager.dart';
 import 'package:qcarder/screens/user/user_screen.dart';
+import 'package:qcarder/widgets/custom_button.dart';
 import 'package:qcarder/widgets/custom_progress_indicator.dart';
 import 'package:qcarder/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -60,19 +61,34 @@ class ConfirmationDialog extends StatelessWidget {
           : AlertDialog(
               title: Text(title),
               content: Text(message),
+              actionsPadding: const EdgeInsets.only(bottom: 20, right: 20),
               actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                  },
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _handleAction(context); // Handle the selected action
-                  },
-                  child: Text(buttonText),
-                ),
+                Wrap(
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      width: 120,
+                      child: CustomButton(
+                        title: 'Cancel',
+                        isInverted: true,
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      height: 50,
+                      width: 120,
+                      child: CustomButton(
+                        title: buttonText,
+                        onPressed: () {
+                          _handleAction(context); // Handle the selected action
+                        },
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
     );
@@ -97,39 +113,52 @@ class ConfirmationDialog extends StatelessWidget {
     }
   }
 
-  void _deleteContact(BuildContext context, UserCubit contactCubit) {
+  Future<void> _deleteContact(BuildContext context, UserCubit userCubit) async {
     if (user == null) return;
-    contactCubit.deleteUser(user!.id.toString()).then((_) {
-      Navigator.pop(context); // Close the dialog
-      RouteManager.routerManagerPushUntil(
-        context: context,
-        routeName: RouteConstants.users,
-      ); // Navigate to the home screen
-    }).catchError((error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete contact: $error')),
-      );
-      Navigator.pop(context); // Close the dialog
-    });
+    await userCubit.deleteUser(user!.id);
+    final state = userCubit.state;
+    if (context.mounted) {
+      if (state is UserFailed) {
+        CustomSnackbar.show(
+          context,
+          'Failed to delete user: ${state.reason}',
+          type: SnackbarType.error,
+        );
+        Navigator.pop(context);
+      } else if (state is UserLoaded) {
+        Navigator.pop(context);
+        CustomSnackbar.show(
+          context,
+          'Deleted user successfully',
+          type: SnackbarType.success,
+        );
+        RouteManager.routerManagerPushUntil(
+          context: context,
+          routeName: RouteConstants.users,
+        );
+      }
+    }
   }
 
   Future<void> _createUser(BuildContext context, UserCubit contactCubit) async {
     if (newUser == null) return;
     await contactCubit.createUser(newUser!);
     final state = contactCubit.state;
-    if (state is UserFailed) {
-      CustomSnackbar.show(
-        context,
-        'Failed to add contact: ${state.reason}',
-        type: SnackbarType.error,
-      );
-      Navigator.pop(context);
-    } else if (state is UserLoaded) {
-      Navigator.pop(context);
-      RouteManager.routerManagerPushUntil(
-        context: context,
-        routeName: RouteConstants.users,
-      );
+    if (context.mounted) {
+      if (state is UserFailed) {
+        CustomSnackbar.show(
+          context,
+          'Failed to add contact: ${state.reason}',
+          type: SnackbarType.error,
+        );
+        Navigator.pop(context);
+      } else if (state is UserLoaded) {
+        Navigator.pop(context);
+        RouteManager.routerManagerPushUntil(
+          context: context,
+          routeName: RouteConstants.users,
+        );
+      }
     }
   }
 
@@ -152,9 +181,6 @@ class ConfirmationDialog extends StatelessWidget {
         'Failed to add contact: $error',
         type: SnackbarType.error,
       );
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Failed to add contact: $error')),
-      // );
       Navigator.pop(context);
     });
   }
@@ -167,6 +193,9 @@ class ConfirmationDialog extends StatelessWidget {
             context: context,
             routeName: RouteConstants.users,
           )
-        : RouteManager.navigateToWithData(context, () => UserScreen(user: user));
+        : RouteManager.pushAndRemovePrevUntilWithData(
+            context,
+            () => UserScreen(user: user),
+          );
   }
 }

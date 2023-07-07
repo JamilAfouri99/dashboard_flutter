@@ -11,33 +11,33 @@
 import 'package:qcarder_api/api.dart';
 import 'package:test/test.dart';
 
-// tests for PatchUserDto
+// tests for GroupProfile
 void main() {
-  // final instance = PatchUserDto();
+  // final instance = GroupProfile();
 
-  group('test PatchUserDto', () {
-    // String email
-    test('to test the property `email`', () async {
+  group('test GroupProfile', () {
+    // String id
+    test('to test the property `id`', () async {
       // TODO
     });
 
-    // String firstName
-    test('to test the property `firstName`', () async {
+    // DateTime createdAt
+    test('to test the property `createdAt`', () async {
       // TODO
     });
 
-    // String lastName
-    test('to test the property `lastName`', () async {
+    // DateTime updatedAt
+    test('to test the property `updatedAt`', () async {
       // TODO
     });
 
-    // String role
-    test('to test the property `role`', () async {
+    // String groupId
+    test('to test the property `groupId`', () async {
       // TODO
     });
 
-    // String status
-    test('to test the property `status`', () async {
+    // String banner
+    test('to test the property `banner`', () async {
       // TODO
     });
 

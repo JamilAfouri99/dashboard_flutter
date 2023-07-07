@@ -15,9 +15,8 @@ import 'package:openapi_generator_annotations/openapi_generator_annotations.dart
   inputSpecFile: 'https://api.qcarder.com/docs-json',
   generatorName: Generator.dart,
   outputDirectory: 'apis',
+  fetchDependencies: true,
   overwriteExistingFiles: true,
-  skipSpecValidation: false,
-  alwaysRun: true,
 )
 class MyApp extends StatefulWidget {
   final Locale locale;
@@ -36,7 +35,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('hash auth: ${widget.apiClient.hashCode}');
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthCubit()..checkAccessToken()),

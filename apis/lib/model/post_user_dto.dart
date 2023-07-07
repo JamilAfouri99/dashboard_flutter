@@ -34,28 +34,31 @@ class PostUserDto {
   PatchUserProfileDto? profile;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PostUserDto &&
-     other.email == email &&
-     other.firstName == firstName &&
-     other.lastName == lastName &&
-     other.profile == profile;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PostUserDto &&
+          other.email == email &&
+          other.firstName == firstName &&
+          other.lastName == lastName &&
+          other.profile == profile;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (email.hashCode) +
-    (firstName.hashCode) +
-    (lastName.hashCode) +
-    (profile == null ? 0 : profile!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (email.hashCode) +
+      (firstName.hashCode) +
+      (lastName.hashCode) +
+      (profile == null ? 0 : profile!.hashCode);
 
   @override
-  String toString() => 'PostUserDto[email=$email, firstName=$firstName, lastName=$lastName, profile=$profile]';
+  String toString() =>
+      'PostUserDto[email=$email, firstName=$firstName, lastName=$lastName, profile=$profile]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'email'] = this.email;
-      json[r'firstName'] = this.firstName;
-      json[r'lastName'] = this.lastName;
+    json[r'email'] = this.email;
+    json[r'firstName'] = this.firstName;
+    json[r'lastName'] = this.lastName;
     if (this.profile != null) {
       json[r'profile'] = this.profile;
     } else {
@@ -86,13 +89,16 @@ class PostUserDto {
         email: mapValueOfType<String>(json, r'email')!,
         firstName: mapValueOfType<String>(json, r'firstName')!,
         lastName: mapValueOfType<String>(json, r'lastName')!,
-        profile: PatchUserProfileDto.fromJson(json[r'profile']),
+        profile: json[r'profile'] == null ? null : PatchUserProfileDto.fromJson(json[r'profile']),
       );
     }
     return null;
   }
 
-  static List<PostUserDto>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PostUserDto>? listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PostUserDto>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -120,12 +126,18 @@ class PostUserDto {
   }
 
   // maps a json object with a list of PostUserDto-objects as value to a dart map
-  static Map<String, List<PostUserDto>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PostUserDto>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PostUserDto>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = PostUserDto.listFromJson(entry.value, growable: growable,);
+        final value = PostUserDto.listFromJson(
+          entry.value,
+          growable: growable,
+        );
         if (value != null) {
           map[entry.key] = value;
         }
@@ -141,4 +153,3 @@ class PostUserDto {
     'lastName',
   };
 }
-
