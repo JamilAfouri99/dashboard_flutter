@@ -3,7 +3,9 @@ import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/helpers/date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qcarder/helpers/image_path_by_label.dart';
 import 'package:qcarder_api/api.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewForm extends StatelessWidget {
   final User user;
@@ -48,7 +50,6 @@ class ViewForm extends StatelessWidget {
                         ),
             ),
           ),
-
           const SizedBox(height: 16),
           Text(
             user.profile.displayName ?? '',
@@ -145,7 +146,41 @@ class ViewForm extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              alignment: WrapAlignment.center,
+              runAlignment: WrapAlignment.center,
+              children: user.profile.links!.map((link) {
+                return Builder(builder: (context) {
+                  return GestureDetector(
+                    onTap: () {
+                      Uri uri = Uri.parse(link.link);
+                      launchUrl(uri);
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.white,
+                      ),
+                      child: ClipOval(
+                        child: SvgPicture.asset(
+                          linkPathByLabel(link.label),
+                          fit: BoxFit.cover,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  );
+                });
+              }).toList(),
+            ),
+          ),
         ],
       ),
     );

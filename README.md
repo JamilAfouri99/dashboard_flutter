@@ -46,6 +46,7 @@ Unless you select another option, the app will run on the development environmen
 In our project, we have implemented OpenAPI to streamline the process of generating services and models based on the APIs we utilize. By using the following command, we can easily generate these files:
 
 ```
+dart run build_runner clean
 dart run build_runner build --delete-conflicting-outputs
 ```
 

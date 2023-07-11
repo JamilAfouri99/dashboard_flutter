@@ -1,6 +1,5 @@
 import 'package:qcarder/configuration/constants.dart';
 import 'package:qcarder/configuration/theme.dart';
-import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
 import 'package:qcarder/cubit/user/user_state.dart';
 import 'package:qcarder/models/enums.dart';
@@ -27,7 +26,6 @@ class UserScreen extends StatelessWidget {
         user != null
             ? BlocProvider(create: (_) => UserCubit()..getUserById(user!.id))
             : BlocProvider(create: (_) => UserCubit()),
-        BlocProvider(create: (context) => AvatarCubit()),
       ],
       child: BlocConsumer<UserCubit, UserState>(
         listener: (context, state) {

@@ -1,6 +1,7 @@
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
 import 'package:qcarder/cubit/users/users_cubit.dart';
 import 'package:qcarder/services/global_services.dart';
@@ -11,12 +12,16 @@ import 'Navigation/router.dart' as router;
 import 'package:openapi_generator_annotations/openapi_generator_annotations.dart';
 
 @Openapi(
-  additionalProperties: AdditionalProperties(pubName: 'qcarder_api', pubAuthor: 'QCarder'),
+  additionalProperties: AdditionalProperties(
+    pubName: 'qcarder_api',
+    pubAuthor: 'QCarder',
+  ),
   inputSpecFile: 'https://api.qcarder.com/docs-json',
   generatorName: Generator.dart,
   outputDirectory: 'apis',
   fetchDependencies: true,
   overwriteExistingFiles: true,
+  alwaysRun: true,
 )
 class MyApp extends StatefulWidget {
   final Locale locale;
@@ -40,6 +45,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => AuthCubit()..checkAccessToken()),
         BlocProvider(create: (_) => UsersCubit()),
         BlocProvider(create: (_) => UserCubit()),
+        BlocProvider(create: (_) => AvatarCubit()),
       ],
       child: MaterialApp(
         title: 'qcarder',

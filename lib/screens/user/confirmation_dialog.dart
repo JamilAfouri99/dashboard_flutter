@@ -1,8 +1,11 @@
 import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
+import 'package:qcarder/cubit/avatar/avatar_state.dart';
 import 'package:qcarder/cubit/user/user_state.dart';
 import 'package:qcarder/models/enums.dart';
 import 'package:qcarder/navigation/router_manager.dart';
 import 'package:qcarder/screens/user/user_screen.dart';
+import 'package:qcarder/services/http/remote_service.dart';
 import 'package:qcarder/widgets/custom_button.dart';
 import 'package:qcarder/widgets/custom_progress_indicator.dart';
 import 'package:qcarder/widgets/snackbar.dart';
@@ -10,12 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
 import 'package:qcarder_api/api.dart';
+import 'package:http/http.dart' as http;
 
 class ConfirmationDialog extends StatelessWidget {
   final ConfirmationDialogAction action;
   final User? user;
   final PostUserDto? newUser;
   final PatchUserProfileDto? updateProfile;
+  final http.MultipartFile? avatar;
 
   const ConfirmationDialog({
     super.key,
@@ -23,6 +28,7 @@ class ConfirmationDialog extends StatelessWidget {
     this.user,
     this.newUser,
     this.updateProfile,
+    this.avatar,
   });
 
   @override
@@ -56,41 +62,42 @@ class ConfirmationDialog extends StatelessWidget {
 
     return BlocConsumer<UserCubit, UserState>(
       listener: (_, state) {},
-      builder: (context, state) => state is UserLoading
-          ? const CustomProgressIndicator()
-          : AlertDialog(
-              title: Text(title),
-              content: Text(message),
-              actionsPadding: const EdgeInsets.only(bottom: 20, right: 20),
-              actions: [
-                Wrap(
-                  children: [
-                    SizedBox(
-                      height: 50,
-                      width: 120,
-                      child: CustomButton(
-                        title: 'Cancel',
-                        isInverted: true,
-                        onPressed: () {
-                          Navigator.pop(context); // Close the dialog
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    SizedBox(
-                      height: 50,
-                      width: 120,
-                      child: CustomButton(
-                        title: buttonText,
-                        onPressed: () {
-                          _handleAction(context); // Handle the selected action
-                        },
-                      ),
-                    ),
+      builder: (context, state) =>
+          state is UserLoading || context.read<AvatarCubit>().state is AvatarLoading
+              ? const CustomProgressIndicator()
+              : AlertDialog(
+                  title: Text(title),
+                  content: Text(message),
+                  actionsPadding: const EdgeInsets.only(bottom: 20, right: 20),
+                  actions: [
+                    Wrap(
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          width: 120,
+                          child: CustomButton(
+                            title: 'Cancel',
+                            isInverted: true,
+                            onPressed: () {
+                              Navigator.pop(context); // Close the dialog
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        SizedBox(
+                          height: 50,
+                          width: 120,
+                          child: CustomButton(
+                            title: buttonText,
+                            onPressed: () {
+                              _handleAction(context); // Handle the selected action
+                            },
+                          ),
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
+                ),
     );
   }
 
@@ -153,11 +160,29 @@ class ConfirmationDialog extends StatelessWidget {
         );
         Navigator.pop(context);
       } else if (state is UserLoaded) {
-        Navigator.pop(context);
-        RouteManager.routerManagerPushUntil(
-          context: context,
-          routeName: RouteConstants.users,
-        );
+        // Avatar uploading.
+        if (avatar != null) {
+          AvatarCubit avatarCubit = context.read<AvatarCubit>();
+          final uploadingAvatar = await RemoteService().asyncTryCatch(
+            () => avatarCubit.uploadAvatar(state.user!.id, avatar!),
+          );
+          if (uploadingAvatar.isError || avatarCubit.state is AvatarFailed) {
+            if (context.mounted) {
+              CustomSnackbar.show(
+                context,
+                'The user was successfully created, but the image failed to upload',
+                type: SnackbarType.info,
+              );
+            }
+          }
+        }
+        if (context.mounted) {
+          Navigator.pop(context);
+          RouteManager.routerManagerPushUntil(
+            context: context,
+            routeName: RouteConstants.users,
+          );
+        }
       }
     }
   }
