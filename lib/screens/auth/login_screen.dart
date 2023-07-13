@@ -12,9 +12,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qcarder_api/api.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController _emailController =
-      TextEditingController(text: 'owner-qcarder.com@test.com');
-  final TextEditingController _passwordController = TextEditingController(text: 'abc123');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   LoginScreen({Key? key}) : super(key: key);
 
