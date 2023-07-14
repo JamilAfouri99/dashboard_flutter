@@ -10,40 +10,36 @@
 
 part of openapi.api;
 
-class PatchGroupDto {
-  /// Returns a new [PatchGroupDto] instance.
-  PatchGroupDto({
-    this.name,
+class DeleteGroupProfileFilesDto {
+  /// Returns a new [DeleteGroupProfileFilesDto] instance.
+  DeleteGroupProfileFilesDto({
+    required this.banner,
   });
 
-  String? name;
+  bool banner;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PatchGroupDto &&
-     other.name == name;
+  bool operator ==(Object other) => identical(this, other) || other is DeleteGroupProfileFilesDto &&
+     other.banner == banner;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (name == null ? 0 : name!.hashCode);
+    (banner.hashCode);
 
   @override
-  String toString() => 'PatchGroupDto[name=$name]';
+  String toString() => 'DeleteGroupProfileFilesDto[banner=$banner]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.name != null) {
-      json[r'name'] = this.name;
-    } else {
-      json[r'name'] = null;
-    }
+      json[r'banner'] = this.banner;
     return json;
   }
 
-  /// Returns a new [PatchGroupDto] instance and imports its values from
+  /// Returns a new [DeleteGroupProfileFilesDto] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static PatchGroupDto? fromJson(dynamic value) {
+  static DeleteGroupProfileFilesDto? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -52,24 +48,24 @@ class PatchGroupDto {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PatchGroupDto[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PatchGroupDto[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "DeleteGroupProfileFilesDto[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "DeleteGroupProfileFilesDto[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return PatchGroupDto(
-        name: mapValueOfType<String>(json, r'name'),
+      return DeleteGroupProfileFilesDto(
+        banner: mapValueOfType<bool>(json, r'banner')!,
       );
     }
     return null;
   }
 
-  static List<PatchGroupDto>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <PatchGroupDto>[];
+  static List<DeleteGroupProfileFilesDto>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <DeleteGroupProfileFilesDto>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = PatchGroupDto.fromJson(row);
+        final value = DeleteGroupProfileFilesDto.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -78,12 +74,12 @@ class PatchGroupDto {
     return result.toList(growable: growable);
   }
 
-  static Map<String, PatchGroupDto> mapFromJson(dynamic json) {
-    final map = <String, PatchGroupDto>{};
+  static Map<String, DeleteGroupProfileFilesDto> mapFromJson(dynamic json) {
+    final map = <String, DeleteGroupProfileFilesDto>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = PatchGroupDto.fromJson(entry.value);
+        final value = DeleteGroupProfileFilesDto.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -92,13 +88,13 @@ class PatchGroupDto {
     return map;
   }
 
-  // maps a json object with a list of PatchGroupDto-objects as value to a dart map
-  static Map<String, List<PatchGroupDto>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<PatchGroupDto>>{};
+  // maps a json object with a list of DeleteGroupProfileFilesDto-objects as value to a dart map
+  static Map<String, List<DeleteGroupProfileFilesDto>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<DeleteGroupProfileFilesDto>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = PatchGroupDto.listFromJson(entry.value, growable: growable,);
+        final value = DeleteGroupProfileFilesDto.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -109,6 +105,7 @@ class PatchGroupDto {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
+    'banner',
   };
 }
 

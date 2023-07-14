@@ -16,6 +16,57 @@ class GroupsApi {
 
   final ApiClient apiClient;
 
+  /// Performs an HTTP 'DELETE /groups/{userId}/profile/{profileId}/files' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] groupId (required):
+  ///
+  /// * [String] profileId (required):
+  ///
+  /// * [DeleteGroupProfileFilesDto] deleteGroupProfileFilesDto (required):
+  ///   Specify which files are to be deleted by sending the file field with a value of \"true\" 
+  Future<Response> deleteUserProfileFilesWithHttpInfo(String groupId, String profileId, DeleteGroupProfileFilesDto deleteGroupProfileFilesDto,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/groups/{userId}/profile/{profileId}/files'
+      .replaceAll('{groupId}', groupId)
+      .replaceAll('{profileId}', profileId);
+
+    // ignore: prefer_final_locals
+    Object? postBody = deleteGroupProfileFilesDto;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] groupId (required):
+  ///
+  /// * [String] profileId (required):
+  ///
+  /// * [DeleteGroupProfileFilesDto] deleteGroupProfileFilesDto (required):
+  ///   Specify which files are to be deleted by sending the file field with a value of \"true\" 
+  Future<void> deleteUserProfileFiles(String groupId, String profileId, DeleteGroupProfileFilesDto deleteGroupProfileFilesDto,) async {
+    final response = await deleteUserProfileFilesWithHttpInfo(groupId, profileId, deleteGroupProfileFilesDto,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
   /// Performs an HTTP 'PATCH /groups/{groupId}' operation and returns the [Response].
   /// Parameters:
   ///
@@ -68,16 +119,19 @@ class GroupsApi {
     return null;
   }
 
-  /// Performs an HTTP 'POST /groups/{groupId}/files' operation and returns the [Response].
+  /// Performs an HTTP 'POST /groups/{groupId}/profile/{profileId}/files' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] groupId (required):
   ///
+  /// * [String] profileId (required):
+  ///
   /// * [MultipartFile] banner (required):
-  Future<Response> postGroupFilesWithHttpInfo(String groupId, MultipartFile banner,) async {
+  Future<Response> postGroupFilesWithHttpInfo(String groupId, String profileId, MultipartFile banner,) async {
     // ignore: prefer_const_declarations
-    final path = r'/groups/{groupId}/files'
-      .replaceAll('{groupId}', groupId);
+    final path = r'/groups/{groupId}/profile/{profileId}/files'
+      .replaceAll('{groupId}', groupId)
+      .replaceAll('{profileId}', profileId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -114,9 +168,11 @@ class GroupsApi {
   ///
   /// * [String] groupId (required):
   ///
+  /// * [String] profileId (required):
+  ///
   /// * [MultipartFile] banner (required):
-  Future<void> postGroupFiles(String groupId, MultipartFile banner,) async {
-    final response = await postGroupFilesWithHttpInfo(groupId, banner,);
+  Future<void> postGroupFiles(String groupId, String profileId, MultipartFile banner,) async {
+    final response = await postGroupFilesWithHttpInfo(groupId, profileId, banner,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

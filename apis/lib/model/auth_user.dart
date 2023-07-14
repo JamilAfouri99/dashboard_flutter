@@ -141,7 +141,7 @@ class AuthUser {
         avatar: json[r'avatar'] == null ? null : mapValueOfType<String>(json, r'avatar'),
         role: AuthUserRoleEnum.fromJson(json[r'role'])!,
         status: AuthUserStatusEnum.fromJson(json[r'status'])!,
-        groupId: json[r'groupId'],
+        groupId: json[r'groupId'] == null ? null : json[r'groupId'],
         accessToken: mapValueOfType<String>(json, r'access_token')!,
         refreshToken: mapValueOfType<String>(json, r'refresh_token')!,
       );

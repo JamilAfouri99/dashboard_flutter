@@ -1,4 +1,5 @@
 import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
 import 'package:qcarder/cubit/avatar/avatar_state.dart';
 import 'package:qcarder/cubit/user/user_state.dart';
@@ -62,42 +63,68 @@ class ConfirmationDialog extends StatelessWidget {
 
     return BlocConsumer<UserCubit, UserState>(
       listener: (_, state) {},
-      builder: (context, state) =>
-          state is UserLoading || context.read<AvatarCubit>().state is AvatarLoading
-              ? const CustomProgressIndicator()
-              : AlertDialog(
-                  title: Text(title),
-                  content: Text(message),
-                  actionsPadding: const EdgeInsets.only(bottom: 20, right: 20),
-                  actions: [
-                    Wrap(
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: 120,
-                          child: CustomButton(
-                            title: 'Cancel',
-                            isInverted: true,
-                            onPressed: () {
-                              Navigator.pop(context); // Close the dialog
-                            },
-                          ),
+      builder: (context, state) => state is UserLoading ||
+              context.read<AvatarCubit>().state is AvatarLoading
+          ? const CustomProgressIndicator()
+          : AlertDialog(
+              title: Text(title),
+              content: Text(message),
+              actionsPadding: const EdgeInsets.only(bottom: 20, right: 20),
+              actions: [
+                Wrap(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xffF3F6FC), Color(0xffF3F6FC)],
                         ),
-                        const SizedBox(width: 10),
-                        SizedBox(
-                          height: 50,
-                          width: 120,
-                          child: CustomButton(
-                            title: buttonText,
-                            onPressed: () {
-                              _handleAction(context); // Handle the selected action
-                            },
-                          ),
+                      ),
+                      child: TextButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          alignment: Alignment.center,
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                         ),
-                      ],
-                    )
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      // margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                          colors: [AppColors.primary, AppColors.primary.withOpacity(0.6)],
+                          begin: Alignment.centerRight,
+                          end: Alignment.centerLeft,
+                        ),
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          alignment: Alignment.center,
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        ),
+                        onPressed: () {
+                          _handleAction(context); // Handle the selected action
+                        },
+                        child: Text(buttonText),
+                      ),
+                    ),
                   ],
-                ),
+                )
+              ],
+            ),
     );
   }
 

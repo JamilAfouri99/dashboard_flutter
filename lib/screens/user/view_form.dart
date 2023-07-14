@@ -154,7 +154,7 @@ class ViewForm extends StatelessWidget {
               runSpacing: 16,
               alignment: WrapAlignment.center,
               runAlignment: WrapAlignment.center,
-              children: user.profile.links!.map((link) {
+              children: user.profile.links.map((link) {
                 return Builder(builder: (context) {
                   return GestureDetector(
                     onTap: () {
@@ -194,12 +194,12 @@ class ViewForm extends StatelessWidget {
           color: AppColors.primary,
         ),
         // subtitle: Text(email.label),
-        title: user.profile.emails != null && user.profile.emails!.length > 1
+        title: user.profile.emails.isNotEmpty && user.profile.emails.length > 1
             ? DropdownButton<String>(
                 value: user.email,
                 isDense: false,
                 onChanged: (_) {},
-                items: user.profile.emails!.map<DropdownMenuItem<String>>((value) {
+                items: user.profile.emails.map<DropdownMenuItem<String>>((value) {
                   return DropdownMenuItem<String>(
                     value: value.email,
                     child: SizedBox(
@@ -229,12 +229,11 @@ class ViewForm extends StatelessWidget {
           color: AppColors.primary,
         ),
         // subtitle: Text(phone.label),
-        title: user.profile.phoneNumbers != null && user.profile.phoneNumbers!.length > 1
+        title: user.profile.phoneNumbers.isNotEmpty && user.profile.phoneNumbers.length > 1
             ? DropdownButton<String>(
                 onChanged: (_) {},
-                value: user.profile.phoneNumbers![0].phoneNumber,
-                items:
-                    user.profile.phoneNumbers!.map<DropdownMenuItem<String>>((PhoneNumber value) {
+                value: user.profile.phoneNumbers[0].phoneNumber,
+                items: user.profile.phoneNumbers.map<DropdownMenuItem<String>>((PhoneNumber value) {
                   return DropdownMenuItem<String>(
                     value: value.phoneNumber,
                     child: Text(
@@ -245,7 +244,9 @@ class ViewForm extends StatelessWidget {
                 }).toList(),
               )
             : Text(
-                user.profile.phoneNumbers != null ? user.profile.phoneNumbers![0].phoneNumber : '',
+                user.profile.phoneNumbers.isNotEmpty
+                    ? user.profile.phoneNumbers[0].phoneNumber
+                    : '',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
       ),

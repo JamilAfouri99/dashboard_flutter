@@ -11,19 +11,17 @@ import 'package:qcarder_api/api.dart';
 import 'Navigation/router.dart' as router;
 import 'package:openapi_generator_annotations/openapi_generator_annotations.dart';
 
-const username = 'dev';
-const password = 'dev@qcarder@';
-
 @Openapi(
   additionalProperties: AdditionalProperties(
     pubName: 'qcarder_api',
     pubAuthor: 'QCarder',
   ),
-  inputSpecFile: 'https://dev:dev@qcarder@api.qcarder.com/docs-json',
+  inputSpecFile: 'api_docs.yaml',
   generatorName: Generator.dart,
   outputDirectory: 'apis',
   fetchDependencies: true,
-  overwriteExistingFiles: true,
+  overwriteExistingFiles: false,
+  skipSpecValidation: true,
   alwaysRun: true,
 )
 class MyApp extends StatefulWidget {

@@ -183,6 +183,12 @@ class ApiClient {
           return value is DateTime ? value : DateTime.tryParse(value);
         case 'AuthUser':
           return AuthUser.fromJson(value);
+        case 'DeleteGroupProfileFilesDto':
+          return DeleteGroupProfileFilesDto.fromJson(value);
+        case 'DeleteUserFilesDto':
+          return DeleteUserFilesDto.fromJson(value);
+        case 'DeleteUserProfileFilesDto':
+          return DeleteUserProfileFilesDto.fromJson(value);
         case 'Email':
           return Email.fromJson(value);
         case 'Group':

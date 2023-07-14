@@ -47,8 +47,13 @@ Unless you select another option, the app will run on the development environmen
 In our project, we have implemented OpenAPI to streamline the process of generating services and models based on the APIs we utilize. By using the following command, we can easily generate these files:
 
 ```
-dart run build_runner clean
-dart run build_runner build --delete-conflicting-outputs
+- Access the API docs [https://api.qcarder.com/docs-json]
+- Retrieve it in JSON format
+- Transform it from JSON to YAML
+- Delete the existing YAML folder (api_docs.yaml) and replace it with the new one having the same name
+- Execute these commands
+    - dart run build_runner clean
+    - dart run build_runner build --delete-conflicting-outputs
 ```
 
 Upon execution, the generated files will be conveniently located in the directory path `QCarder/apis`. It is important to note that running this command will overwrite any existing files in that location.

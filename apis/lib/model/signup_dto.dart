@@ -28,29 +28,29 @@ class SignupDto {
   String lastName;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SignupDto &&
-          other.email == email &&
-          other.password == password &&
-          other.firstName == firstName &&
-          other.lastName == lastName;
+  bool operator ==(Object other) => identical(this, other) || other is SignupDto &&
+     other.email == email &&
+     other.password == password &&
+     other.firstName == firstName &&
+     other.lastName == lastName;
 
   @override
   int get hashCode =>
-      // ignore: unnecessary_parenthesis
-      (email.hashCode) + (password.hashCode) + (firstName.hashCode) + (lastName.hashCode);
+    // ignore: unnecessary_parenthesis
+    (email.hashCode) +
+    (password.hashCode) +
+    (firstName.hashCode) +
+    (lastName.hashCode);
 
   @override
-  String toString() =>
-      'SignupDto[email=$email, password=$password, firstName=$firstName, lastName=$lastName]';
+  String toString() => 'SignupDto[email=$email, password=$password, firstName=$firstName, lastName=$lastName]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'email'] = this.email;
-    json[r'password'] = this.password;
-    json[r'firstName'] = this.firstName;
-    json[r'lastName'] = this.lastName;
+      json[r'email'] = this.email;
+      json[r'password'] = this.password;
+      json[r'firstName'] = this.firstName;
+      json[r'lastName'] = this.lastName;
     return json;
   }
 
@@ -82,10 +82,7 @@ class SignupDto {
     return null;
   }
 
-  static List<SignupDto>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
+  static List<SignupDto>? listFromJson(dynamic json, {bool growable = false,}) {
     final result = <SignupDto>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -113,18 +110,12 @@ class SignupDto {
   }
 
   // maps a json object with a list of SignupDto-objects as value to a dart map
-  static Map<String, List<SignupDto>> mapListFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
+  static Map<String, List<SignupDto>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<SignupDto>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = SignupDto.listFromJson(
-          entry.value,
-          growable: growable,
-        );
+        final value = SignupDto.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -141,3 +132,4 @@ class SignupDto {
     'lastName',
   };
 }
+

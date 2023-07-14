@@ -14,37 +14,37 @@ class PhoneNumber {
   /// Returns a new [PhoneNumber] instance.
   PhoneNumber({
     required this.phoneNumber,
-    this.country,
-    this.label,
+    required this.country,
+    required this.label,
   });
 
   String phoneNumber;
 
-  String? country;
+  String country;
 
-  String? label;
+  String label;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PhoneNumber &&
-          other.phoneNumber == phoneNumber &&
-          other.country == country &&
-          other.label == label;
+  bool operator ==(Object other) => identical(this, other) || other is PhoneNumber &&
+     other.phoneNumber == phoneNumber &&
+     other.country == country &&
+     other.label == label;
 
   @override
   int get hashCode =>
-      // ignore: unnecessary_parenthesis
-      (phoneNumber.hashCode) + (country.hashCode) + (label.hashCode);
+    // ignore: unnecessary_parenthesis
+    (phoneNumber.hashCode) +
+    (country.hashCode) +
+    (label.hashCode);
 
   @override
   String toString() => 'PhoneNumber[phoneNumber=$phoneNumber, country=$country, label=$label]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'phoneNumber'] = this.phoneNumber;
-    json[r'country'] = this.country;
-    json[r'label'] = this.label;
+      json[r'phoneNumber'] = this.phoneNumber;
+      json[r'country'] = this.country;
+      json[r'label'] = this.label;
     return json;
   }
 
@@ -68,17 +68,14 @@ class PhoneNumber {
 
       return PhoneNumber(
         phoneNumber: mapValueOfType<String>(json, r'phoneNumber')!,
-        country: json[r'country'] == null ? null : mapValueOfType<String>(json, r'country')!,
-        label: json[r'label'] == null ? null : mapValueOfType<String>(json, r'label')!,
+        country: mapValueOfType<String>(json, r'country')!,
+        label: mapValueOfType<String>(json, r'label')!,
       );
     }
     return null;
   }
 
-  static List<PhoneNumber>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
+  static List<PhoneNumber>? listFromJson(dynamic json, {bool growable = false,}) {
     final result = <PhoneNumber>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -106,18 +103,12 @@ class PhoneNumber {
   }
 
   // maps a json object with a list of PhoneNumber-objects as value to a dart map
-  static Map<String, List<PhoneNumber>> mapListFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
+  static Map<String, List<PhoneNumber>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<PhoneNumber>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = PhoneNumber.listFromJson(
-          entry.value,
-          growable: growable,
-        );
+        final value = PhoneNumber.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -129,5 +120,8 @@ class PhoneNumber {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'phoneNumber',
+    'country',
+    'label',
   };
 }
+

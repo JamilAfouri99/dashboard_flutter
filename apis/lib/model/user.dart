@@ -19,12 +19,12 @@ class User {
     required this.email,
     required this.firstName,
     required this.lastName,
+    this.avatar,
     required this.role,
     required this.status,
-    required this.profile,
-    this.avatar,
     this.group,
     this.groupId,
+    required this.profile,
   });
 
   String id;
@@ -142,11 +142,11 @@ class User {
         email: mapValueOfType<String>(json, r'email')!,
         firstName: mapValueOfType<String>(json, r'firstName')!,
         lastName: mapValueOfType<String>(json, r'lastName')!,
-        avatar: json[r'avatar'] != null ? mapValueOfType<String>(json, r'avatar') : null,
+        avatar: json[r'avatar'] == null ? null : mapValueOfType<String>(json, r'avatar'),
         role: UserRoleEnum.fromJson(json[r'role'])!,
         status: UserStatusEnum.fromJson(json[r'status'])!,
-        group: json[r'group'] != null ? Group.fromJson(json[r'group']) : null,
-        groupId: json[r'groupId'],
+        group: json[r'group'] == null ? null : Group.fromJson(json[r'group']),
+        groupId: json[r'groupId'] == null ? null : json[r'groupId'],
         profile: UserProfile.fromJson(json[r'profile'])!,
       );
     }

@@ -33,6 +33,9 @@ part 'api/groups_api.dart';
 part 'api/users_api.dart';
 
 part 'model/auth_user.dart';
+part 'model/delete_group_profile_files_dto.dart';
+part 'model/delete_user_files_dto.dart';
+part 'model/delete_user_profile_files_dto.dart';
 part 'model/email.dart';
 part 'model/group.dart';
 part 'model/group_profile.dart';

@@ -439,7 +439,7 @@ class _NewFormState extends State<NewForm> {
                         ),
                         child: ClipOval(
                           child: SvgPicture.asset(
-                            flagPathByName(_phones[i].country ?? ''),
+                            flagPathByName(_phones[i].country),
                             fit: BoxFit.cover,
                           ),
                         ),

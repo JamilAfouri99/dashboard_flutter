@@ -60,22 +60,23 @@ class _EditableFormState extends State<EditableForm> {
     _noteController.text = widget.user.profile.notes ?? '';
     // _categoryController.text = widget.user!.categories[0];
     _emailControllers = List<TextEditingController>.generate(
-      widget.user.profile.emails != null ? widget.user.profile.emails!.length : 1,
+      widget.user.profile.emails.isNotEmpty ? widget.user.profile.emails.length : 1,
       (index) => TextEditingController(
-        text: widget.user.profile.emails != null ? widget.user.profile.emails![index].email : '',
+        text: widget.user.profile.emails.isNotEmpty ? widget.user.profile.emails[index].email : '',
       ),
     );
-    if (widget.user.profile.phoneNumbers != null && widget.user.profile.phoneNumbers!.isNotEmpty) {
-      for (final phone in widget.user.profile.phoneNumbers!) {
+    if (widget.user.profile.phoneNumbers.isNotEmpty &&
+        widget.user.profile.phoneNumbers.isNotEmpty) {
+      for (final phone in widget.user.profile.phoneNumbers) {
         _phones.add(phone);
         _phoneControllers.add(TextEditingController(text: phone.phoneNumber));
       }
     } else {
       _phoneControllers.add(TextEditingController());
-      _phones.add(PhoneNumber(phoneNumber: _phoneControllers[0].text, label: ''));
+      _phones.add(PhoneNumber(phoneNumber: _phoneControllers[0].text, label: '', country: ''));
     }
-    if (widget.user.profile.links != null && widget.user.profile.links!.isNotEmpty) {
-      for (final link in widget.user.profile.links!) {
+    if (widget.user.profile.links.isNotEmpty) {
+      for (final link in widget.user.profile.links) {
         _links.add(link);
         _linkControllers.add(TextEditingController(text: link.link));
       }
@@ -413,7 +414,7 @@ class _EditableFormState extends State<EditableForm> {
                         ),
                         child: ClipOval(
                           child: SvgPicture.asset(
-                            flagPathByName(_phones[i].country ?? ''),
+                            flagPathByName(_phones[i].country),
                             fit: BoxFit.cover,
                           ),
                         ),

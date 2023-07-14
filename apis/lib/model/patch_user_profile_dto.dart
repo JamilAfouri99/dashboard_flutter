@@ -36,11 +36,11 @@ class PatchUserProfileDto {
 
   String? notes;
 
-  List<Email>? emails;
+  List<Email> emails;
 
-  List<PhoneNumber>? phoneNumbers;
+  List<PhoneNumber> phoneNumbers;
 
-  List<Link>? links;
+  List<Link> links;
 
   @override
   bool operator ==(Object other) =>
@@ -65,9 +65,9 @@ class PatchUserProfileDto {
       (birthday == null ? 0 : birthday!.hashCode) +
       (address == null ? 0 : address!.hashCode) +
       (notes == null ? 0 : notes!.hashCode) +
-      (emails == null ? 0 : emails!.hashCode) +
-      (phoneNumbers == null ? 0 : phoneNumbers!.hashCode) +
-      (links == null ? 0 : links!.hashCode);
+      (emails.hashCode) +
+      (phoneNumbers.hashCode) +
+      (links.hashCode);
 
   @override
   String toString() =>
@@ -105,21 +105,9 @@ class PatchUserProfileDto {
     } else {
       json[r'notes'] = null;
     }
-    if (this.emails != null) {
-      json[r'emails'] = this.emails;
-    } else {
-      json[r'emails'] = null;
-    }
-    if (this.phoneNumbers != null) {
-      json[r'phoneNumbers'] = this.phoneNumbers;
-    } else {
-      json[r'phoneNumbers'] = null;
-    }
-    if (this.links != null) {
-      json[r'links'] = this.links;
-    } else {
-      json[r'links'] = null;
-    }
+    json[r'emails'] = this.emails;
+    json[r'phoneNumbers'] = this.phoneNumbers;
+    json[r'links'] = this.links;
     return json;
   }
 
@@ -151,11 +139,9 @@ class PatchUserProfileDto {
         birthday: json[r'birthday'] == null ? null : mapDateTime(json, r'birthday', ''),
         address: json[r'address'] == null ? null : mapValueOfType<String>(json, r'address'),
         notes: json[r'notes'] == null ? null : mapValueOfType<String>(json, r'notes'),
-        emails: json[r'emails'] == null ? null : Email.listFromJson(json[r'emails']) ?? const [],
-        phoneNumbers: json[r'phoneNumbers'] == null
-            ? null
-            : PhoneNumber.listFromJson(json[r'phoneNumbers']) ?? const [],
-        links: json[r'links'] == null ? null : Link.listFromJson(json[r'links']) ?? const [],
+        emails: Email.listFromJson(json[r'emails']) ?? const [],
+        phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers']) ?? const [],
+        links: Link.listFromJson(json[r'links']) ?? const [],
       );
     }
     return null;

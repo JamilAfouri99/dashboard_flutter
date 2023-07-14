@@ -190,16 +190,18 @@ class PatchUserResponseDto {
       }());
 
       return PatchUserResponseDto(
-        id: mapValueOfType<String>(json, r'id'),
-        createdAt: mapDateTime(json, r'createdAt', ''),
-        updatedAt: mapDateTime(json, r'updatedAt', ''),
-        email: mapValueOfType<String>(json, r'email'),
-        firstName: mapValueOfType<String>(json, r'firstName'),
-        lastName: mapValueOfType<String>(json, r'lastName'),
-        avatar: mapValueOfType<String>(json, r'avatar'),
-        role: PatchUserResponseDtoRoleEnum.fromJson(json[r'role']),
-        status: PatchUserResponseDtoStatusEnum.fromJson(json[r'status']),
-        groupId: json[r'groupId'],
+        id: json[r'id'] == null ? null : mapValueOfType<String>(json, r'id'),
+        createdAt: json[r'createdAt'] == null ? null : mapDateTime(json, r'createdAt', ''),
+        updatedAt: json[r'updatedAt'] == null ? null : mapDateTime(json, r'updatedAt', ''),
+        email: json[r'email'] == null ? null : mapValueOfType<String>(json, r'email'),
+        firstName: json[r'firstName'] == null ? null : mapValueOfType<String>(json, r'firstName'),
+        lastName: json[r'lastName'] == null ? null : mapValueOfType<String>(json, r'lastName'),
+        avatar: json[r'avatar'] == null ? null : mapValueOfType<String>(json, r'avatar'),
+        role: json[r'role'] == null ? null : PatchUserResponseDtoRoleEnum.fromJson(json[r'role']),
+        status: json[r'status'] == null
+            ? null
+            : PatchUserResponseDtoStatusEnum.fromJson(json[r'status']),
+        groupId: json[r'groupId'] == null ? null : json[r'groupId'],
       );
     }
     return null;

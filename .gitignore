@@ -48,6 +48,9 @@ app.*.map.json
 .env.development
 .env.production
 
+# Api Docs
+api_docs.yaml
+
 # Personal
 todo.md
 result.json

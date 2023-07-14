@@ -103,24 +103,31 @@ class UsersApi {
     }
   }
 
-  /// Performs an HTTP 'GET /users/me' operation and returns the [Response].
-  Future<Response> getMeWithHttpInfo() async {
+  /// Performs an HTTP 'DELETE /users/{userId}/files' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [DeleteUserFilesDto] deleteUserFilesDto (required):
+  ///   Specify which files are to be deleted by sending the file field with a value of \"true\" 
+  Future<Response> deleteUserFilesWithHttpInfo(String userId, DeleteUserFilesDto deleteUserFilesDto,) async {
     // ignore: prefer_const_declarations
-    final path = r'/users/me';
+    final path = r'/users/{userId}/files'
+      .replaceAll('{userId}', userId);
 
     // ignore: prefer_final_locals
-    Object? postBody;
+    Object? postBody = deleteUserFilesDto;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
     return apiClient.invokeAPI(
       path,
-      'GET',
+      'DELETE',
       queryParams,
       postBody,
       headerParams,
@@ -129,19 +136,68 @@ class UsersApi {
     );
   }
 
-  Future<User?> getMe() async {
-    final response = await getMeWithHttpInfo();
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [DeleteUserFilesDto] deleteUserFilesDto (required):
+  ///   Specify which files are to be deleted by sending the file field with a value of \"true\" 
+  Future<void> deleteUserFiles(String userId, DeleteUserFilesDto deleteUserFilesDto,) async {
+    final response = await deleteUserFilesWithHttpInfo(userId, deleteUserFilesDto,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'User',) as User;
-    
+  }
+
+  /// Performs an HTTP 'DELETE /users/{userId}/profile/{profileId}/files' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [String] profileId (required):
+  ///
+  /// * [DeleteUserProfileFilesDto] deleteUserProfileFilesDto (required):
+  ///   Specify which files are to be deleted by sending the file field with a value of \"true\" 
+  Future<Response> deleteUserProfileFilesWithHttpInfo(String userId, String profileId, DeleteUserProfileFilesDto deleteUserProfileFilesDto,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/users/{userId}/profile/{profileId}/files'
+      .replaceAll('{userId}', userId)
+      .replaceAll('{profileId}', profileId);
+
+    // ignore: prefer_final_locals
+    Object? postBody = deleteUserProfileFilesDto;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [String] profileId (required):
+  ///
+  /// * [DeleteUserProfileFilesDto] deleteUserProfileFilesDto (required):
+  ///   Specify which files are to be deleted by sending the file field with a value of \"true\" 
+  Future<void> deleteUserProfileFiles(String userId, String profileId, DeleteUserProfileFilesDto deleteUserProfileFilesDto,) async {
+    final response = await deleteUserProfileFilesWithHttpInfo(userId, profileId, deleteUserProfileFilesDto,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    return null;
   }
 
   /// Performs an HTTP 'GET /users/{userId}' operation and returns the [Response].
