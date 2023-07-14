@@ -543,6 +543,7 @@ class _EditableFormState extends State<EditableForm> {
         PhoneNumber phone = entry.value;
         phone.phoneNumber = _phoneControllers[index].text;
         phone.label = 'null';
+        phone.country = phone.country.isEmpty ? flagPathByName(phone.country) : phone.country;
         return phone;
       }).toList(),
       links: _linkControllers[0].text.isEmpty

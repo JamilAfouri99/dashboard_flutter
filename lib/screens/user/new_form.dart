@@ -567,6 +567,7 @@ class _NewFormState extends State<NewForm> {
         PhoneNumber phone = entry.value;
         phone.phoneNumber = _phoneControllers[index].text;
         phone.label = 'null';
+        phone.country = phone.country.isEmpty ? flagPathByName(phone.country) : phone.country;
         return phone;
       }).toList(),
       links: _linkControllers[0].text.isEmpty
