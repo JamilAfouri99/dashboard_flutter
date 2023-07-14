@@ -21,11 +21,6 @@ void main() {
       // TODO
     });
 
-    // String banner
-    test('to test the property `banner`', () async {
-      // TODO
-    });
-
     // String title
     test('to test the property `title`', () async {
       // TODO
@@ -58,6 +53,11 @@ void main() {
 
     // List<PhoneNumber> phoneNumbers (default value: const [])
     test('to test the property `phoneNumbers`', () async {
+      // TODO
+    });
+
+    // List<Link> links (default value: const [])
+    test('to test the property `links`', () async {
       // TODO
     });
 

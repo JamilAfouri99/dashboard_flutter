@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:qcarder/app.dart';
 import 'package:qcarder/configuration/config.dart';
 import 'package:qcarder/helpers/localization_helpers.dart';

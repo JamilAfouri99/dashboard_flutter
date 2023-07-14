@@ -22,13 +22,8 @@ void main() {
       // TODO
     });
 
-    //Future<PatchUserResponseDto> editUser(num userId, PatchUserDto patchUserDto) async
-    test('test editUser', () async {
-      // TODO
-    });
-
-    //Future<UserProfile> editUserProfile(num userId, num profileId, PatchUserProfileDto patchUserProfileDto) async
-    test('test editUserProfile', () async {
+    //Future deleteUser(String userId) async
+    test('test deleteUser', () async {
       // TODO
     });
 
@@ -37,13 +32,33 @@ void main() {
       // TODO
     });
 
-    //Future<User> getUserById(num userId) async
+    //Future<User> getUserById(String userId) async
     test('test getUserById', () async {
       // TODO
     });
 
     //Future<PaginatedUsers> getUsers({ num page, num perPage, String search }) async
     test('test getUsers', () async {
+      // TODO
+    });
+
+    //Future<PatchUserResponseDto> patchUser(String userId, PatchUserDto patchUserDto) async
+    test('test patchUser', () async {
+      // TODO
+    });
+
+    //Future<UserProfile> patchUserProfile(String userId, String profileId, PatchUserProfileDto patchUserProfileDto) async
+    test('test patchUserProfile', () async {
+      // TODO
+    });
+
+    //Future postUserFiles(String userId, MultipartFile avatar) async
+    test('test postUserFiles', () async {
+      // TODO
+    });
+
+    //Future postUserProfileFiles(String userId, String profileId, MultipartFile banner) async
+    test('test postUserProfileFiles', () async {
       // TODO
     });
 

@@ -8,7 +8,7 @@ import 'package:qcarder_api/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **num** |  | [optional] 
+**id** | **String** |  | [optional] 
 **createdAt** | [**DateTime**](DateTime.md) |  | [optional] 
 **updatedAt** | [**DateTime**](DateTime.md) |  | [optional] 
 **email** | **String** |  | [optional] 

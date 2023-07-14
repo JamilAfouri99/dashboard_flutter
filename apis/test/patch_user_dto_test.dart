@@ -31,11 +31,6 @@ void main() {
       // TODO
     });
 
-    // String avatar
-    test('to test the property `avatar`', () async {
-      // TODO
-    });
-
     // String role
     test('to test the property `role`', () async {
       // TODO
@@ -43,11 +38,6 @@ void main() {
 
     // String status
     test('to test the property `status`', () async {
-      // TODO
-    });
-
-    // num groupId
-    test('to test the property `groupId`', () async {
       // TODO
     });
 

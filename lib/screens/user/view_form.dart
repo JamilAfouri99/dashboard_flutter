@@ -3,7 +3,9 @@ import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/helpers/date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qcarder/helpers/image_path_by_label.dart';
 import 'package:qcarder_api/api.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewForm extends StatelessWidget {
   final User user;
@@ -11,8 +13,9 @@ class ViewForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.2),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,10 +50,9 @@ class ViewForm extends StatelessWidget {
                         ),
             ),
           ),
-
           const SizedBox(height: 16),
           Text(
-            user.profile.displayName,
+            user.profile.displayName ?? '',
             style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: AppColors.primary),
           ),
           const SizedBox(height: 8),
@@ -144,7 +146,41 @@ class ViewForm extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              alignment: WrapAlignment.center,
+              runAlignment: WrapAlignment.center,
+              children: user.profile.links.map((link) {
+                return Builder(builder: (context) {
+                  return GestureDetector(
+                    onTap: () {
+                      Uri uri = Uri.parse(link.link);
+                      launchUrl(uri);
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.white,
+                      ),
+                      child: ClipOval(
+                        child: SvgPicture.asset(
+                          linkPathByLabel(link.label),
+                          fit: BoxFit.cover,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  );
+                });
+              }).toList(),
+            ),
+          ),
         ],
       ),
     );
@@ -158,12 +194,12 @@ class ViewForm extends StatelessWidget {
           color: AppColors.primary,
         ),
         // subtitle: Text(email.label),
-        title: user.profile.emails != null && user.profile.emails!.length > 1
+        title: user.profile.emails.isNotEmpty && user.profile.emails.length > 1
             ? DropdownButton<String>(
                 value: user.email,
                 isDense: false,
                 onChanged: (_) {},
-                items: user.profile.emails!.map<DropdownMenuItem<String>>((value) {
+                items: user.profile.emails.map<DropdownMenuItem<String>>((value) {
                   return DropdownMenuItem<String>(
                     value: value.email,
                     child: SizedBox(
@@ -193,12 +229,11 @@ class ViewForm extends StatelessWidget {
           color: AppColors.primary,
         ),
         // subtitle: Text(phone.label),
-        title: user.profile.phoneNumbers != null && user.profile.phoneNumbers!.length > 1
+        title: user.profile.phoneNumbers.isNotEmpty && user.profile.phoneNumbers.length > 1
             ? DropdownButton<String>(
                 onChanged: (_) {},
-                value: user.profile.phoneNumbers![0].phoneNumber,
-                items:
-                    user.profile.phoneNumbers!.map<DropdownMenuItem<String>>((PhoneNumber value) {
+                value: user.profile.phoneNumbers[0].phoneNumber,
+                items: user.profile.phoneNumbers.map<DropdownMenuItem<String>>((PhoneNumber value) {
                   return DropdownMenuItem<String>(
                     value: value.phoneNumber,
                     child: Text(
@@ -209,7 +244,9 @@ class ViewForm extends StatelessWidget {
                 }).toList(),
               )
             : Text(
-                user.profile.phoneNumbers != null ? user.profile.phoneNumbers![0].phoneNumber : '',
+                user.profile.phoneNumbers.isNotEmpty
+                    ? user.profile.phoneNumbers[0].phoneNumber
+                    : '',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
       ),

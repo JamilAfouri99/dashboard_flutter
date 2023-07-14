@@ -1,20 +1,27 @@
 import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
+import 'package:qcarder/cubit/avatar/avatar_state.dart';
 import 'package:qcarder/cubit/user/user_state.dart';
 import 'package:qcarder/models/enums.dart';
 import 'package:qcarder/navigation/router_manager.dart';
 import 'package:qcarder/screens/user/user_screen.dart';
+import 'package:qcarder/services/http/remote_service.dart';
+import 'package:qcarder/widgets/custom_button.dart';
 import 'package:qcarder/widgets/custom_progress_indicator.dart';
 import 'package:qcarder/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
 import 'package:qcarder_api/api.dart';
+import 'package:http/http.dart' as http;
 
 class ConfirmationDialog extends StatelessWidget {
   final ConfirmationDialogAction action;
   final User? user;
   final PostUserDto? newUser;
   final PatchUserProfileDto? updateProfile;
+  final http.MultipartFile? avatar;
 
   const ConfirmationDialog({
     super.key,
@@ -22,6 +29,7 @@ class ConfirmationDialog extends StatelessWidget {
     this.user,
     this.newUser,
     this.updateProfile,
+    this.avatar,
   });
 
   @override
@@ -55,24 +63,66 @@ class ConfirmationDialog extends StatelessWidget {
 
     return BlocConsumer<UserCubit, UserState>(
       listener: (_, state) {},
-      builder: (context, state) => state is UserLoading
+      builder: (context, state) => state is UserLoading ||
+              context.read<AvatarCubit>().state is AvatarLoading
           ? const CustomProgressIndicator()
           : AlertDialog(
               title: Text(title),
               content: Text(message),
+              actionsPadding: const EdgeInsets.only(bottom: 20, right: 20),
               actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                  },
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _handleAction(context); // Handle the selected action
-                  },
-                  child: Text(buttonText),
-                ),
+                Wrap(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xffF3F6FC), Color(0xffF3F6FC)],
+                        ),
+                      ),
+                      child: TextButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          alignment: Alignment.center,
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      // margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                          colors: [AppColors.primary, AppColors.primary.withOpacity(0.6)],
+                          begin: Alignment.centerRight,
+                          end: Alignment.centerLeft,
+                        ),
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          alignment: Alignment.center,
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        ),
+                        onPressed: () {
+                          _handleAction(context); // Handle the selected action
+                        },
+                        child: Text(buttonText),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
     );
@@ -97,39 +147,70 @@ class ConfirmationDialog extends StatelessWidget {
     }
   }
 
-  void _deleteContact(BuildContext context, UserCubit contactCubit) {
+  Future<void> _deleteContact(BuildContext context, UserCubit userCubit) async {
     if (user == null) return;
-    contactCubit.deleteUser(user!.id.toString()).then((_) {
-      Navigator.pop(context); // Close the dialog
-      RouteManager.routerManagerPushUntil(
-        context: context,
-        routeName: RouteConstants.users,
-      ); // Navigate to the home screen
-    }).catchError((error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete contact: $error')),
-      );
-      Navigator.pop(context); // Close the dialog
-    });
+    await userCubit.deleteUser(user!.id);
+    final state = userCubit.state;
+    if (context.mounted) {
+      if (state is UserFailed) {
+        CustomSnackbar.show(
+          context,
+          'Failed to delete user: ${state.reason}',
+          type: SnackbarType.error,
+        );
+        Navigator.pop(context);
+      } else if (state is UserLoaded) {
+        Navigator.pop(context);
+        CustomSnackbar.show(
+          context,
+          'Deleted user successfully',
+          type: SnackbarType.success,
+        );
+        RouteManager.routerManagerPushUntil(
+          context: context,
+          routeName: RouteConstants.users,
+        );
+      }
+    }
   }
 
   Future<void> _createUser(BuildContext context, UserCubit contactCubit) async {
     if (newUser == null) return;
     await contactCubit.createUser(newUser!);
     final state = contactCubit.state;
-    if (state is UserFailed) {
-      CustomSnackbar.show(
-        context,
-        'Failed to add contact: ${state.reason}',
-        type: SnackbarType.error,
-      );
-      Navigator.pop(context);
-    } else if (state is UserLoaded) {
-      Navigator.pop(context);
-      RouteManager.routerManagerPushUntil(
-        context: context,
-        routeName: RouteConstants.users,
-      );
+    if (context.mounted) {
+      if (state is UserFailed) {
+        CustomSnackbar.show(
+          context,
+          'Failed to add contact: ${state.reason}',
+          type: SnackbarType.error,
+        );
+        Navigator.pop(context);
+      } else if (state is UserLoaded) {
+        // Avatar uploading.
+        if (avatar != null) {
+          AvatarCubit avatarCubit = context.read<AvatarCubit>();
+          final uploadingAvatar = await RemoteService().asyncTryCatch(
+            () => avatarCubit.uploadAvatar(state.user!.id, avatar!),
+          );
+          if (uploadingAvatar.isError || avatarCubit.state is AvatarFailed) {
+            if (context.mounted) {
+              CustomSnackbar.show(
+                context,
+                'The user was successfully created, but the image failed to upload',
+                type: SnackbarType.info,
+              );
+            }
+          }
+        }
+        if (context.mounted) {
+          Navigator.pop(context);
+          RouteManager.routerManagerPushUntil(
+            context: context,
+            routeName: RouteConstants.users,
+          );
+        }
+      }
     }
   }
 
@@ -152,9 +233,6 @@ class ConfirmationDialog extends StatelessWidget {
         'Failed to add contact: $error',
         type: SnackbarType.error,
       );
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Failed to add contact: $error')),
-      // );
       Navigator.pop(context);
     });
   }
@@ -167,6 +245,9 @@ class ConfirmationDialog extends StatelessWidget {
             context: context,
             routeName: RouteConstants.users,
           )
-        : RouteManager.navigateToWithData(context, () => UserScreen(user: user));
+        : RouteManager.pushAndRemovePrevUntilWithData(
+            context,
+            () => UserScreen(user: user),
+          );
   }
 }

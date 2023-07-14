@@ -31,7 +31,7 @@ class PatchUserResponseDto {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  num? id;
+  String? id;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -73,55 +73,46 @@ class PatchUserResponseDto {
   ///
   String? lastName;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
   String? avatar;
 
   PatchUserResponseDtoRoleEnum? role;
 
   PatchUserResponseDtoStatusEnum? status;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  num? groupId;
+  String? groupId;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PatchUserResponseDto &&
-     other.id == id &&
-     other.createdAt == createdAt &&
-     other.updatedAt == updatedAt &&
-     other.email == email &&
-     other.firstName == firstName &&
-     other.lastName == lastName &&
-     other.avatar == avatar &&
-     other.role == role &&
-     other.status == status &&
-     other.groupId == groupId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PatchUserResponseDto &&
+          other.id == id &&
+          other.createdAt == createdAt &&
+          other.updatedAt == updatedAt &&
+          other.email == email &&
+          other.firstName == firstName &&
+          other.lastName == lastName &&
+          other.avatar == avatar &&
+          other.role == role &&
+          other.status == status &&
+          other.groupId == groupId;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (id == null ? 0 : id!.hashCode) +
-    (createdAt == null ? 0 : createdAt!.hashCode) +
-    (updatedAt == null ? 0 : updatedAt!.hashCode) +
-    (email == null ? 0 : email!.hashCode) +
-    (firstName == null ? 0 : firstName!.hashCode) +
-    (lastName == null ? 0 : lastName!.hashCode) +
-    (avatar == null ? 0 : avatar!.hashCode) +
-    (role == null ? 0 : role!.hashCode) +
-    (status == null ? 0 : status!.hashCode) +
-    (groupId == null ? 0 : groupId!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (id == null ? 0 : id!.hashCode) +
+      (createdAt == null ? 0 : createdAt!.hashCode) +
+      (updatedAt == null ? 0 : updatedAt!.hashCode) +
+      (email == null ? 0 : email!.hashCode) +
+      (firstName == null ? 0 : firstName!.hashCode) +
+      (lastName == null ? 0 : lastName!.hashCode) +
+      (avatar == null ? 0 : avatar!.hashCode) +
+      (role == null ? 0 : role!.hashCode) +
+      (status == null ? 0 : status!.hashCode) +
+      (groupId == null ? 0 : groupId!.hashCode);
 
   @override
-  String toString() => 'PatchUserResponseDto[id=$id, createdAt=$createdAt, updatedAt=$updatedAt, email=$email, firstName=$firstName, lastName=$lastName, avatar=$avatar, role=$role, status=$status, groupId=$groupId]';
+  String toString() =>
+      'PatchUserResponseDto[id=$id, createdAt=$createdAt, updatedAt=$updatedAt, email=$email, firstName=$firstName, lastName=$lastName, avatar=$avatar, role=$role, status=$status, groupId=$groupId]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -190,33 +181,36 @@ class PatchUserResponseDto {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PatchUserResponseDto[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PatchUserResponseDto[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PatchUserResponseDto[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PatchUserResponseDto[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return PatchUserResponseDto(
-        id: json[r'id'] == null
+        id: json[r'id'] == null ? null : mapValueOfType<String>(json, r'id'),
+        createdAt: json[r'createdAt'] == null ? null : mapDateTime(json, r'createdAt', ''),
+        updatedAt: json[r'updatedAt'] == null ? null : mapDateTime(json, r'updatedAt', ''),
+        email: json[r'email'] == null ? null : mapValueOfType<String>(json, r'email'),
+        firstName: json[r'firstName'] == null ? null : mapValueOfType<String>(json, r'firstName'),
+        lastName: json[r'lastName'] == null ? null : mapValueOfType<String>(json, r'lastName'),
+        avatar: json[r'avatar'] == null ? null : mapValueOfType<String>(json, r'avatar'),
+        role: json[r'role'] == null ? null : PatchUserResponseDtoRoleEnum.fromJson(json[r'role']),
+        status: json[r'status'] == null
             ? null
-            : num.parse(json[r'id'].toString()),
-        createdAt: mapDateTime(json, r'createdAt', ''),
-        updatedAt: mapDateTime(json, r'updatedAt', ''),
-        email: mapValueOfType<String>(json, r'email'),
-        firstName: mapValueOfType<String>(json, r'firstName'),
-        lastName: mapValueOfType<String>(json, r'lastName'),
-        avatar: mapValueOfType<String>(json, r'avatar'),
-        role: PatchUserResponseDtoRoleEnum.fromJson(json[r'role']),
-        status: PatchUserResponseDtoStatusEnum.fromJson(json[r'status']),
-        groupId: json[r'groupId'] == null
-            ? null
-            : num.parse(json[r'groupId'].toString()),
+            : PatchUserResponseDtoStatusEnum.fromJson(json[r'status']),
+        groupId: json[r'groupId'] == null ? null : json[r'groupId'],
       );
     }
     return null;
   }
 
-  static List<PatchUserResponseDto>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PatchUserResponseDto>? listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PatchUserResponseDto>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -244,12 +238,18 @@ class PatchUserResponseDto {
   }
 
   // maps a json object with a list of PatchUserResponseDto-objects as value to a dart map
-  static Map<String, List<PatchUserResponseDto>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PatchUserResponseDto>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PatchUserResponseDto>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = PatchUserResponseDto.listFromJson(entry.value, growable: growable,);
+        final value = PatchUserResponseDto.listFromJson(
+          entry.value,
+          growable: growable,
+        );
         if (value != null) {
           map[entry.key] = value;
         }
@@ -259,10 +259,8 @@ class PatchUserResponseDto {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
-  };
+  static const requiredKeys = <String>{};
 }
-
 
 class PatchUserResponseDtoRoleEnum {
   /// Instantiate a new enum with the provided [value].
@@ -289,9 +287,13 @@ class PatchUserResponseDtoRoleEnum {
     SUPERADMIN,
   ];
 
-  static PatchUserResponseDtoRoleEnum? fromJson(dynamic value) => PatchUserResponseDtoRoleEnumTypeTransformer().decode(value);
+  static PatchUserResponseDtoRoleEnum? fromJson(dynamic value) =>
+      PatchUserResponseDtoRoleEnumTypeTransformer().decode(value);
 
-  static List<PatchUserResponseDtoRoleEnum>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PatchUserResponseDtoRoleEnum>? listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PatchUserResponseDtoRoleEnum>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -308,7 +310,8 @@ class PatchUserResponseDtoRoleEnum {
 /// Transformation class that can [encode] an instance of [PatchUserResponseDtoRoleEnum] to String,
 /// and [decode] dynamic data back to [PatchUserResponseDtoRoleEnum].
 class PatchUserResponseDtoRoleEnumTypeTransformer {
-  factory PatchUserResponseDtoRoleEnumTypeTransformer() => _instance ??= const PatchUserResponseDtoRoleEnumTypeTransformer._();
+  factory PatchUserResponseDtoRoleEnumTypeTransformer() =>
+      _instance ??= const PatchUserResponseDtoRoleEnumTypeTransformer._();
 
   const PatchUserResponseDtoRoleEnumTypeTransformer._();
 
@@ -325,10 +328,14 @@ class PatchUserResponseDtoRoleEnumTypeTransformer {
   PatchUserResponseDtoRoleEnum? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
-        case r'USER': return PatchUserResponseDtoRoleEnum.USER;
-        case r'OWNER': return PatchUserResponseDtoRoleEnum.OWNER;
-        case r'ADMIN': return PatchUserResponseDtoRoleEnum.ADMIN;
-        case r'SUPERADMIN': return PatchUserResponseDtoRoleEnum.SUPERADMIN;
+        case r'USER':
+          return PatchUserResponseDtoRoleEnum.USER;
+        case r'OWNER':
+          return PatchUserResponseDtoRoleEnum.OWNER;
+        case r'ADMIN':
+          return PatchUserResponseDtoRoleEnum.ADMIN;
+        case r'SUPERADMIN':
+          return PatchUserResponseDtoRoleEnum.SUPERADMIN;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
@@ -341,8 +348,6 @@ class PatchUserResponseDtoRoleEnumTypeTransformer {
   /// Singleton [PatchUserResponseDtoRoleEnumTypeTransformer] instance.
   static PatchUserResponseDtoRoleEnumTypeTransformer? _instance;
 }
-
-
 
 class PatchUserResponseDtoStatusEnum {
   /// Instantiate a new enum with the provided [value].
@@ -365,9 +370,13 @@ class PatchUserResponseDtoStatusEnum {
     INACTIVE,
   ];
 
-  static PatchUserResponseDtoStatusEnum? fromJson(dynamic value) => PatchUserResponseDtoStatusEnumTypeTransformer().decode(value);
+  static PatchUserResponseDtoStatusEnum? fromJson(dynamic value) =>
+      PatchUserResponseDtoStatusEnumTypeTransformer().decode(value);
 
-  static List<PatchUserResponseDtoStatusEnum>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PatchUserResponseDtoStatusEnum>? listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PatchUserResponseDtoStatusEnum>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -384,7 +393,8 @@ class PatchUserResponseDtoStatusEnum {
 /// Transformation class that can [encode] an instance of [PatchUserResponseDtoStatusEnum] to String,
 /// and [decode] dynamic data back to [PatchUserResponseDtoStatusEnum].
 class PatchUserResponseDtoStatusEnumTypeTransformer {
-  factory PatchUserResponseDtoStatusEnumTypeTransformer() => _instance ??= const PatchUserResponseDtoStatusEnumTypeTransformer._();
+  factory PatchUserResponseDtoStatusEnumTypeTransformer() =>
+      _instance ??= const PatchUserResponseDtoStatusEnumTypeTransformer._();
 
   const PatchUserResponseDtoStatusEnumTypeTransformer._();
 
@@ -401,8 +411,10 @@ class PatchUserResponseDtoStatusEnumTypeTransformer {
   PatchUserResponseDtoStatusEnum? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
-        case r'ACTIVE': return PatchUserResponseDtoStatusEnum.ACTIVE;
-        case r'INACTIVE': return PatchUserResponseDtoStatusEnum.INACTIVE;
+        case r'ACTIVE':
+          return PatchUserResponseDtoStatusEnum.ACTIVE;
+        case r'INACTIVE':
+          return PatchUserResponseDtoStatusEnum.INACTIVE;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
@@ -415,5 +427,3 @@ class PatchUserResponseDtoStatusEnumTypeTransformer {
   /// Singleton [PatchUserResponseDtoStatusEnumTypeTransformer] instance.
   static PatchUserResponseDtoStatusEnumTypeTransformer? _instance;
 }
-
-

@@ -14,7 +14,7 @@ class RemoteService {
   late AuthApi authApi;
 
   RemoteService() {
-    this.authApi = AuthApi(apiClient);
+    authApi = AuthApi(apiClient);
   }
 
   Future<Result<T>> asyncTryCatch<T>(

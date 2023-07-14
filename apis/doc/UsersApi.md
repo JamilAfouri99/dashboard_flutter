@@ -10,11 +10,15 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createUser**](UsersApi.md#createuser) | **POST** /users | 
-[**editUser**](UsersApi.md#edituser) | **PATCH** /users/{userId} | 
-[**editUserProfile**](UsersApi.md#edituserprofile) | **PATCH** /users/{userId}/profile/{profileId} | 
-[**getMe**](UsersApi.md#getme) | **GET** /users/me | 
+[**deleteUser**](UsersApi.md#deleteuser) | **DELETE** /users/{userId} | 
+[**deleteUserFiles**](UsersApi.md#deleteuserfiles) | **DELETE** /users/{userId}/files | 
+[**deleteUserProfileFiles**](UsersApi.md#deleteuserprofilefiles) | **DELETE** /users/{userId}/profile/{profileId}/files | 
 [**getUserById**](UsersApi.md#getuserbyid) | **GET** /users/{userId} | 
 [**getUsers**](UsersApi.md#getusers) | **GET** /users | 
+[**patchUser**](UsersApi.md#patchuser) | **PATCH** /users/{userId} | 
+[**patchUserProfile**](UsersApi.md#patchuserprofile) | **PATCH** /users/{userId}/profile/{profileId} | 
+[**postUserFiles**](UsersApi.md#postuserfiles) | **POST** /users/{userId}/files | 
+[**postUserProfileFiles**](UsersApi.md#postuserprofilefiles) | **POST** /users/{userId}/profile/{profileId}/files | 
 
 
 # **createUser**
@@ -64,8 +68,8 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **editUser**
-> PatchUserResponseDto editUser(userId, patchUserDto)
+# **deleteUser**
+> deleteUser(userId)
 
 
 
@@ -80,14 +84,12 @@ import 'package:qcarder_api/api.dart';
 //defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
 
 final api_instance = UsersApi();
-final userId = 7; // num | 
-final patchUserDto = PatchUserDto(); // PatchUserDto | 
+final userId = xXx7xXx7xXx7xXx7; // String | 
 
 try {
-    final result = api_instance.editUser(userId, patchUserDto);
-    print(result);
+    api_instance.deleteUser(userId);
 } catch (e) {
-    print('Exception when calling UsersApi->editUser: $e\n');
+    print('Exception when calling UsersApi->deleteUser: $e\n');
 }
 ```
 
@@ -95,106 +97,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userId** | **num**|  | [default to 1]
- **patchUserDto** | [**PatchUserDto**](PatchUserDto.md)|  | 
+ **userId** | **String**|  | 
 
 ### Return type
 
-[**PatchUserResponseDto**](PatchUserResponseDto.md)
-
-### Authorization
-
-[bearer](../README.md#bearer)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **editUserProfile**
-> UserProfile editUserProfile(userId, profileId, patchUserProfileDto)
-
-
-
-### Example
-```dart
-import 'package:qcarder_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearer
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
-
-final api_instance = UsersApi();
-final userId = 13; // num | 
-final profileId = 13; // num | 
-final patchUserProfileDto = PatchUserProfileDto(); // PatchUserProfileDto | 
-
-try {
-    final result = api_instance.editUserProfile(userId, profileId, patchUserProfileDto);
-    print(result);
-} catch (e) {
-    print('Exception when calling UsersApi->editUserProfile: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **userId** | **num**|  | 
- **profileId** | **num**|  | 
- **patchUserProfileDto** | [**PatchUserProfileDto**](PatchUserProfileDto.md)|  | 
-
-### Return type
-
-[**UserProfile**](UserProfile.md)
-
-### Authorization
-
-[bearer](../README.md#bearer)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **getMe**
-> User getMe()
-
-
-
-### Example
-```dart
-import 'package:qcarder_api/api.dart';
-// TODO Configure HTTP Bearer authorization: bearer
-// Case 1. Use String Token
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken('YOUR_ACCESS_TOKEN');
-// Case 2. Use Function which generate token.
-// String yourTokenGeneratorFunction() { ... }
-//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
-
-final api_instance = UsersApi();
-
-try {
-    final result = api_instance.getMe();
-    print(result);
-} catch (e) {
-    print('Exception when calling UsersApi->getMe: $e\n');
-}
-```
-
-### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-[**User**](User.md)
+void (empty response body)
 
 ### Authorization
 
@@ -203,7 +110,105 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deleteUserFiles**
+> deleteUserFiles(userId, deleteUserFilesDto)
+
+
+
+### Example
+```dart
+import 'package:qcarder_api/api.dart';
+// TODO Configure HTTP Bearer authorization: bearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = UsersApi();
+final userId = xXx7xXx7xXx7xXx7; // String | 
+final deleteUserFilesDto = DeleteUserFilesDto(); // DeleteUserFilesDto | Specify which files are to be deleted by sending the file field with a value of \"true\" 
+
+try {
+    api_instance.deleteUserFiles(userId, deleteUserFilesDto);
+} catch (e) {
+    print('Exception when calling UsersApi->deleteUserFiles: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+ **deleteUserFilesDto** | [**DeleteUserFilesDto**](DeleteUserFilesDto.md)| Specify which files are to be deleted by sending the file field with a value of \"true\"  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deleteUserProfileFiles**
+> deleteUserProfileFiles(userId, profileId, deleteUserProfileFilesDto)
+
+
+
+### Example
+```dart
+import 'package:qcarder_api/api.dart';
+// TODO Configure HTTP Bearer authorization: bearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = UsersApi();
+final userId = xXx7xXx7xXx7xXx7; // String | 
+final profileId = xXx7xXx7xXx7xXx7; // String | 
+final deleteUserProfileFilesDto = DeleteUserProfileFilesDto(); // DeleteUserProfileFilesDto | Specify which files are to be deleted by sending the file field with a value of \"true\" 
+
+try {
+    api_instance.deleteUserProfileFiles(userId, profileId, deleteUserProfileFilesDto);
+} catch (e) {
+    print('Exception when calling UsersApi->deleteUserProfileFiles: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+ **profileId** | **String**|  | 
+ **deleteUserProfileFilesDto** | [**DeleteUserProfileFilesDto**](DeleteUserProfileFilesDto.md)| Specify which files are to be deleted by sending the file field with a value of \"true\"  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -223,7 +228,7 @@ import 'package:qcarder_api/api.dart';
 //defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
 
 final api_instance = UsersApi();
-final userId = 13; // num | 
+final userId = xXx7xXx7xXx7xXx7; // String | 
 
 try {
     final result = api_instance.getUserById(userId);
@@ -237,7 +242,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userId** | **num**|  | 
+ **userId** | **String**|  | 
 
 ### Return type
 
@@ -302,6 +307,204 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patchUser**
+> PatchUserResponseDto patchUser(userId, patchUserDto)
+
+
+
+### Example
+```dart
+import 'package:qcarder_api/api.dart';
+// TODO Configure HTTP Bearer authorization: bearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = UsersApi();
+final userId = xXx7xXx7xXx7xXx7; // String | 
+final patchUserDto = PatchUserDto(); // PatchUserDto | 
+
+try {
+    final result = api_instance.patchUser(userId, patchUserDto);
+    print(result);
+} catch (e) {
+    print('Exception when calling UsersApi->patchUser: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+ **patchUserDto** | [**PatchUserDto**](PatchUserDto.md)|  | 
+
+### Return type
+
+[**PatchUserResponseDto**](PatchUserResponseDto.md)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patchUserProfile**
+> UserProfile patchUserProfile(userId, profileId, patchUserProfileDto)
+
+
+
+### Example
+```dart
+import 'package:qcarder_api/api.dart';
+// TODO Configure HTTP Bearer authorization: bearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = UsersApi();
+final userId = xXx7xXx7xXx7xXx7; // String | 
+final profileId = xXx7xXx7xXx7xXx7; // String | 
+final patchUserProfileDto = PatchUserProfileDto(); // PatchUserProfileDto | 
+
+try {
+    final result = api_instance.patchUserProfile(userId, profileId, patchUserProfileDto);
+    print(result);
+} catch (e) {
+    print('Exception when calling UsersApi->patchUserProfile: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+ **profileId** | **String**|  | 
+ **patchUserProfileDto** | [**PatchUserProfileDto**](PatchUserProfileDto.md)|  | 
+
+### Return type
+
+[**UserProfile**](UserProfile.md)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **postUserFiles**
+> postUserFiles(userId, avatar)
+
+
+
+### Example
+```dart
+import 'package:qcarder_api/api.dart';
+// TODO Configure HTTP Bearer authorization: bearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = UsersApi();
+final userId = xXx7xXx7xXx7xXx7; // String | 
+final avatar = BINARY_DATA_HERE; // MultipartFile | 
+
+try {
+    api_instance.postUserFiles(userId, avatar);
+} catch (e) {
+    print('Exception when calling UsersApi->postUserFiles: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+ **avatar** | **MultipartFile**|  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **postUserProfileFiles**
+> postUserProfileFiles(userId, profileId, banner)
+
+
+
+### Example
+```dart
+import 'package:qcarder_api/api.dart';
+// TODO Configure HTTP Bearer authorization: bearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('bearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = UsersApi();
+final userId = xXx7xXx7xXx7xXx7; // String | 
+final profileId = xXx7xXx7xXx7xXx7; // String | 
+final banner = BINARY_DATA_HERE; // MultipartFile | 
+
+try {
+    api_instance.postUserProfileFiles(userId, profileId, banner);
+} catch (e) {
+    print('Exception when calling UsersApi->postUserProfileFiles: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+ **profileId** | **String**|  | 
+ **banner** | **MultipartFile**|  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

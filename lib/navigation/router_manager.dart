@@ -16,4 +16,18 @@ class RouteManager {
   static navigateToWithData<T>(BuildContext context, Widget Function() builder) {
     Navigator.of(context).push(MaterialPageRoute(builder: (data) => builder()));
   }
+
+  static pushAndRemoveUntilWithData<T>(BuildContext context, Widget Function() builder) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (data) => builder()),
+      (Route<dynamic> route) => false,
+    );
+  }
+
+  static pushAndRemovePrevUntilWithData<T>(BuildContext context, Widget Function() builder) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (data) => builder()),
+      (Route<dynamic> route) => route.isFirst,
+    );
+  }
 }

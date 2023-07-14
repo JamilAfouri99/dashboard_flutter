@@ -27,7 +27,7 @@ class User {
     required this.profile,
   });
 
-  num id;
+  String id;
 
   DateTime createdAt;
 
@@ -45,9 +45,9 @@ class User {
 
   UserStatusEnum status;
 
-  UserGroup? group;
+  Group? group;
 
-  num? groupId;
+  String? groupId;
 
   UserProfile profile;
 
@@ -77,11 +77,11 @@ class User {
       (email.hashCode) +
       (firstName.hashCode) +
       (lastName.hashCode) +
-      (avatar.hashCode) +
+      (avatar == null ? 0 : avatar!.hashCode) +
       (role.hashCode) +
       (status.hashCode) +
-      (group.hashCode) +
-      (groupId.hashCode) +
+      (group == null ? 0 : group!.hashCode) +
+      (groupId == null ? 0 : groupId!.hashCode) +
       (profile.hashCode);
 
   @override
@@ -96,11 +96,23 @@ class User {
     json[r'email'] = this.email;
     json[r'firstName'] = this.firstName;
     json[r'lastName'] = this.lastName;
-    json[r'avatar'] = this.avatar;
+    if (this.avatar != null) {
+      json[r'avatar'] = this.avatar;
+    } else {
+      json[r'avatar'] = null;
+    }
     json[r'role'] = this.role;
     json[r'status'] = this.status;
-    json[r'group'] = this.group;
-    json[r'groupId'] = this.groupId;
+    if (this.group != null) {
+      json[r'group'] = this.group;
+    } else {
+      json[r'group'] = null;
+    }
+    if (this.groupId != null) {
+      json[r'groupId'] = this.groupId;
+    } else {
+      json[r'groupId'] = null;
+    }
     json[r'profile'] = this.profile;
     return json;
   }
@@ -115,27 +127,26 @@ class User {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      // assert(() {
-      //   requiredKeys.forEach((key) {
-      //     assert(json.containsKey(key), 'Required key "User[$key]" is missing from JSON.');
-      //     assert(json[key] != null, 'Required key "User[$key]" has a null value in JSON.');
-      //   });
-      //   return true;
-      // }());
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "User[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "User[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
       return User(
-        id: num.parse(json[r'id'].toString()),
+        id: mapValueOfType<String>(json, r'id')!,
         createdAt: mapDateTime(json, r'createdAt', '')!,
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
         email: mapValueOfType<String>(json, r'email')!,
         firstName: mapValueOfType<String>(json, r'firstName')!,
         lastName: mapValueOfType<String>(json, r'lastName')!,
-        avatar: json[r'avatar'] != null ? mapValueOfType<String>(json, r'avatar') : json[r'avatar'],
-        role: json[r'role'] != null ? UserRoleEnum.fromJson(json[r'role']) : json[r'role'],
+        avatar: json[r'avatar'] == null ? null : mapValueOfType<String>(json, r'avatar'),
+        role: UserRoleEnum.fromJson(json[r'role'])!,
         status: UserStatusEnum.fromJson(json[r'status'])!,
-        group: json[r'group'] != null ? UserGroup.fromJson(json[r'group']) : json[r'group'],
-        groupId:
-            json[r'groupId'] != null ? num.parse(json[r'groupId'].toString()) : json[r'groupId'],
+        group: json[r'group'] == null ? null : Group.fromJson(json[r'group']),
+        groupId: json[r'groupId'] == null ? null : json[r'groupId'],
         profile: UserProfile.fromJson(json[r'profile'])!,
       );
     }
@@ -201,11 +212,8 @@ class User {
     'email',
     'firstName',
     'lastName',
-    'avatar',
     'role',
     'status',
-    'group',
-    'groupId',
     'profile',
   };
 }

@@ -12,30 +12,30 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qcarder_api/api.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController _emailController =
-      TextEditingController(text: 'owner-qcarder.com@test.com');
-  final TextEditingController _passwordController = TextEditingController(text: 'abc123');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 32),
+                padding: const EdgeInsets.symmetric(vertical: 100),
                 child: SvgPicture.asset(
                   ImageConstants.fullLogo,
-                  width: 90,
-                  height: 90,
+                  width: 80,
+                  height: 80,
                 ),
               ),
+              // SizedBox(height: MediaQuery.of(context).size.height * 0.15),
               Form(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -102,18 +102,18 @@ class LoginScreen extends StatelessWidget {
                         );
                       },
                     ),
-                    const SizedBox(height: 16.0),
-                    TextButton(
-                      onPressed: context.watch<AuthCubit>().state is AuthenticatingState
-                          ? null
-                          : () {
-                              RouteManager.routerManager(
-                                routeName: RouteConstants.signUp,
-                                context: context,
-                              );
-                            },
-                      child: const Text('Don\'t have an account? Sign up'),
-                    ),
+                    // const SizedBox(height: 16.0),
+                    // TextButton(
+                    //   onPressed: context.watch<AuthCubit>().state is AuthenticatingState
+                    //       ? null
+                    //       : () {
+                    //           RouteManager.routerManager(
+                    //             routeName: RouteConstants.signUp,
+                    //             context: context,
+                    //           );
+                    //         },
+                    //   child: const Text('Don\'t have an account? Sign up'),
+                    // ),
                   ],
                 ),
               ),

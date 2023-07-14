@@ -15,7 +15,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:qcarder_api/api.dart';
 
 class UsersScreen extends StatelessWidget {
-  const UsersScreen({Key? key});
+  const UsersScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +135,7 @@ Widget _user(User user, BuildContext context) {
               user.avatar ?? '',
               height: 50,
               width: 50,
+              fit: BoxFit.cover,
               errorBuilder: (context, url, error) => const Icon(Icons.error),
             )
           : SvgPicture.asset(
@@ -144,7 +145,7 @@ Widget _user(User user, BuildContext context) {
             ),
     ),
     title: Text(
-      user.profile.displayName,
+      user.profile.displayName ?? '',
       style: Theme.of(context).textTheme.bodyLarge,
     ),
     subtitle: Text(
@@ -211,6 +212,6 @@ FloatingActionButton _floatingActionButton(BuildContext context) => FloatingActi
         context,
         () => const UserScreen(),
       ),
-      child: const Icon(Icons.add),
       tooltip: 'Add user',
+      child: const Icon(Icons.add),
     );

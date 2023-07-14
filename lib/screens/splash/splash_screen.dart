@@ -3,7 +3,6 @@ import 'package:qcarder/configuration/image_constants.dart';
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:qcarder/navigation/router_manager.dart';
-import 'package:qcarder/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _fadeAnimation = CurvedAnimation(
       parent: _animationController,
@@ -56,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               context: context,
             );
           } else if (state is AuthenticationFailed) {
-            CustomSnackbar.show(context, state.reason.toString(), type: SnackbarType.error);
+            // CustomSnackbar.show(context, state.reason.toString(), type: SnackbarType.error);
             RouteManager.routerManagerPopAndPushNamed(
               routeName: RouteConstants.login,
               context: context,

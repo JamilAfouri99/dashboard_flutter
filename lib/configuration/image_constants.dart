@@ -1,5 +1,7 @@
 class ImageConstants {
   static const String iconsPrefix = 'assets/icons/';
+  static const String linksPrefix = 'assets/icons/links/';
+  static const String flagsPrefix = 'assets/icons/flags/';
   static const String imagesPrefix = 'assets/images/';
 
   // icons
@@ -7,4 +9,22 @@ class ImageConstants {
   static const String fullWhiteLogo = '${iconsPrefix}full_white.svg';
   static const String fullLogo = '${iconsPrefix}full.svg';
   static const String letterLogo = '${iconsPrefix}q.svg';
+
+  // links
+  static const String facebook = '${linksPrefix}Facebook_black.svg';
+  static const String wahtsapp = '${linksPrefix}WhatsApp_black.svg';
+  static const String gmail = '${linksPrefix}Gmail_black.svg';
+  static const String linkedin = '${linksPrefix}LinkedIN_black.svg';
+  static const String twitter = '${linksPrefix}Twitter_black.svg';
+  static const String instagram = '${linksPrefix}Instagram_black.svg';
+  static const String github = '${linksPrefix}Github_black.svg';
+  static const String outlook = '${linksPrefix}Outlook_black.svg';
+  static const String skype = '${linksPrefix}Skype_black.svg';
+  static const String slack = '${linksPrefix}Slack_black.svg';
+
+  static const String defaultLink = '${linksPrefix}Creativemarket_black.svg';
+
+  // flags
+  static const String jordan = '${flagsPrefix}jo.svg';
+  static const String uae = '${flagsPrefix}ae.svg';
 }

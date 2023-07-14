@@ -27,7 +27,7 @@ class AuthUser {
     required this.refreshToken,
   });
 
-  num id;
+  String id;
 
   DateTime createdAt;
 
@@ -45,7 +45,7 @@ class AuthUser {
 
   AuthUserStatusEnum status;
 
-  num? groupId;
+  String? groupId;
 
   String accessToken;
 
@@ -77,10 +77,10 @@ class AuthUser {
       (email.hashCode) +
       (firstName.hashCode) +
       (lastName.hashCode) +
-      (avatar.hashCode) +
+      (avatar == null ? 0 : avatar!.hashCode) +
       (role.hashCode) +
       (status.hashCode) +
-      (groupId.hashCode) +
+      (groupId == null ? 0 : groupId!.hashCode) +
       (accessToken.hashCode) +
       (refreshToken.hashCode);
 
@@ -96,10 +96,18 @@ class AuthUser {
     json[r'email'] = this.email;
     json[r'firstName'] = this.firstName;
     json[r'lastName'] = this.lastName;
-    json[r'avatar'] = this.avatar;
+    if (this.avatar != null) {
+      json[r'avatar'] = this.avatar;
+    } else {
+      json[r'avatar'] = null;
+    }
     json[r'role'] = this.role;
     json[r'status'] = this.status;
-    json[r'groupId'] = this.groupId;
+    if (this.groupId != null) {
+      json[r'groupId'] = this.groupId;
+    } else {
+      json[r'groupId'] = null;
+    }
     json[r'access_token'] = this.accessToken;
     json[r'refresh_token'] = this.refreshToken;
     return json;
@@ -115,26 +123,25 @@ class AuthUser {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      // assert(() {
-      //   requiredKeys.forEach((key) {
-      //     assert(json.containsKey(key), 'Required key "AuthUser[$key]" is missing from JSON.');
-      //     assert(json[key] != null, 'Required key "AuthUser[$key]" has a null value in JSON.');
-      //   });
-      //   return true;
-      // }());
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "AuthUser[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "AuthUser[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
       return AuthUser(
-        id: num.parse(json[r'id'].toString()),
+        id: mapValueOfType<String>(json, r'id')!,
         createdAt: mapDateTime(json, r'createdAt', '')!,
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
         email: mapValueOfType<String>(json, r'email')!,
         firstName: mapValueOfType<String>(json, r'firstName')!,
         lastName: mapValueOfType<String>(json, r'lastName')!,
-        avatar: json[r'avatar'] != null ? mapValueOfType<String>(json, r'avatar') : json[r'avatar'],
+        avatar: json[r'avatar'] == null ? null : mapValueOfType<String>(json, r'avatar'),
         role: AuthUserRoleEnum.fromJson(json[r'role'])!,
         status: AuthUserStatusEnum.fromJson(json[r'status'])!,
-        groupId:
-            json[r'groupId'] != null ? num.parse(json[r'groupId'].toString()) : json[r'groupId'],
+        groupId: json[r'groupId'] == null ? null : json[r'groupId'],
         accessToken: mapValueOfType<String>(json, r'access_token')!,
         refreshToken: mapValueOfType<String>(json, r'refresh_token')!,
       );
@@ -201,10 +208,8 @@ class AuthUser {
     'email',
     'firstName',
     'lastName',
-    'avatar',
     'role',
     'status',
-    'groupId',
     'access_token',
     'refresh_token',
   };

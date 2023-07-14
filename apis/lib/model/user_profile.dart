@@ -17,7 +17,7 @@ class UserProfile {
     required this.createdAt,
     required this.updatedAt,
     required this.userId,
-    required this.displayName,
+    this.displayName,
     this.banner,
     this.title,
     this.company,
@@ -26,17 +26,18 @@ class UserProfile {
     this.notes,
     this.emails = const [],
     this.phoneNumbers = const [],
+    this.links = const [],
   });
 
-  num id;
+  String id;
 
   DateTime createdAt;
 
   DateTime updatedAt;
 
-  num userId;
+  String userId;
 
-  String displayName;
+  String? displayName;
 
   String? banner;
 
@@ -50,9 +51,11 @@ class UserProfile {
 
   String? notes;
 
-  List<Email>? emails;
+  List<Email> emails;
 
-  List<PhoneNumber>? phoneNumbers;
+  List<PhoneNumber> phoneNumbers;
+
+  List<Link> links;
 
   @override
   bool operator ==(Object other) =>
@@ -70,7 +73,8 @@ class UserProfile {
           other.address == address &&
           other.notes == notes &&
           other.emails == emails &&
-          other.phoneNumbers == phoneNumbers;
+          other.phoneNumbers == phoneNumbers &&
+          other.links == links;
 
   @override
   int get hashCode =>
@@ -79,19 +83,20 @@ class UserProfile {
       (createdAt.hashCode) +
       (updatedAt.hashCode) +
       (userId.hashCode) +
-      (displayName.hashCode) +
-      (banner.hashCode) +
-      (title.hashCode) +
-      (company.hashCode) +
-      (birthday.hashCode) +
-      (address.hashCode) +
-      (notes.hashCode) +
+      (displayName == null ? 0 : displayName!.hashCode) +
+      (banner == null ? 0 : banner!.hashCode) +
+      (title == null ? 0 : title!.hashCode) +
+      (company == null ? 0 : company!.hashCode) +
+      (birthday == null ? 0 : birthday!.hashCode) +
+      (address == null ? 0 : address!.hashCode) +
+      (notes == null ? 0 : notes!.hashCode) +
       (emails.hashCode) +
-      (phoneNumbers.hashCode);
+      (phoneNumbers.hashCode) +
+      (links.hashCode);
 
   @override
   String toString() =>
-      'UserProfile[id=$id, createdAt=$createdAt, updatedAt=$updatedAt, userId=$userId, displayName=$displayName, banner=$banner, title=$title, company=$company, birthday=$birthday, address=$address, notes=$notes, emails=$emails, phoneNumbers=$phoneNumbers]';
+      'UserProfile[id=$id, createdAt=$createdAt, updatedAt=$updatedAt, userId=$userId, displayName=$displayName, banner=$banner, title=$title, company=$company, birthday=$birthday, address=$address, notes=$notes, emails=$emails, phoneNumbers=$phoneNumbers, links=$links]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -99,16 +104,44 @@ class UserProfile {
     json[r'createdAt'] = this.createdAt.toUtc().toIso8601String();
     json[r'updatedAt'] = this.updatedAt.toUtc().toIso8601String();
     json[r'userId'] = this.userId;
-    json[r'displayName'] = this.displayName;
-    json[r'banner'] = this.banner;
-    json[r'title'] = this.title;
-    json[r'company'] = this.company;
-    json[r'birthday'] =
-        json[r'birthday'] != null ? this.birthday!.toUtc().toIso8601String() : json[r'birthday'];
-    json[r'address'] = this.address;
-    json[r'notes'] = this.notes;
+    if (this.displayName != null) {
+      json[r'displayName'] = this.displayName;
+    } else {
+      json[r'displayName'] = null;
+    }
+    if (this.banner != null) {
+      json[r'banner'] = this.banner;
+    } else {
+      json[r'banner'] = null;
+    }
+    if (this.title != null) {
+      json[r'title'] = this.title;
+    } else {
+      json[r'title'] = null;
+    }
+    if (this.company != null) {
+      json[r'company'] = this.company;
+    } else {
+      json[r'company'] = null;
+    }
+    if (this.birthday != null) {
+      json[r'birthday'] = this.birthday!.toUtc().toIso8601String();
+    } else {
+      json[r'birthday'] = null;
+    }
+    if (this.address != null) {
+      json[r'address'] = this.address;
+    } else {
+      json[r'address'] = null;
+    }
+    if (this.notes != null) {
+      json[r'notes'] = this.notes;
+    } else {
+      json[r'notes'] = null;
+    }
     json[r'emails'] = this.emails;
     json[r'phoneNumbers'] = this.phoneNumbers;
+    json[r'links'] = this.links;
     return json;
   }
 
@@ -122,35 +155,30 @@ class UserProfile {
       // Ensure that the map contains the required keys.
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
-      // assert(() {
-      //   requiredKeys.forEach((key) {
-      //     assert(json.containsKey(key), 'Required key "UserProfile[$key]" is missing from JSON.');
-      //     assert(json[key] != null, 'Required key "UserProfile[$key]" has a null value in JSON.');
-      //   });
-      //   return true;
-      // }());
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "UserProfile[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "UserProfile[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
       return UserProfile(
-        id: num.parse(json[r'id'].toString()),
+        id: mapValueOfType<String>(json, r'id')!,
         createdAt: mapDateTime(json, r'createdAt', '')!,
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
-        userId: num.parse(json[r'userId'].toString()),
-        displayName: mapValueOfType<String>(json, r'displayName')!,
-        banner: json[r'banner'] != null ? mapValueOfType<String>(json, r'banner') : json[r'banner'],
-        title: json[r'title'] != null ? mapValueOfType<String>(json, r'title') : json[r'title'],
-        company:
-            json[r'company'] != null ? mapValueOfType<String>(json, r'company') : json[r'company'],
-        birthday:
-            json[r'birthday'] != null ? mapDateTime(json, r'birthday', '') : json[r'birthday'],
-        address:
-            json[r'address'] != null ? mapValueOfType<String>(json, r'address') : json[r'address'],
-        notes: json[r'notes'] != null ? mapValueOfType<String>(json, r'notes') : json[r'notes'],
-        emails: json[r'emails'] != null && json[r'emails'].length > 0
-            ? Email.listFromJson(json[r'emails'])
-            : json[r'emails'],
-        phoneNumbers: json[r'phoneNumbers'] != null && json[r'phoneNumbers'].length > 0
-            ? PhoneNumber.listFromJson(json[r'phoneNumbers'])
-            : json[r'phoneNumbers'],
+        userId: mapValueOfType<String>(json, r'userId')!,
+        displayName:
+            json[r'displayName'] == null ? null : mapValueOfType<String>(json, r'displayName'),
+        banner: json[r'banner'] == null ? null : mapValueOfType<String>(json, r'banner'),
+        title: json[r'title'] == null ? null : mapValueOfType<String>(json, r'title'),
+        company: json[r'company'] == null ? null : mapValueOfType<String>(json, r'company'),
+        birthday: json[r'birthday'] == null ? null : mapDateTime(json, r'birthday', ''),
+        address: json[r'address'] == null ? null : mapValueOfType<String>(json, r'address'),
+        notes: json[r'notes'] == null ? null : mapValueOfType<String>(json, r'notes'),
+        emails: Email.listFromJson(json[r'emails'])!,
+        phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers'])!,
+        links: Link.listFromJson(json[r'links'])!,
       );
     }
     return null;
@@ -213,14 +241,8 @@ class UserProfile {
     'createdAt',
     'updatedAt',
     'userId',
-    'displayName',
-    'banner',
-    'title',
-    'company',
-    'birthday',
-    'address',
-    'notes',
     'emails',
     'phoneNumbers',
+    'links',
   };
 }

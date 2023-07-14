@@ -18,8 +18,8 @@ class AuthCubit extends Cubit<AuthState> {
   late RemoteService remoteService;
 
   AuthCubit() : super(UnknownAuthState()) {
-    this.authApi = AuthApi(apiClient);
-    this.remoteService = RemoteService();
+    authApi = AuthApi(apiClient);
+    remoteService = RemoteService();
   }
 
   // call in splash screen

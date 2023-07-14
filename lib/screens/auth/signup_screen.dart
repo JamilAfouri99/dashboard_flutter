@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qcarder/widgets/snackbar.dart';
 import 'package:qcarder_api/api.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -20,6 +21,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Container();
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -95,6 +97,13 @@ class SignUpScreen extends StatelessWidget {
                     const SizedBox(height: 16.0),
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
+                        if (state is AuthenticationFailed) {
+                          CustomSnackbar.show(
+                            context,
+                            state.reason.toString(),
+                            type: SnackbarType.error,
+                          );
+                        }
                         if (state is AuthenticatedState) {
                           RouteManager.routerManagerPushUntil(
                             routeName: RouteConstants.users,
