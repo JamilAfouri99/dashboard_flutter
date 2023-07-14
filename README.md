@@ -83,6 +83,8 @@ Here is a list of useful commands for this project:
   - Android
     - `flutter build apk --dart-define=ENV=development` - build for DEVELOPMENT.
     - `flutter build apk --dart-define=ENV=production` - build for PRODUCTION.
+    - `flutter build appbundle --dart-define=ENV=development` - build for DEVELOPMENT.
+    - `flutter build appbundle --dart-define=ENV=production` - build for PRODUCTION.
 - Update version
   `new_version="1.0.0+1"` - Set the new version number as a variable.
   `sed -i "s/version: .*/version: $new_version/" pubspec.yaml` - Update the pubspec.yaml file with the new version number.
