@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:qcarder/configuration/image_constants.dart';
 import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
@@ -170,13 +171,19 @@ class _EditableFormState extends State<EditableForm> {
                               : widget.user.avatar != null &&
                                       widget.user.avatar!.isNotEmpty &&
                                       widget.user.avatar!.contains('https')
-                                  ? Image.network(
-                                      widget.user.avatar ?? '',
+                                  ? CachedNetworkImage(
                                       height: 80,
                                       width: 80,
+                                      imageUrl: widget.user.avatar ?? '',
                                       fit: BoxFit.cover,
-                                      errorBuilder: (context, url, error) =>
-                                          const Icon(Icons.error),
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(
+                                        color: AppColors.primary,
+                                      ),
+                                      errorWidget: (context, url, error) => const Icon(
+                                        Icons.error,
+                                        color: AppColors.onError,
+                                      ),
                                     )
                                   : SvgPicture.asset(
                                       ImageConstants.user,

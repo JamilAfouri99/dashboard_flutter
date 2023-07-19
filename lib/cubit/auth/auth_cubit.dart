@@ -38,6 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       emit(AuthenticatedState(
+        authUser: result.value!,
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
       ));
@@ -63,6 +64,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
       //TODO: store the user information
       emit(AuthenticatedState(
+        authUser: result.value!,
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
       ));
@@ -90,6 +92,7 @@ class AuthCubit extends Cubit<AuthState> {
       //TODO: store the user information
 
       emit(AuthenticatedState(
+        authUser: result.value!,
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
       ));
@@ -108,7 +111,7 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     final result = await remoteService.asyncTryCatch(() => authApi.logout());
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
 
     await repository.removeTokens();
     if (!result.isError) emit(UnauthenticatedState());

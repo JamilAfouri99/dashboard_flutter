@@ -1,6 +1,5 @@
 import 'package:qcarder/configuration/constants.dart';
 import 'package:qcarder/screens/auth/login_screen.dart';
-import 'package:qcarder/screens/auth/signup_screen.dart';
 import 'package:qcarder/screens/dashboard/dashboard_screen.dart';
 import 'package:qcarder/screens/nfc/nfc_screen.dart';
 import 'package:qcarder/screens/splash/splash_screen.dart';
@@ -16,7 +15,7 @@ class Router {
       case RouteConstants.login:
         return MaterialPageRoute(builder: (_) => LoginScreen(), settings: settings);
       case RouteConstants.signUp:
-        return MaterialPageRoute(builder: (_) => SignUpScreen(), settings: settings);
+        return MaterialPageRoute(builder: (_) => LoginScreen(), settings: settings);
       case RouteConstants.home:
         return MaterialPageRoute(builder: (_) => const DashboardScreen(), settings: settings);
       case RouteConstants.users:

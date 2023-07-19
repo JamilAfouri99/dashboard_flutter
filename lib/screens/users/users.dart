@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:qcarder_api/api.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class UsersScreen extends StatelessWidget {
   const UsersScreen({Key? key}) : super(key: key);
@@ -30,17 +31,7 @@ class UsersScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.light),
           ),
           actions: [
-            BlocBuilder<AuthCubit, AuthState>(
-              builder: (context, state) {
-                return IconButton(
-                  icon: const Icon(Icons.logout, color: AppColors.light),
-                  tooltip: 'Logout',
-                  onPressed: () async {
-                    await context.read<AuthCubit>().remoteLogout(context);
-                  },
-                );
-              },
-            ),
+            usersTopActions(context),
           ],
         ),
         floatingActionButton: _floatingActionButton(context),
@@ -111,6 +102,88 @@ class UsersScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget usersTopActions(BuildContext context) {
+    return BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) => {},
+        builder: (context, state) {
+          if (state is AuthenticatedState) {
+            return PopupMenuButton<String>(
+              onSelected: (result) {
+                switch (result) {
+                  case 'logout':
+                    context.read<AuthCubit>().remoteLogout(context);
+                    break;
+                  default:
+                }
+              },
+              itemBuilder: (context) => <PopupMenuEntry<String>>[
+                PopupMenuItem<String>(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Signed in as',
+                        style: TextStyle(
+                          color: AppColors.grey.withOpacity(0.8),
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        state.authUser.email,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: AppColors.grey.withOpacity(0.8),
+                              fontSize: 12,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<String>(
+                  value: 'logout',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.logout,
+                        size: 20,
+                        color: AppColors.grey.withOpacity(0.8),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Sign out',
+                        style: TextStyle(
+                          color: AppColors.grey.withOpacity(0.8),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              child: Container(
+                margin: const EdgeInsets.all(10),
+                width: 40,
+                height: 40,
+                clipBehavior: Clip.antiAlias,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: state.authUser.avatar != null
+                    ? CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: state.authUser.avatar ?? '',
+                      )
+                    : const Icon(
+                        Icons.person,
+                        color: AppColors.light,
+                        size: 25,
+                      ),
+              ),
+            );
+          }
+          return const CircularProgressIndicator();
+        });
+  }
 }
 
 Widget _users(BuildContext context) {
@@ -131,12 +204,18 @@ Widget _user(User user, BuildContext context) {
     leading: ClipRRect(
       borderRadius: BorderRadius.circular(50.0),
       child: user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
-          ? Image.network(
-              user.avatar ?? '',
+          ? CachedNetworkImage(
               height: 50,
               width: 50,
+              imageUrl: user.avatar ?? '',
               fit: BoxFit.cover,
-              errorBuilder: (context, url, error) => const Icon(Icons.error),
+              placeholder: (context, url) => const CircularProgressIndicator(
+                color: AppColors.primary,
+              ),
+              errorWidget: (context, url, error) => const Icon(
+                Icons.error,
+                color: AppColors.onError,
+              ),
             )
           : SvgPicture.asset(
               ImageConstants.user,

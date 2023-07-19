@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:qcarder/configuration/image_constants.dart';
 import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/helpers/date_time.dart';
@@ -33,14 +34,17 @@ class ViewForm extends StatelessWidget {
             child: ClipOval(
               child:
                   user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
-                      ? Image.network(
-                          user.avatar ?? '',
+                      ? CachedNetworkImage(
                           height: 120,
                           width: 120,
+                          imageUrl: user.avatar ?? '',
                           fit: BoxFit.cover,
-                          errorBuilder: (context, url, error) => const Icon(
-                            Icons.error,
+                          placeholder: (context, url) => const CircularProgressIndicator(
                             color: AppColors.primary,
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: AppColors.onError,
                           ),
                         )
                       : SvgPicture.asset(

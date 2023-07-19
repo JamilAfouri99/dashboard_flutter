@@ -7,7 +7,6 @@ import 'package:qcarder/models/enums.dart';
 import 'package:qcarder/navigation/router_manager.dart';
 import 'package:qcarder/screens/user/user_screen.dart';
 import 'package:qcarder/services/http/remote_service.dart';
-import 'package:qcarder/widgets/custom_button.dart';
 import 'package:qcarder/widgets/custom_progress_indicator.dart';
 import 'package:qcarder/widgets/snackbar.dart';
 import 'package:flutter/material.dart';

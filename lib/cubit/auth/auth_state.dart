@@ -1,4 +1,5 @@
 import 'package:qcarder/models/tokens.dart';
+import 'package:qcarder_api/api.dart';
 
 abstract class AuthState {}
 
@@ -9,8 +10,10 @@ class AuthenticatingState extends AuthState {}
 class AuthenticatedState extends AuthState {
   final AccessToken accessToken;
   final RefreshToken refreshToken;
+  final AuthUser authUser;
 
   AuthenticatedState({
+    required this.authUser,
     required this.accessToken,
     required this.refreshToken,
   });

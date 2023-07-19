@@ -27,6 +27,7 @@ dependencies:
   nfc_manager: ^3.3.0
   http_parser: ^4.0.2
   rename: ^2.1.1
+  cached_network_image: ^3.2.3
 
   # open api
   openapi_generator_annotations: ^4.10.0

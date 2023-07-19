@@ -21,7 +21,6 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -31,7 +30,7 @@ class SignUpScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 32),
+                padding: const EdgeInsets.symmetric(vertical: 32),
                 child: SvgPicture.asset(
                   ImageConstants.fullLogo,
                   width: 90,
