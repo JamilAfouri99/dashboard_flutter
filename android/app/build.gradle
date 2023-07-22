@@ -22,6 +22,7 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -85,5 +86,10 @@ dependencies {
     implementation "com.android.installreferrer:installreferrer:2.2"
     implementation "com.miui.referrer:homereferrer:1.0.0.6"
     implementation 'com.facebook.android:facebook-android-sdk:15.1.0'
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:32.2.0')
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
 

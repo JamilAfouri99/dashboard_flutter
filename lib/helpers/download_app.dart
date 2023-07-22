@@ -1,12 +1,10 @@
 import 'package:url_launcher/url_launcher.dart';
 
 downloadApp() async {
-  // TODO
-  // Replace with your Flutter app's deep link URL scheme
-  const String appDeepLink = "qcarder://";
+  const String appDeepLink = 'qcarder://';
 
-  const String appStoreURL =
-      "https://play.google.com/store/apps/details?id=com.qcarder.qcarder";
+  const String appStoreURL = 'https://play.google.com/store/apps/details?id=com.qcarder.qcarder';
+  https: //play.google.com/store/apps/details?id=com.qlixar.rewards&hl=en&gl=US
 
   bool isAppInstalled = await canLaunchUrl(Uri(path: appDeepLink));
 

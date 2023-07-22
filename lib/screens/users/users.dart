@@ -25,9 +25,9 @@ class UsersScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.primary,
-          centerTitle: true,
+          // centerTitle: true,
           title: Text(
-            'Users',
+            'Group Users',
             style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.light),
           ),
           actions: [
@@ -48,7 +48,7 @@ class UsersScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 20.0, right: 10),
                     child: Icon(
                       Icons.search,
                       color: AppColors.grey.withOpacity(0.5),
@@ -57,6 +57,7 @@ class UsersScreen extends StatelessWidget {
                   BlocBuilder<UsersCubit, UsersState>(
                     builder: (context, state) => Expanded(
                       child: TextField(
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                         onChanged: (value) => context.read<UsersCubit>().updateSearch(value),
                         decoration: InputDecoration(
                           hintText: 'Search users',
@@ -171,6 +172,7 @@ class UsersScreen extends StatelessWidget {
                 child: state.authUser.avatar != null
                     ? CachedNetworkImage(
                         fit: BoxFit.cover,
+                        cacheKey: state.authUser.avatar ?? '',
                         imageUrl: state.authUser.avatar ?? '',
                       )
                     : const Icon(
@@ -193,6 +195,7 @@ Widget _users(BuildContext context) {
       color: AppColors.primary.withOpacity(0.3),
     ),
     builderDelegate: PagedChildBuilderDelegate<User>(
+      noMoreItemsIndicatorBuilder: (context) => _noMoreItems(),
       itemBuilder: (context, user, index) => _user(user, context),
       firstPageProgressIndicatorBuilder: (context) => _usersShimmer(context),
     ),
@@ -207,6 +210,7 @@ Widget _user(User user, BuildContext context) {
           ? CachedNetworkImage(
               height: 50,
               width: 50,
+              cacheKey: user.avatar ?? '',
               imageUrl: user.avatar ?? '',
               fit: BoxFit.cover,
               placeholder: (context, url) => const CircularProgressIndicator(
@@ -229,11 +233,25 @@ Widget _user(User user, BuildContext context) {
     ),
     subtitle: Text(
       user.profile.title ?? '',
-      style: Theme.of(context).textTheme.bodySmall,
+      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+            color: AppColors.grey.withOpacity(0.7),
+          ),
     ),
     onTap: () => RouteManager.navigateToWithData(
       context,
       () => UserScreen(user: user),
+    ),
+  );
+}
+
+_noMoreItems() {
+  return Center(
+    child: Container(
+      padding: const EdgeInsets.all(20),
+      child: Text(
+        'QCarder © 2023',
+        style: TextStyle(color: AppColors.grey.withOpacity(0.8)),
+      ),
     ),
   );
 }

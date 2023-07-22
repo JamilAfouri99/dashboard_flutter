@@ -22,6 +22,7 @@ enum Links {
   skype,
   slack,
   qcarder,
+  link,
 }
 
 enum Flags {

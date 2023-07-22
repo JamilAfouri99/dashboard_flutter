@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "224696683089",
+    "project_id": "qcarder-app",
+    "storage_bucket": "qcarder-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224696683089:android:7bf1c6fa8221683ccf0670",
+        "android_client_info": {
+          "package_name": "com.qcarder.qcarder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224696683089-ggnd99k1t5mtppb6tdt0e7nh8ijjdktg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qcarder.qcarder",
+            "certificate_hash": "175f3005baf7c09dcd202f46c32623c14bca3578"
+          }
+        },
+        {
+          "client_id": "224696683089-4iu535i1h6k1ef8reed5rabcha0qpa9c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxDtDgF0rchICiOlfdM15JBhkfMHpTrIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224696683089-4iu535i1h6k1ef8reed5rabcha0qpa9c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

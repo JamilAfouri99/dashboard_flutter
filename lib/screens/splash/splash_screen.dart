@@ -87,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Dot(
-                          radius: 5,
+                          radius: 3,
                           color: AppColors.primary,
                           animation: _dotAnimation,
                           intervalBegin: 0.0,
@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ),
                         const SizedBox(width: 10),
                         Dot(
-                          radius: 5,
+                          radius: 3,
                           color: AppColors.primary,
                           animation: _dotAnimation,
                           intervalBegin: 0.33,
@@ -103,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ),
                         const SizedBox(width: 10),
                         Dot(
-                          radius: 5,
+                          radius: 3,
                           color: AppColors.primary,
                           animation: _dotAnimation,
                           intervalBegin: 0.66,
@@ -154,8 +154,8 @@ class Dot extends StatelessWidget {
         scale:
             (animation.value <= intervalEnd) ? scale : 1.0, // Scale is 1.0 during the second half
         child: Container(
-          width: radius * 2,
-          height: radius * 2,
+          width: radius * 1.5,
+          height: radius * 1.5,
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,

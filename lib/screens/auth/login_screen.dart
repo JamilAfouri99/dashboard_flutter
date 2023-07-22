@@ -34,7 +34,6 @@ class LoginScreen extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
               decoration: const BoxDecoration(
                 color: AppColors.background,
                 borderRadius: BorderRadius.vertical(
@@ -42,87 +41,91 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               child: SingleChildScrollView(
-                child: Form(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          hintText: 'user@qcarder.com',
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+                  child: Form(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            hintText: 'user@qcarder.com',
+                            hintStyle: TextStyle(color: AppColors.grey.withOpacity(0.5)),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            return null;
+                          },
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 16.0),
-                      // TextFormField(
-                      //   controller: _passwordController,
-                      //   decoration: const InputDecoration(
-                      //     labelText: 'Password',
-                      //   ),
-                      //   obscureText: true,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your password';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      PasswordField(_passwordController),
-                      const SizedBox(height: 16.0),
-                      BlocConsumer<AuthCubit, AuthState>(
-                        listener: (context, state) {
-                          if (state is AuthenticationFailed) {
-                            CustomSnackbar.show(
-                              context,
-                              state.reason.toString(),
-                              type: SnackbarType.error,
+                        const SizedBox(height: 16.0),
+                        // TextFormField(
+                        //   controller: _passwordController,
+                        //   decoration: const InputDecoration(
+                        //     labelText: 'Password',
+                        //   ),
+                        //   obscureText: true,
+                        //   validator: (value) {
+                        //     if (value == null || value.isEmpty) {
+                        //       return 'Please enter your password';
+                        //     }
+                        //     return null;
+                        //   },
+                        // ),
+                        PasswordField(_passwordController),
+                        const SizedBox(height: 16.0),
+                        BlocConsumer<AuthCubit, AuthState>(
+                          listener: (context, state) {
+                            if (state is AuthenticationFailed) {
+                              CustomSnackbar.show(
+                                context,
+                                state.reason.toString(),
+                                type: SnackbarType.error,
+                              );
+                            } else if (state is AuthenticatedState) {
+                              RouteManager.routerManagerPushUntil(
+                                routeName: RouteConstants.users,
+                                context: context,
+                              );
+                            }
+                          },
+                          builder: (context, state) {
+                            if (state is AuthenticatingState) {
+                              return const CustomProgressIndicator();
+                            }
+                            return CustomButton(
+                              title: 'Login'.toUpperCase(),
+                              onPressed: () async {
+                                final form = Form.of(context);
+                                if (form.validate()) {
+                                  form.save();
+                                  final email = _emailController.text.trim();
+                                  final password = _passwordController.text.trim();
+                                  context
+                                      .read<AuthCubit>()
+                                      .signIn(SigninDto(email: email, password: password));
+                                }
+                              },
                             );
-                          } else if (state is AuthenticatedState) {
-                            RouteManager.routerManagerPushUntil(
-                              routeName: RouteConstants.users,
-                              context: context,
-                            );
-                          }
-                        },
-                        builder: (context, state) {
-                          if (state is AuthenticatingState) {
-                            return const CustomProgressIndicator();
-                          }
-                          return CustomButton(
-                            title: 'Login'.toUpperCase(),
-                            onPressed: () async {
-                              final form = Form.of(context);
-                              if (form.validate()) {
-                                form.save();
-                                final email = _emailController.text;
-                                final password = _passwordController.text;
-                                context
-                                    .read<AuthCubit>()
-                                    .signIn(SigninDto(email: email, password: password));
-                              }
-                            },
-                          );
-                        },
-                      ),
-                      // const SizedBox(height: 16.0),
-                      // TextButton(
-                      //   onPressed: context.watch<AuthCubit>().state is AuthenticatingState
-                      //       ? null
-                      //       : () {
-                      //           RouteManager.routerManager(
-                      //             routeName: RouteConstants.signUp,
-                      //             context: context,
-                      //           );
-                      //         },
-                      //   child: const Text('Don\'t have an account? Sign up'),
-                      // ),
-                    ],
+                          },
+                        ),
+                        // const SizedBox(height: 16.0),
+                        // TextButton(
+                        //   onPressed: context.watch<AuthCubit>().state is AuthenticatingState
+                        //       ? null
+                        //       : () {
+                        //           RouteManager.routerManager(
+                        //             routeName: RouteConstants.signUp,
+                        //             context: context,
+                        //           );
+                        //         },
+                        //   child: const Text('Don\'t have an account? Sign up'),
+                        // ),
+                      ],
+                    ),
                   ),
                 ),
               ),

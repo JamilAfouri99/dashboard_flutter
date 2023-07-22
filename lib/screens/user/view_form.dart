@@ -5,6 +5,8 @@ import 'package:qcarder/helpers/date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qcarder/helpers/image_path_by_label.dart';
+import 'package:qcarder/helpers/index.dart';
+import 'package:qcarder/widgets/snackbar.dart';
 import 'package:qcarder_api/api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -161,9 +163,19 @@ class ViewForm extends StatelessWidget {
               children: user.profile.links.map((link) {
                 return Builder(builder: (context) {
                   return GestureDetector(
-                    onTap: () {
-                      Uri uri = Uri.parse(link.link);
-                      launchUrl(uri);
+                    onTap: () async {
+                      String url = link.link;
+                      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                        url = 'https://$url';
+                      }
+                      Uri uri = Uri.parse(url);
+
+                      launchUrl(
+                        uri,
+                        mode: url.contains('qcarder')
+                            ? LaunchMode.inAppWebView
+                            : LaunchMode.externalApplication,
+                      );
                     },
                     child: Container(
                       width: 40,
@@ -199,12 +211,14 @@ class ViewForm extends StatelessWidget {
         ),
         // subtitle: Text(email.label),
         title: user.profile.emails.isNotEmpty && user.profile.emails.length > 1
-            ? DropdownButton<String>(
-                value: user.email,
+            ? DropdownButton(
+                icon: const Icon(Icons.more_vert_outlined),
+                autofocus: true,
+                value: user.profile.emails[0].email,
                 isDense: false,
                 onChanged: (_) {},
-                items: user.profile.emails.map<DropdownMenuItem<String>>((value) {
-                  return DropdownMenuItem<String>(
+                items: user.profile.emails.map((value) {
+                  return DropdownMenuItem(
                     value: value.email,
                     child: SizedBox(
                       width: 200,

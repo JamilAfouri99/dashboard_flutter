@@ -566,71 +566,73 @@ class _EditableFormState extends State<EditableForm> {
   }
 
   Future<void> _showLinksIcons(int linkIndex) {
-    return showDialog(
+    return showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('CHOOSE AN ICON', textAlign: TextAlign.center),
-          content: Wrap(
-            children: List.generate(
-              Links.values.length,
-              (index) => ListTile(
-                leading: Container(
-                  width: 30,
-                  height: 30,
-                  decoration: const BoxDecoration(shape: BoxShape.circle),
-                  child: ClipOval(
-                    child: SvgPicture.asset(
-                      linkPathByLabel(Links.values[index].toString().split('.')[1]),
-                      fit: BoxFit.cover,
-                      color: AppColors.primary,
-                    ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (context) {
+        return ListView.builder(
+          padding: const EdgeInsets.all(10),
+          itemCount: Links.values.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              leading: Container(
+                width: 30,
+                height: 30,
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: ClipOval(
+                  child: SvgPicture.asset(
+                    linkPathByLabel(Links.values[index].toString().split('.')[1]),
+                    fit: BoxFit.cover,
+                    color: AppColors.primary,
                   ),
                 ),
-                title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
-                onTap: () {
-                  _links[linkIndex].label = Links.values[index].toString().split('.')[1];
-                  setState(() {});
-                  Navigator.of(context).pop();
-                },
               ),
-            ),
-          ),
+              title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
+              onTap: () {
+                _links[linkIndex].label = Links.values[index].toString().split('.')[1];
+                setState(() {});
+                Navigator.of(context).pop();
+              },
+            );
+          },
         );
       },
     );
   }
 
   Future<void> _showFlagsIcons(int flagIndex) {
-    return showDialog(
+    return showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('CHOOSE A COUNTRY', textAlign: TextAlign.center),
-          content: Wrap(
-            children: List.generate(
-              Flags.values.length,
-              (index) => ListTile(
-                leading: Container(
-                  width: 30,
-                  height: 30,
-                  decoration: const BoxDecoration(shape: BoxShape.circle),
-                  child: ClipOval(
-                    child: SvgPicture.asset(
-                      flagPathByName(Flags.values[index].toString().split('.')[1]),
-                      fit: BoxFit.cover,
-                    ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (context) {
+        return ListView.builder(
+          padding: const EdgeInsets.all(10),
+          itemCount: Flags.values.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              leading: Container(
+                width: 30,
+                height: 30,
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: ClipOval(
+                  child: SvgPicture.asset(
+                    flagPathByName(Flags.values[index].toString().split('.')[1]),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                title: Text(Flags.values[index].toString().split('.')[1].toUpperCase()),
-                onTap: () {
-                  _phones[flagIndex].country = Flags.values[index].toString().split('.')[1];
-                  setState(() {});
-                  Navigator.of(context).pop();
-                },
               ),
-            ),
-          ),
+              title: Text(Flags.values[index].toString().split('.')[1].toUpperCase()),
+              onTap: () {
+                _phones[flagIndex].country = Flags.values[index].toString().split('.')[1];
+                setState(() {});
+                Navigator.of(context).pop();
+              },
+            );
+          },
         );
       },
     );

@@ -59,7 +59,7 @@ class RemoteService {
         token = res.value!.token;
       }
     }
-    apiClient.addDefaultHeader('Authorization', 'Bearer ${token}');
+    apiClient.addDefaultHeader('Authorization', 'Bearer $token');
     return Result.ok(null);
   }
 

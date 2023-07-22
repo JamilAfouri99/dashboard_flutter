@@ -31,7 +31,7 @@ class AuthCubit extends Cubit<AuthState> {
       () => authApi.signinUsingAccessToken(),
     );
 
-    if (result.isSuccess && result.value != null) {
+    if (!result.isError && result.value != null) {
       await repository.setTokens(
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
@@ -62,7 +62,7 @@ class AuthCubit extends Cubit<AuthState> {
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
       );
-      //TODO: store the user information
+
       emit(AuthenticatedState(
         authUser: result.value!,
         accessToken: AccessToken(result.value!.accessToken),
@@ -88,8 +88,6 @@ class AuthCubit extends Cubit<AuthState> {
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
       );
-
-      //TODO: store the user information
 
       emit(AuthenticatedState(
         authUser: result.value!,

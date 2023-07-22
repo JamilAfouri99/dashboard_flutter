@@ -23,11 +23,14 @@ dependencies:
   infinite_scroll_pagination: ^3.2.0
   jwt_decoder: ^2.0.1
   country_code_picker: ^3.0.0
-  url_launcher: ^6.1.11
+  url_launcher: ^6.1.12
   nfc_manager: ^3.3.0
   http_parser: ^4.0.2
   rename: ^2.1.1
   cached_network_image: ^3.2.3
+
+  # firebase
+  firebase_dynamic_links: ^5.3.4
 
   # open api
   openapi_generator_annotations: ^4.10.0
