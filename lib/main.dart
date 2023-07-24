@@ -9,11 +9,11 @@ import 'package:qcarder/helpers/localization_helpers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   await _envInit();
   await _googleLicenseInit();
   final locale = await _localizationInit();
-
+  await Firebase.initializeApp();
+  
   runApp(MyApp(locale));
 }
 
