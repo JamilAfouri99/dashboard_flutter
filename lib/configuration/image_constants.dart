@@ -21,6 +21,7 @@ class ImageConstants {
   static const String outlook = '${linksPrefix}Outlook_black.svg';
   static const String skype = '${linksPrefix}Skype_black.svg';
   static const String slack = '${linksPrefix}Slack_black.svg';
+  static const String letterLogoWhite = '${linksPrefix}white_q_logo.svg';
 
   static const String defaultLink = '${linksPrefix}Creativemarket_black.svg';
 

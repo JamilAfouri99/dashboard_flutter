@@ -23,7 +23,7 @@ String linkPathByLabel(String label) {
     case 'slack':
       return ImageConstants.slack;
     case 'qcarder':
-      return ImageConstants.letterLogo;
+      return ImageConstants.letterLogoWhite;
     default:
       return ImageConstants.defaultLink;
   }
