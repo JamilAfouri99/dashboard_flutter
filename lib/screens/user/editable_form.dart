@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/services.dart';
 import 'package:qcarder/configuration/image_constants.dart';
 import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
@@ -41,12 +42,15 @@ class _EditableFormState extends State<EditableForm> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _birthdayController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
-  List<TextEditingController> _emailControllers = [TextEditingController()];
+  final List<TextEditingController> _emailControllers = [];
+  final List<TextEditingController> _emailLabelControllers = [];
   final List<TextEditingController> _phoneControllers = [];
+  final List<TextEditingController> _phoneLabelControllers = [];
   final List<TextEditingController> _linkControllers = [];
 
-  final List<Link> _links = [];
+  final List<Email> _emails = [];
   final List<PhoneNumber> _phones = [];
+  final List<Link> _links = [];
 
   @override
   void initState() {
@@ -60,22 +64,24 @@ class _EditableFormState extends State<EditableForm> {
         widget.user.profile.birthday != null ? widget.user.profile.birthday!.ymd : '';
     _noteController.text = widget.user.profile.notes ?? '';
     // _categoryController.text = widget.user!.categories[0];
-    _emailControllers = List<TextEditingController>.generate(
-      widget.user.profile.emails.isNotEmpty ? widget.user.profile.emails.length : 1,
-      (index) => TextEditingController(
-        text: widget.user.profile.emails.isNotEmpty ? widget.user.profile.emails[index].email : '',
-      ),
-    );
+    // phone
     if (widget.user.profile.phoneNumbers.isNotEmpty &&
         widget.user.profile.phoneNumbers.isNotEmpty) {
       for (final phone in widget.user.profile.phoneNumbers) {
         _phones.add(phone);
         _phoneControllers.add(TextEditingController(text: phone.phoneNumber));
+        _phoneLabelControllers.add(TextEditingController(text: phone.label));
       }
     } else {
       _phoneControllers.add(TextEditingController());
-      _phones.add(PhoneNumber(phoneNumber: _phoneControllers[0].text, label: '', country: ''));
+      _phoneLabelControllers.add(TextEditingController());
+      _phones.add(PhoneNumber(
+        phoneNumber: _phoneControllers[0].text,
+        label: _phoneLabelControllers[0].text,
+        country: '',
+      ));
     }
+    // link
     if (widget.user.profile.links.isNotEmpty) {
       for (final link in widget.user.profile.links) {
         _links.add(link);
@@ -84,6 +90,18 @@ class _EditableFormState extends State<EditableForm> {
     } else {
       _linkControllers.add(TextEditingController());
       _links.add(Link(link: _linkControllers[0].text, label: ''));
+    }
+    // email
+    if (widget.user.profile.emails.isNotEmpty) {
+      for (final email in widget.user.profile.emails) {
+        _emails.add(email);
+        _emailControllers.add(TextEditingController(text: email.email));
+        _emailLabelControllers.add(TextEditingController(text: email.label));
+      }
+    } else {
+      _emailControllers.add(TextEditingController());
+      _emailLabelControllers.add(TextEditingController());
+      _emails.add(Email(email: _emailControllers[0].text, label: _emailLabelControllers[0].text));
     }
   }
 
@@ -202,7 +220,7 @@ class _EditableFormState extends State<EditableForm> {
                       width: 30,
                       height: 30,
                       decoration: const BoxDecoration(
-                        color: Colors.blue,
+                        color: AppColors.darkPrimary,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -219,8 +237,13 @@ class _EditableFormState extends State<EditableForm> {
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Display Name',
-                prefixIcon: Icon(Icons.person),
+                prefixIcon: Icon(
+                  Icons.person,
+                  size: 20,
+                ),
               ),
+              scrollPadding: EdgeInsets.zero,
+              style: Theme.of(context).textTheme.bodySmall,
               controller: _displayNameController,
               validator: (value) => _validator(value),
             ),
@@ -237,16 +260,26 @@ class _EditableFormState extends State<EditableForm> {
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Title',
-                prefixIcon: Icon(Icons.title),
+                prefixIcon: Icon(
+                  Icons.title,
+                  size: 20,
+                ),
               ),
+              scrollPadding: EdgeInsets.zero,
+              style: Theme.of(context).textTheme.bodySmall,
               controller: _titleController,
             ),
             const SizedBox(height: 16),
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Company',
-                prefixIcon: Icon(Icons.business),
+                prefixIcon: Icon(
+                  Icons.business,
+                  size: 20,
+                ),
               ),
+              scrollPadding: EdgeInsets.zero,
+              style: Theme.of(context).textTheme.bodySmall,
               controller: _companyController,
             ),
             const SizedBox(height: 16),
@@ -259,16 +292,26 @@ class _EditableFormState extends State<EditableForm> {
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Address',
-                prefixIcon: Icon(Icons.location_on),
+                prefixIcon: Icon(
+                  Icons.location_on_outlined,
+                  size: 20,
+                ),
               ),
+              scrollPadding: EdgeInsets.zero,
+              style: Theme.of(context).textTheme.bodySmall,
               controller: _addressController,
             ),
             const SizedBox(height: 16),
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Birthday',
-                prefixIcon: Icon(Icons.calendar_today),
+                prefixIcon: Icon(
+                  Icons.calendar_month,
+                  size: 20,
+                ),
               ),
+              scrollPadding: EdgeInsets.zero,
+              style: Theme.of(context).textTheme.bodySmall,
               controller: _birthdayController,
               validator: (value) => _validator(value),
               onTap: () async {
@@ -289,8 +332,13 @@ class _EditableFormState extends State<EditableForm> {
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Note',
-                prefixIcon: Icon(Icons.note),
+                prefixIcon: Icon(
+                  Icons.note_add_outlined,
+                  size: 20,
+                ),
               ),
+              scrollPadding: EdgeInsets.zero,
+              style: Theme.of(context).textTheme.bodySmall,
               controller: _noteController,
               maxLines: null,
               keyboardType: TextInputType.multiline,
@@ -357,13 +405,38 @@ class _EditableFormState extends State<EditableForm> {
                 Row(
                   children: [
                     Expanded(
-                      flex: 5,
+                      flex: 4,
                       child: TextFormField(
+                        inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
                         decoration: const InputDecoration(
                           labelText: 'Email',
-                          prefixIcon: Icon(Icons.email),
+                          prefixIcon: Icon(
+                            Icons.email_outlined,
+                            size: 20,
+                          ),
                         ),
+                        scrollPadding: EdgeInsets.zero,
+                        style: Theme.of(context).textTheme.bodySmall,
                         controller: _emailControllers[i],
+                        onChanged: (value) {
+                          _emails[i].email = _emailControllers[i].text;
+                        },
+                        validator: (value) => _validator(value),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      flex: 2,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Label',
+                        ),
+                        scrollPadding: EdgeInsets.zero,
+                        style: Theme.of(context).textTheme.bodySmall,
+                        controller: _emailLabelControllers[i],
+                        onChanged: (value) {
+                          _emails[i].label = _emailLabelControllers[i].text;
+                        },
                         validator: (value) => _validator(value),
                       ),
                     ),
@@ -372,9 +445,10 @@ class _EditableFormState extends State<EditableForm> {
                         flex: 1,
                         child: IconButton(
                           onPressed: () {
-                            setState(() {
-                              _emailControllers.removeAt(i);
-                            });
+                            _emailControllers.removeAt(i);
+                            _emailLabelControllers.removeAt(i);
+                            _emails.removeAt(i);
+                            setState(() {});
                           },
                           icon: const Icon(
                             Icons.delete_outline_rounded,
@@ -387,15 +461,36 @@ class _EditableFormState extends State<EditableForm> {
                 if (_emailControllers.length > 1) const SizedBox(height: 15),
               ]);
             }),
-        ListTile(
-          title: const Text('Add an email address'),
-          leading: const Icon(Icons.add_circle_rounded),
-          onTap: () {
-            setState(() {
+        Padding(
+          padding: EdgeInsets.only(top: _emailControllers.length > 1 ? 0 : 15),
+          child: InkWell(
+            onTap: () {
               _emailControllers.add(TextEditingController());
-            });
-          },
-        )
+              _emailLabelControllers.add(TextEditingController());
+              _emails.add(
+                Email(
+                  email: _emailControllers.last.text,
+                  label: _emailLabelControllers.last.text,
+                ),
+              );
+              setState(() {});
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.add_circle_rounded,
+                  size: 20,
+                  color: AppColors.grey.withOpacity(0.7),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  'Add a new email',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -407,11 +502,14 @@ class _EditableFormState extends State<EditableForm> {
           Row(
             children: [
               Expanded(
-                flex: 5,
+                flex: 4,
                 child: TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Phone',
-                    prefixIcon: Icon(Icons.phone),
+                    prefixIcon: Icon(
+                      Icons.phone,
+                      size: 20,
+                    ),
                     // prefixIcon: GestureDetector(
                     //   onTap: () => _showFlagsIcons(i),
                     //   child: Container(
@@ -430,10 +528,28 @@ class _EditableFormState extends State<EditableForm> {
                     //   ),
                     // ),
                   ),
+                  scrollPadding: EdgeInsets.zero,
+                  style: Theme.of(context).textTheme.bodySmall,
                   validator: _validator,
                   controller: _phoneControllers[i],
                   onChanged: (value) {
                     _phones[i].phoneNumber = _phoneControllers[i].text;
+                  },
+                ),
+              ),
+              const SizedBox(width: 5),
+              Expanded(
+                flex: 2,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Label',
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  validator: _validator,
+                  controller: _phoneLabelControllers[i],
+                  onChanged: (value) {
+                    _phones[i].label = _phoneLabelControllers[i].text;
                   },
                 ),
               ),
@@ -443,6 +559,7 @@ class _EditableFormState extends State<EditableForm> {
                   child: IconButton(
                     onPressed: () {
                       _phoneControllers.removeAt(i);
+                      _phoneLabelControllers.removeAt(i);
                       _phones.removeAt(i);
                       setState(() {});
                     },
@@ -456,16 +573,37 @@ class _EditableFormState extends State<EditableForm> {
           ),
           if (_phones.length > 1) const SizedBox(height: 15),
         ],
-        ListTile(
-          title: const Text('Add a new phone'),
-          leading: const Icon(Icons.add_circle_rounded),
-          onTap: () {
-            _phoneControllers.add(TextEditingController());
-            _phones
-                .add(PhoneNumber(phoneNumber: _phoneControllers.last.text, country: '', label: ''));
-            setState(() {});
-          },
-        )
+        Padding(
+          padding: EdgeInsets.only(top: _phoneControllers.length > 1 ? 0 : 15),
+          child: InkWell(
+            onTap: () {
+              _phoneControllers.add(TextEditingController());
+              _phoneLabelControllers.add(TextEditingController());
+              _phones.add(
+                PhoneNumber(
+                  phoneNumber: _phoneControllers.last.text,
+                  label: _phoneLabelControllers.last.text,
+                  country: '',
+                ),
+              );
+              setState(() {});
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.add_circle_rounded,
+                  size: 20,
+                  color: AppColors.grey.withOpacity(0.7),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  'Add a new phone',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -479,14 +617,15 @@ class _EditableFormState extends State<EditableForm> {
               Expanded(
                 flex: 5,
                 child: TextFormField(
+                  inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
                   decoration: InputDecoration(
                     labelText: 'Link',
                     prefixIcon: GestureDetector(
                       onTap: () => _showLinksIcons(i),
                       child: Container(
-                        width: 25,
-                        height: 25,
-                        padding: const EdgeInsets.all(10),
+                        width: 20,
+                        height: 20,
+                        padding: const EdgeInsets.all(12),
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                         ),
@@ -500,6 +639,8 @@ class _EditableFormState extends State<EditableForm> {
                       ),
                     ),
                   ),
+                  scrollPadding: EdgeInsets.zero,
+                  style: Theme.of(context).textTheme.bodySmall,
                   controller: _linkControllers[i],
                   onChanged: (value) {
                     _links[i].link = _linkControllers[i].text;
@@ -525,20 +666,36 @@ class _EditableFormState extends State<EditableForm> {
           ),
           if (_links.length > 1) const SizedBox(height: 15),
         ],
-        ListTile(
-          title: const Text('Add a new link'),
-          leading: const Icon(Icons.add_circle_rounded),
-          onTap: () {
-            _linkControllers.add(TextEditingController());
-            _links.add(Link(link: '', label: _linkControllers.last.text));
-            setState(() {});
-          },
-        )
+        Padding(
+          padding: EdgeInsets.only(top: _linkControllers.length > 1 ? 0 : 15),
+          child: InkWell(
+            onTap: () {
+              _linkControllers.add(TextEditingController());
+              _links.add(Link(link: '', label: _linkControllers.last.text));
+              setState(() {});
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.add_circle_rounded,
+                  size: 20,
+                  color: AppColors.grey.withOpacity(0.7),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  'Add a new link',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
 
   PatchUserProfileDto _updateProfile() {
+    print(_emails);
     return PatchUserProfileDto(
       address: _addressController.text,
       birthday: DateFormat('MMM d, yyyy').parse(_birthdayController.text),
@@ -546,15 +703,8 @@ class _EditableFormState extends State<EditableForm> {
       displayName: _displayNameController.text,
       notes: _noteController.text,
       title: _titleController.text,
-      emails: _emailControllers.map((email) => Email(email: email.text, label: 'null')).toList(),
-      phoneNumbers: _phones.asMap().entries.map<PhoneNumber>((entry) {
-        int index = entry.key;
-        PhoneNumber phone = entry.value;
-        phone.phoneNumber = _phoneControllers[index].text;
-        phone.label = 'null';
-        phone.country = phone.country.isEmpty ? flagPathByName(phone.country) : phone.country;
-        return phone;
-      }).toList(),
+      emails: _emails,
+      phoneNumbers: _phones,
       links: _linkControllers[0].text.isEmpty
           ? []
           : _links.asMap().entries.map<Link>((entry) {

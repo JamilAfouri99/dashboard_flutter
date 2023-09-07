@@ -33,7 +33,7 @@ final lightTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: AppColors.primary,
   fontFamily: 'Inter',
-  textTheme: textTheme,
+  textTheme: textLightTheme,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,
     elevation: 2,
@@ -45,8 +45,24 @@ final lightTheme = ThemeData(
   drawerTheme: const DrawerThemeData(backgroundColor: Colors.white, elevation: 2),
   scaffoldBackgroundColor: Colors.white,
   inputDecorationTheme: InputDecorationTheme(
+    helperStyle: const TextStyle(
+      fontSize: 14,
+      color: AppColors.grey,
+    ),
+    hintStyle: const TextStyle(
+      fontSize: 14,
+      color: AppColors.grey,
+    ),
+    labelStyle: const TextStyle(
+      fontSize: 14,
+      color: AppColors.grey,
+    ),
+    floatingLabelStyle: const TextStyle(
+      fontSize: 14,
+      color: AppColors.primary,
+    ),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: BorderRadius.circular(2),
     ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
@@ -79,7 +95,7 @@ final lightTheme = ThemeData(
   ).copyWith(background: Colors.white),
 );
 
-TextTheme textTheme = const TextTheme(
+TextTheme textLightTheme = const TextTheme(
   headlineLarge: TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 44,
@@ -94,6 +110,115 @@ TextTheme textTheme = const TextTheme(
     fontWeight: FontWeight.w700,
     fontSize: 20,
     color: AppColors.dark,
+  ),
+  titleLarge: TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 18,
+  ),
+  titleMedium: TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 16,
+  ),
+  titleSmall: TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 14,
+  ),
+  bodyLarge: TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
+  ),
+  bodyMedium: TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+  ),
+  bodySmall: TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.grey,
+  ),
+);
+
+final darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  primaryColor: AppColors.darkPrimary,
+  fontFamily: 'Inter',
+  textTheme: textDarkTheme,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: AppColors.darkPrimary,
+    elevation: 2,
+    shadowColor: Colors.white,
+    iconTheme: IconThemeData(color: AppColors.darkPrimary),
+  ),
+  indicatorColor: AppColors.primary,
+  tabBarTheme: const TabBarTheme(labelColor: AppColors.primary),
+  drawerTheme: const DrawerThemeData(backgroundColor: AppColors.darkPrimary, elevation: 2),
+  scaffoldBackgroundColor: Colors.white,
+  inputDecorationTheme: InputDecorationTheme(
+    helperStyle: TextStyle(
+      fontSize: 14,
+      color: AppColors.grey.withOpacity(0.2),
+    ),
+    hintStyle: TextStyle(
+      fontSize: 14,
+      color: AppColors.grey.withOpacity(0.2),
+    ),
+    labelStyle: TextStyle(
+      fontSize: 14,
+      color: AppColors.grey.withOpacity(0.2),
+    ),
+    floatingLabelStyle: const TextStyle(
+      fontSize: 14,
+      color: AppColors.darkPrimary,
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(2),
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      shadowColor: Colors.transparent,
+      backgroundColor: AppColors.darkPrimary,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+    ),
+  ),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+    ),
+  ),
+  iconTheme: const IconThemeData(color: AppColors.primary),
+  colorScheme: const ColorScheme(
+    brightness: Brightness.light,
+    primary: AppColors.darkPrimary,
+    onPrimary: AppColors.light,
+    secondary: AppColors.primary,
+    onSecondary: AppColors.light,
+    background: AppColors.secondary,
+    onBackground: AppColors.dark,
+    surface: AppColors.light,
+    onSurface: AppColors.primary,
+    error: AppColors.onError,
+    onError: AppColors.light,
+  ).copyWith(background: Colors.white),
+);
+
+TextTheme textDarkTheme = const TextTheme(
+  headlineLarge: TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 44,
+    color: AppColors.light,
+  ),
+  headlineMedium: TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 24,
+    color: AppColors.light,
+  ),
+  headlineSmall: TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 20,
+    color: AppColors.light,
   ),
   titleLarge: TextStyle(
     fontWeight: FontWeight.w700,

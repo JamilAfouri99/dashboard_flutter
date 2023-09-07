@@ -1,5 +1,6 @@
 import 'package:qcarder/configuration/image_constants.dart';
 import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/cubit/theme/theme_cubit.dart';
 import 'package:qcarder/cubit/users/users_cubit.dart';
 import 'package:qcarder/cubit/users/users_state.dart';
 import 'package:qcarder/navigation/router_manager.dart';
@@ -21,8 +22,11 @@ class UsersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<UsersCubit>(
-      create: (_) => UsersCubit()..fetch(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => UsersCubit()..fetch()),
+        BlocProvider(create: (_) => ThemeCubit()),
+      ],
       child: Scaffold(
         appBar: const GlobalAppBar(),
         drawer: const GlobalDrawer(),
