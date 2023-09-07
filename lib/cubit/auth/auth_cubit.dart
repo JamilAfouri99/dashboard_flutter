@@ -2,7 +2,7 @@ import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:qcarder/configuration/constants.dart';
 import 'package:qcarder/models/tokens.dart';
 import 'package:qcarder/navigation/router_manager.dart';
-import 'package:qcarder/repositories/token.dart';
+import 'package:qcarder/repositories/credentials.dart';
 import 'package:qcarder/services/error/network_exceptions.dart';
 import 'package:qcarder/services/http/remote_service.dart';
 import 'package:qcarder/services/global_services.dart';
@@ -10,12 +10,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder_api/api.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final makeRepository = TokensRepository.make();
+  final makeRepository = Repository.make();
   final ApiClient apiClient = ClientService.apiClient;
 
   late AuthApi authApi;
-  late TokensRepository repository;
+  late Repository repository;
   late RemoteService remoteService;
+  bool rememberMe = false;
 
   AuthCubit() : super(UnknownAuthState()) {
     authApi = AuthApi(apiClient);
@@ -25,6 +26,8 @@ class AuthCubit extends Cubit<AuthState> {
   // call in splash screen
   Future<void> checkAccessToken() async {
     repository = await makeRepository;
+
+    if (await repository.getCredentials() != null) rememberMe = true;
 
     emit(AuthenticatingState());
     final result = await remoteService.asyncTryCatch(
@@ -68,6 +71,14 @@ class AuthCubit extends Cubit<AuthState> {
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
       ));
+
+      // (save | remove) credentials
+      if (rememberMe) {
+        await repository.setCredentials(signInReq);
+      } else {
+        SigninDto? savedDate = await repository.getCredentials();
+        if (savedDate != null) await repository.clearCredentials();
+      }
     }
 
     if (result.isError || result.value == null) {
@@ -103,7 +114,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> remoteLogout(context) async {
     emit(UnknownAuthState());
-    RouteManager.routerManagerPushUntil(
+    RouteManager.pushAndRemoveAll(
       routeName: RouteConstants.splash,
       context: context,
     );
@@ -111,7 +122,7 @@ class AuthCubit extends Cubit<AuthState> {
     final result = await remoteService.asyncTryCatch(() => authApi.logout());
     await Future.delayed(const Duration(milliseconds: 500));
 
-    await repository.removeTokens();
+    await repository.clearTokens();
     if (!result.isError) emit(UnauthenticatedState());
     if (result.isError) {
       final error = NetworkExceptions.getHttpException(result.error);
@@ -121,14 +132,21 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> localLogout(context) async {
     emit(UnknownAuthState());
-    RouteManager.routerManagerPushUntil(
+    RouteManager.pushAndRemoveAll(
       routeName: RouteConstants.splash,
       context: context,
     );
 
     await Future.delayed(const Duration(milliseconds: 500));
-    await repository.removeTokens();
+    await repository.clearTokens();
 
     emit(AuthenticationFailed(ErrorMessages.authenticationFailed));
+  }
+
+  Future<SigninDto?> getSavedCredentials() async {
+    if (rememberMe) {
+      return await repository.getCredentials();
+    }
+    return null;
   }
 }

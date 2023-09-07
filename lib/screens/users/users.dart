@@ -1,11 +1,11 @@
 import 'package:qcarder/configuration/image_constants.dart';
 import 'package:qcarder/configuration/theme.dart';
-import 'package:qcarder/cubit/auth/auth_cubit.dart';
-import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:qcarder/cubit/users/users_cubit.dart';
 import 'package:qcarder/cubit/users/users_state.dart';
 import 'package:qcarder/navigation/router_manager.dart';
 import 'package:qcarder/screens/user/user_screen.dart';
+import 'package:qcarder/widgets/app_bar.dart';
+import 'package:qcarder/widgets/drawer.dart';
 import 'package:qcarder/widgets/failed_widget.dart';
 import 'package:qcarder/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:qcarder_api/api.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UsersScreen extends StatelessWidget {
   const UsersScreen({Key? key}) : super(key: key);
@@ -23,18 +24,9 @@ class UsersScreen extends StatelessWidget {
     return BlocProvider<UsersCubit>(
       create: (_) => UsersCubit()..fetch(),
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.primary,
-          // centerTitle: true,
-          title: Text(
-            'Group Users',
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.light),
-          ),
-          actions: [
-            usersTopActions(context),
-          ],
-        ),
-        floatingActionButton: _floatingActionButton(context),
+        appBar: const GlobalAppBar(),
+        drawer: const GlobalDrawer(),
+        floatingActionButton: floatingActionButton(context),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Column(
           children: [
@@ -51,7 +43,8 @@ class UsersScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 20.0, right: 10),
                     child: Icon(
                       Icons.search,
-                      color: AppColors.grey.withOpacity(0.5),
+                      size: 28,
+                      color: AppColors.grey.withOpacity(0.6),
                     ),
                   ),
                   BlocBuilder<UsersCubit, UsersState>(
@@ -62,7 +55,8 @@ class UsersScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: 'Search users',
                           border: InputBorder.none,
-                          hintStyle: TextStyle(color: AppColors.grey.withOpacity(0.5)),
+                          hintStyle:
+                              TextStyle(color: AppColors.grey.withOpacity(0.6), fontSize: 16),
                         ),
                       ),
                     ),
@@ -102,89 +96,6 @@ class UsersScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget usersTopActions(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) => {},
-        builder: (context, state) {
-          if (state is AuthenticatedState) {
-            return PopupMenuButton<String>(
-              onSelected: (result) {
-                switch (result) {
-                  case 'logout':
-                    context.read<AuthCubit>().remoteLogout(context);
-                    break;
-                  default:
-                }
-              },
-              itemBuilder: (context) => <PopupMenuEntry<String>>[
-                PopupMenuItem<String>(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Signed in as',
-                        style: TextStyle(
-                          color: AppColors.grey.withOpacity(0.8),
-                          fontSize: 12,
-                        ),
-                      ),
-                      Text(
-                        state.authUser.email,
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              color: AppColors.grey.withOpacity(0.8),
-                              fontSize: 12,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                PopupMenuItem<String>(
-                  value: 'logout',
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.logout,
-                        size: 20,
-                        color: AppColors.grey.withOpacity(0.8),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        'Sign out',
-                        style: TextStyle(
-                          color: AppColors.grey.withOpacity(0.8),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                width: 40,
-                height: 40,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: state.authUser.avatar != null
-                    ? CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        cacheKey: state.authUser.avatar ?? '',
-                        imageUrl: state.authUser.avatar ?? '',
-                      )
-                    : const Icon(
-                        Icons.person,
-                        color: AppColors.light,
-                        size: 25,
-                      ),
-              ),
-            );
-          }
-          return const CircularProgressIndicator();
-        });
   }
 }
 
@@ -229,15 +140,27 @@ Widget _user(User user, BuildContext context) {
     ),
     title: Text(
       user.profile.displayName ?? '',
-      style: Theme.of(context).textTheme.bodyLarge,
+      style: Theme.of(context).textTheme.bodyMedium,
     ),
     subtitle: Text(
       user.profile.title ?? '',
-      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-            color: AppColors.grey.withOpacity(0.7),
-          ),
+      style:
+          Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.grey.withOpacity(0.7)),
     ),
-    onTap: () => RouteManager.navigateToWithData(
+    trailing: IconButton(
+      icon: const Icon(
+        Icons.remove_red_eye_outlined,
+        color: AppColors.primary,
+      ),
+      onPressed: () {
+        Uri uri = Uri.parse('https://qcarder.com/users/${user.id}');
+        launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      },
+    ),
+    onTap: () => RouteManager.navigateWithData(
       context,
       () => UserScreen(user: user),
     ),
@@ -303,9 +226,9 @@ Widget _usersShimmer(BuildContext context) {
   );
 }
 
-FloatingActionButton _floatingActionButton(BuildContext context) => FloatingActionButton(
+FloatingActionButton floatingActionButton(BuildContext context) => FloatingActionButton(
       backgroundColor: AppColors.primary,
-      onPressed: () => RouteManager.navigateToWithData(
+      onPressed: () => RouteManager.navigateWithData(
         context,
         () => const UserScreen(),
       ),

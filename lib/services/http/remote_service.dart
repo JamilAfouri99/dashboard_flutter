@@ -1,14 +1,14 @@
 import 'package:qcarder/helpers/index.dart';
 import 'package:qcarder/helpers/token_validator.dart';
 import 'package:qcarder/models/tokens.dart';
-import 'package:qcarder/repositories/token.dart';
+import 'package:qcarder/repositories/credentials.dart';
 import 'package:qcarder/services/error/network_exceptions.dart';
 import 'package:qcarder/services/global_services.dart';
 import 'package:qcarder_api/api.dart';
 
 class RemoteService {
-  final makeRepository = TokensRepository.make();
-  TokensRepository? tokensRepo;
+  final makeRepository = Repository.make();
+  Repository? tokensRepo;
 
   final ApiClient apiClient = ClientService.apiClient;
   late AuthApi authApi;
@@ -63,7 +63,7 @@ class RemoteService {
     return Result.ok(null);
   }
 
-  Future<Result<AccessToken>> _latestAccessTokenHandler(TokensRepository tokensRepository) async {
+  Future<Result<AccessToken>> _latestAccessTokenHandler(Repository tokensRepository) async {
     try {
       final RefreshToken? refreshToken = await tokensRepository.getRefreshToken();
       if (refreshToken == null || isTokenExpired(refreshToken.token)) {
@@ -85,7 +85,7 @@ class RemoteService {
   }
 
   Future<Result<void>> _refreshTokenHandler(
-      TokensRepository tokensRepository, RefreshToken refreshToken) async {
+      Repository tokensRepository, RefreshToken refreshToken) async {
     try {
       apiClient.addDefaultHeader('Authorization', 'Bearer ${refreshToken.token}');
 

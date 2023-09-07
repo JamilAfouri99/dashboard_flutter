@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
           final MediaQueryData data = MediaQuery.of(context);
           return MediaQuery(
             data: data.copyWith(textScaleFactor: 1.0),
-            child: SafeArea(child: child!),
+            child: child!,
           );
         },
       ),

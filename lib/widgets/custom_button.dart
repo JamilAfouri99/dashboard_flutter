@@ -55,7 +55,7 @@ class CustomButton extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
-                    .copyWith(color: isInverted ? AppColors.primary : Colors.white),
+                    .copyWith(color: isInverted ? AppColors.primary : AppColors.light),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +69,7 @@ class CustomButton extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!
-                        .copyWith(color: isInverted ? AppColors.primary : Colors.white),
+                        .copyWith(color: isInverted ? AppColors.primary : AppColors.light),
                   )
                 ],
               ),

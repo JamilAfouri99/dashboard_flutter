@@ -125,9 +125,10 @@ class _EditableFormState extends State<EditableForm> {
             GestureDetector(
               onTap: () async {
                 File? file = await FileHelper.pickImage(context);
+                if (file == null) return;
                 var multipartFile = http.MultipartFile(
                   'avatar',
-                  file!.readAsBytes().asStream(),
+                  file.readAsBytes().asStream(),
                   file.lengthSync(),
                   filename: file.path.split('/').last,
                   contentType: MediaType('image', 'jpeg'),
@@ -408,25 +409,26 @@ class _EditableFormState extends State<EditableForm> {
               Expanded(
                 flex: 5,
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Phone',
-                    prefixIcon: GestureDetector(
-                      onTap: () => _showFlagsIcons(i),
-                      child: Container(
-                        width: 25,
-                        height: 25,
-                        padding: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: ClipOval(
-                          child: SvgPicture.asset(
-                            flagPathByName(_phones[i].country),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
+                    prefixIcon: Icon(Icons.phone),
+                    // prefixIcon: GestureDetector(
+                    //   onTap: () => _showFlagsIcons(i),
+                    //   child: Container(
+                    //     width: 25,
+                    //     height: 25,
+                    //     padding: const EdgeInsets.all(10),
+                    //     decoration: const BoxDecoration(
+                    //       shape: BoxShape.circle,
+                    //     ),
+                    //     child: ClipOval(
+                    //       child: SvgPicture.asset(
+                    //         flagPathByName(_phones[i].country),
+                    //         fit: BoxFit.cover,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                   validator: _validator,
                   controller: _phoneControllers[i],

@@ -104,7 +104,7 @@ class SignUpScreen extends StatelessWidget {
                           );
                         }
                         if (state is AuthenticatedState) {
-                          RouteManager.routerManagerPushUntil(
+                          RouteManager.pushAndRemoveAll(
                             routeName: RouteConstants.users,
                             context: context,
                           );
@@ -140,7 +140,7 @@ class SignUpScreen extends StatelessWidget {
                       onPressed: context.watch<AuthCubit>().state is AuthenticatingState
                           ? null
                           : () {
-                              RouteManager.routerManager(
+                              RouteManager.navigateTo(
                                 routeName: RouteConstants.login,
                                 context: context,
                               );

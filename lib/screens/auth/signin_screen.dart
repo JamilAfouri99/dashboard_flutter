@@ -13,11 +13,30 @@ import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qcarder_api/api.dart';
 
-class LoginScreen extends StatelessWidget {
+class SigninScreen extends StatefulWidget {
+  const SigninScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SigninScreen> createState() => _SigninScreenState();
+}
+
+class _SigninScreenState extends State<SigninScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  LoginScreen({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  Future<void> init() async {
+    SigninDto? savedCredentials = await context.read<AuthCubit>().getSavedCredentials();
+    if (savedCredentials != null) {
+      _emailController.text = savedCredentials.email;
+      _passwordController.text = savedCredentials.password;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +47,8 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 80, bottom: 50),
             child: SvgPicture.asset(
               ImageConstants.fullLogo,
-              width: 80,
-              height: 80,
+              width: 70,
+              height: 70,
             ),
           ),
           Expanded(
@@ -49,10 +68,13 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         TextFormField(
                           controller: _emailController,
+                          style: Theme.of(context).textTheme.bodyMedium,
                           decoration: InputDecoration(
                             labelText: 'Email',
                             hintText: 'user@qcarder.com',
-                            hintStyle: TextStyle(color: AppColors.grey.withOpacity(0.5)),
+                            hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  color: AppColors.grey.withOpacity(0.5),
+                                ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -62,21 +84,39 @@ class LoginScreen extends StatelessWidget {
                           },
                         ),
                         const SizedBox(height: 16.0),
-                        // TextFormField(
-                        //   controller: _passwordController,
-                        //   decoration: const InputDecoration(
-                        //     labelText: 'Password',
-                        //   ),
-                        //   obscureText: true,
-                        //   validator: (value) {
-                        //     if (value == null || value.isEmpty) {
-                        //       return 'Please enter your password';
-                        //     }
-                        //     return null;
-                        //   },
-                        // ),
                         PasswordField(_passwordController),
-                        const SizedBox(height: 16.0),
+                        const SizedBox(height: 5.0),
+                        BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+                          bool isRemember = context.read<AuthCubit>().rememberMe;
+                          return Row(
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: () {
+                                  context.read<AuthCubit>().rememberMe = !isRemember;
+                                  setState(() => {});
+                                },
+                                icon: Icon(
+                                  isRemember ? Icons.check_box : Icons.check_box_outline_blank,
+                                  size: 28,
+                                  color: isRemember
+                                      ? AppColors.primary
+                                      : AppColors.grey.withOpacity(0.6),
+                                ),
+                              ),
+                              TextButton(
+                                  child: Text(
+                                    'Remember me',
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  onPressed: () {
+                                    context.read<AuthCubit>().rememberMe = !isRemember;
+                                    setState(() => {});
+                                  }),
+                            ],
+                          );
+                        }),
+                        const SizedBox(height: 5.0),
                         BlocConsumer<AuthCubit, AuthState>(
                           listener: (context, state) {
                             if (state is AuthenticationFailed) {
@@ -86,7 +126,7 @@ class LoginScreen extends StatelessWidget {
                                 type: SnackbarType.error,
                               );
                             } else if (state is AuthenticatedState) {
-                              RouteManager.routerManagerPushUntil(
+                              RouteManager.pushAndRemoveAll(
                                 routeName: RouteConstants.users,
                                 context: context,
                               );
@@ -97,7 +137,7 @@ class LoginScreen extends StatelessWidget {
                               return const CustomProgressIndicator();
                             }
                             return CustomButton(
-                              title: 'Login'.toUpperCase(),
+                              title: 'Sign in'.toUpperCase(),
                               onPressed: () async {
                                 final form = Form.of(context);
                                 if (form.validate()) {

@@ -48,7 +48,7 @@ class UserScreen extends StatelessWidget {
                         color: AppColors.light,
                       ),
                       onPressed: () {
-                        RouteManager.routerManagerPushUntil(
+                        RouteManager.pushAndRemoveAll(
                           context: context,
                           routeName: RouteConstants.users,
                         );

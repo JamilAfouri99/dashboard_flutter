@@ -52,18 +52,18 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
-            RouteManager.routerManagerPopAndPushNamed(
+            RouteManager.popAndPushNamed(
               routeName: RouteConstants.users,
               context: context,
             );
           } else if (state is UnauthenticatedState) {
-            RouteManager.routerManagerPopAndPushNamed(
+            RouteManager.popAndPushNamed(
               routeName: RouteConstants.login,
               context: context,
             );
           } else if (state is AuthenticationFailed) {
             // CustomSnackbar.show(context, state.reason.toString(), type: SnackbarType.error);
-            RouteManager.routerManagerPopAndPushNamed(
+            RouteManager.popAndPushNamed(
               routeName: RouteConstants.login,
               context: context,
             );

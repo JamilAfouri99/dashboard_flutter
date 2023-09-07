@@ -16,8 +16,10 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller, // Use the provided controller here
+      style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(
         labelText: 'Password',
+        labelStyle: Theme.of(context).textTheme.bodyMedium,
         suffixIcon: GestureDetector(
           onTap: () {
             setState(() {

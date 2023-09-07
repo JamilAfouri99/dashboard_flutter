@@ -165,7 +165,7 @@ class ConfirmationDialog extends StatelessWidget {
           'Deleted user successfully',
           type: SnackbarType.success,
         );
-        RouteManager.routerManagerPushUntil(
+        RouteManager.pushAndRemoveAll(
           context: context,
           routeName: RouteConstants.users,
         );
@@ -204,7 +204,7 @@ class ConfirmationDialog extends StatelessWidget {
         }
         if (context.mounted) {
           Navigator.pop(context);
-          RouteManager.routerManagerPushUntil(
+          RouteManager.pushAndRemoveAll(
             context: context,
             routeName: RouteConstants.users,
           );
@@ -219,7 +219,7 @@ class ConfirmationDialog extends StatelessWidget {
       UserState state = userCubit.state;
       if (state is UserLoaded) {
         Navigator.pop(context);
-        RouteManager.navigateToWithData(
+        RouteManager.pushAndRemoveCurrentWithData(
           context,
           () => UserScreen(user: state.user),
         );
@@ -240,11 +240,11 @@ class ConfirmationDialog extends StatelessWidget {
     Navigator.pop(context);
     context.read<UserCubit>().isNewForm();
     user == null
-        ? RouteManager.routerManagerPushUntil(
+        ? RouteManager.pushAndRemoveAll(
             context: context,
             routeName: RouteConstants.users,
           )
-        : RouteManager.pushAndRemovePrevUntilWithData(
+        : RouteManager.pushAndRemoveCurrentWithData(
             context,
             () => UserScreen(user: user),
           );
