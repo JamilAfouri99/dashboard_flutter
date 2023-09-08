@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 
-class ThemeCubit extends Cubit<bool> {
-  ThemeCubit() : super(false); // Initial state is not dark theme
+enum AppThemeMode { light, dark }
 
-  void toggleDarkTheme() {
-    emit(!state); // Toggle the dark theme state
+class ThemeCubit extends Cubit<AppThemeMode> {
+  ThemeCubit() : super(AppThemeMode.light);
+
+  void toggleTheme() {
+    emit(state == AppThemeMode.light ? AppThemeMode.dark : AppThemeMode.light);
   }
 }

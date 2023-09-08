@@ -33,8 +33,8 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget usersTopActions(BuildContext context) {
-    return BlocBuilder<ThemeCubit, bool>(
-      builder: (context, state) => BlocConsumer<AuthCubit, AuthState>(
+    return BlocBuilder<ThemeCubit, AppThemeMode>(
+      builder: (context, theme) => BlocConsumer<AuthCubit, AuthState>(
           listener: (context, state) => {},
           builder: (context, state) {
             if (state is AuthenticatedState) {
@@ -42,7 +42,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onSelected: (result) {
                   switch (result) {
                     case 'theme':
-                      context.read<ThemeCubit>().toggleDarkTheme();
+                      context.read<ThemeCubit>().toggleTheme();
                       break;
                     case 'logout':
                       context.read<AuthCubit>().remoteLogout(context);
@@ -75,18 +75,21 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                     padding: EdgeInsets.zero,
                     child: Divider(),
                   ),
+                  // TODO: APP THEME
                   // PopupMenuItem<String>(
                   //   value: 'theme',
                   //   child: Row(
                   //     children: [
-                  //       const Icon(
-                  //         Icons.light_rounded,
+                  //       Icon(
+                  //         theme == AppThemeMode.light
+                  //             ? Icons.dark_mode_outlined
+                  //             : Icons.light_mode_outlined,
                   //         size: 22,
                   //         color: AppColors.grey,
                   //       ),
                   //       const SizedBox(width: 5),
                   //       Text(
-                  //         'Dark Theme',
+                  //         theme == AppThemeMode.light ? 'Dark Theme' : 'Light Theme',
                   //         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   //               color: AppColors.grey,
                   //             ),

@@ -2,6 +2,7 @@ import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/configuration/constants.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
+import 'package:qcarder/cubit/theme/theme_cubit.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
 import 'package:qcarder/cubit/users/users_cubit.dart';
 import 'package:qcarder/services/global_services.dart';
@@ -47,29 +48,33 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => UsersCubit()),
         BlocProvider(create: (_) => UserCubit()),
         BlocProvider(create: (_) => AvatarCubit()),
+        BlocProvider(create: (_) => ThemeCubit()),
       ],
-      child: MaterialApp(
-        title: 'qcarder',
-        onGenerateRoute: router.Router.generateRoute,
-        initialRoute: RouteConstants.splash,
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        darkTheme: lightTheme,
-        navigatorKey: KeysService.navigatorKey,
-        scaffoldMessengerKey: KeysService.snackbarKey,
-        supportedLocales: const [
-          Locale('en', ''), // English, no country code
-          Locale('ar', ''), // Arabic, no country code
-        ],
-        locale: const Locale('en', ''),
-        // set the max scale factor of all text in the app to 1.0 to avoid any issues.
-        builder: (context, child) {
-          final MediaQueryData data = MediaQuery.of(context);
-          return MediaQuery(
-            data: data.copyWith(textScaleFactor: 1.0),
-            child: child!,
-          );
-        },
+      child: BlocBuilder<ThemeCubit, AppThemeMode>(
+        builder: (context, themeMode) => MaterialApp(
+          title: 'qcarder',
+          onGenerateRoute: router.Router.generateRoute,
+          initialRoute: RouteConstants.splash,
+          debugShowCheckedModeBanner: false,
+          theme: lightTheme,
+          darkTheme: lightTheme,
+          themeMode: themeMode == AppThemeMode.light ? ThemeMode.light : ThemeMode.dark,
+          navigatorKey: KeysService.navigatorKey,
+          scaffoldMessengerKey: KeysService.snackbarKey,
+          supportedLocales: const [
+            Locale('en', ''), // English, no country code
+            Locale('ar', ''), // Arabic, no country code
+          ],
+          locale: const Locale('en', ''),
+          // set the max scale factor of all text in the app to 1.0 to avoid any issues.
+          builder: (context, child) {
+            final MediaQueryData data = MediaQuery.of(context);
+            return MediaQuery(
+              data: data.copyWith(textScaleFactor: 1.0),
+              child: child!,
+            );
+          },
+        ),
       ),
     );
   }
