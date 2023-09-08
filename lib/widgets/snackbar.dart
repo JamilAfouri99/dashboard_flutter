@@ -11,7 +11,7 @@ class CustomSnackbar {
           message,
           style: const TextStyle(color: AppColors.light),
         ),
-        backgroundColor: _getSnackbarColor(type),
+        backgroundColor: _getSnackbarColor(type, context),
         behavior: SnackBarBehavior.floating,
       );
       key.currentState?.clearSnackBars();
@@ -19,10 +19,10 @@ class CustomSnackbar {
     }
   }
 
-  static Color _getSnackbarColor(SnackbarType type) {
+  static Color _getSnackbarColor(SnackbarType type, BuildContext context) {
     switch (type) {
       case SnackbarType.info:
-        return AppColors.grey;
+        return Theme.of(context).colorScheme.shadow;
       case SnackbarType.error:
         return AppColors.onError;
       case SnackbarType.success:

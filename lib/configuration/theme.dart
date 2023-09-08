@@ -22,6 +22,7 @@ class AppColors {
   static const Color dark = Colors.black;
   static const Color noColor = Colors.transparent;
   static const Color grey = Color(0xFF515966);
+  static const Color lightGrey = Color(0xFF94A3B8);
   static const Color errorField = Color(0xFFFAEDEF);
   static const Color stagingColor = Color(0xFFFAE9FF);
   static const Color paymentExpandedWidget = Color(0xFFF8FAFB);
@@ -86,13 +87,14 @@ final lightTheme = ThemeData(
     onPrimary: AppColors.light,
     secondary: AppColors.secondary,
     onSecondary: AppColors.light,
-    background: AppColors.secondary,
+    shadow: AppColors.grey,
+    background: AppColors.light,
     onBackground: AppColors.dark,
     surface: AppColors.light,
     onSurface: AppColors.primary,
     error: AppColors.onError,
     onError: AppColors.light,
-  ).copyWith(background: Colors.white),
+  ).copyWith(background: AppColors.light),
 );
 
 TextTheme textLightTheme = const TextTheme(
@@ -152,23 +154,23 @@ final darkTheme = ThemeData(
   indicatorColor: AppColors.primary,
   tabBarTheme: const TabBarTheme(labelColor: AppColors.primary),
   drawerTheme: const DrawerThemeData(backgroundColor: AppColors.darkPrimary, elevation: 2),
-  scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: AppColors.darkPrimary,
   inputDecorationTheme: InputDecorationTheme(
     helperStyle: TextStyle(
       fontSize: 14,
-      color: AppColors.grey.withOpacity(0.2),
+      color: AppColors.grey.withOpacity(0.05),
     ),
     hintStyle: TextStyle(
       fontSize: 14,
-      color: AppColors.grey.withOpacity(0.2),
+      color: AppColors.grey.withOpacity(0.05),
     ),
     labelStyle: TextStyle(
       fontSize: 14,
-      color: AppColors.grey.withOpacity(0.2),
+      color: AppColors.grey.withOpacity(0.05),
     ),
     floatingLabelStyle: const TextStyle(
       fontSize: 14,
-      color: AppColors.darkPrimary,
+      color: AppColors.light,
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(2),
@@ -190,59 +192,62 @@ final darkTheme = ThemeData(
   ),
   iconTheme: const IconThemeData(color: AppColors.primary),
   colorScheme: const ColorScheme(
-    brightness: Brightness.light,
+    brightness: Brightness.dark,
     primary: AppColors.darkPrimary,
     onPrimary: AppColors.light,
     secondary: AppColors.primary,
+    shadow: AppColors.lightGrey,
     onSecondary: AppColors.light,
-    background: AppColors.secondary,
+    background: AppColors.darkPrimary,
     onBackground: AppColors.dark,
     surface: AppColors.light,
     onSurface: AppColors.primary,
     error: AppColors.onError,
     onError: AppColors.light,
-  ).copyWith(background: Colors.white),
+  ).copyWith(
+    background: AppColors.darkPrimary,
+  ),
 );
 
-TextTheme textDarkTheme = const TextTheme(
-  headlineLarge: TextStyle(
+TextTheme textDarkTheme = TextTheme(
+  headlineLarge: const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 44,
     color: AppColors.light,
   ),
-  headlineMedium: TextStyle(
+  headlineMedium: const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 24,
     color: AppColors.light,
   ),
-  headlineSmall: TextStyle(
+  headlineSmall: const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 20,
     color: AppColors.light,
   ),
-  titleLarge: TextStyle(
+  titleLarge: const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 18,
   ),
-  titleMedium: TextStyle(
+  titleMedium: const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 16,
   ),
-  titleSmall: TextStyle(
+  titleSmall: const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 14,
   ),
-  bodyLarge: TextStyle(
+  bodyLarge: const TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 18,
   ),
-  bodyMedium: TextStyle(
+  bodyMedium: const TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 16,
   ),
   bodySmall: TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w500,
-    color: AppColors.grey,
+    color: AppColors.grey.withOpacity(0.1),
   ),
 );

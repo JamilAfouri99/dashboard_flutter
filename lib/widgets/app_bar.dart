@@ -5,6 +5,7 @@ import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:qcarder/cubit/theme/theme_cubit.dart';
+import 'package:qcarder/cubit/theme/theme_state.dart';
 
 class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -16,11 +17,11 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 70,
       leading: Builder(
         builder: (context) => IconButton(
-          icon: const Icon(Icons.density_medium_outlined, color: AppColors.grey),
+          icon: Icon(Icons.density_medium_outlined, color: Theme.of(context).colorScheme.shadow),
           onPressed: () => Scaffold.of(context).openDrawer(),
         ),
       ),
-      backgroundColor: AppColors.light,
+      backgroundColor: Theme.of(context).colorScheme.background,
       centerTitle: true,
       title: Text(
         title,
@@ -33,7 +34,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget usersTopActions(BuildContext context) {
-    return BlocBuilder<ThemeCubit, AppThemeMode>(
+    return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, theme) => BlocConsumer<AuthCubit, AuthState>(
           listener: (context, state) => {},
           builder: (context, state) {
@@ -58,13 +59,13 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Text(
                           'Signed in as',
                           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: AppColors.grey,
+                                color: Theme.of(context).colorScheme.shadow,
                               ),
                         ),
                         Text(
                           state.authUser.email,
                           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: AppColors.grey.withOpacity(0.8),
+                                color: Theme.of(context).colorScheme.shadow.withOpacity(0.8),
                               ),
                         ),
                       ],
@@ -81,17 +82,17 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                   //   child: Row(
                   //     children: [
                   //       Icon(
-                  //         theme == AppThemeMode.light
+                  //         theme.themeMode == ThemeMode.light
                   //             ? Icons.dark_mode_outlined
                   //             : Icons.light_mode_outlined,
                   //         size: 22,
-                  //         color: AppColors.grey,
+                  //         color: Theme.of(context).colorScheme.shadow,
                   //       ),
                   //       const SizedBox(width: 5),
                   //       Text(
-                  //         theme == AppThemeMode.light ? 'Dark Theme' : 'Light Theme',
+                  //         theme.themeMode == ThemeMode.light ? 'Dark Theme' : 'Light Theme',
                   //         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  //               color: AppColors.grey,
+                  //               color: Theme.of(context).colorScheme.shadow,
                   //             ),
                   //       ),
                   //     ],
@@ -106,16 +107,16 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                     value: 'logout',
                     child: Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.logout,
                           size: 22,
-                          color: AppColors.grey,
+                          color: Theme.of(context).colorScheme.shadow,
                         ),
                         const SizedBox(width: 5),
                         Text(
                           'Sign out',
                           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: AppColors.grey,
+                                color: Theme.of(context).colorScheme.shadow,
                               ),
                         ),
                       ],

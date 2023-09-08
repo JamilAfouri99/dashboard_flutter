@@ -128,7 +128,7 @@ class _NewFormState extends State<NewForm> {
                       shape: BoxShape.circle,
                       border: Border.all(
                         width: 4,
-                        color: AppColors.grey.withOpacity(0.2),
+                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
                       ),
                     ),
                     child: ClipOval(
@@ -452,7 +452,7 @@ class _NewFormState extends State<NewForm> {
                 Icon(
                   Icons.add_circle_rounded,
                   size: 20,
-                  color: AppColors.grey.withOpacity(0.7),
+                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.7),
                 ),
                 const SizedBox(width: 10),
                 Text(
@@ -611,7 +611,7 @@ class _NewFormState extends State<NewForm> {
                 Icon(
                   Icons.add_circle_rounded,
                   size: 20,
-                  color: AppColors.grey.withOpacity(0.7),
+                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.7),
                 ),
                 const SizedBox(width: 10),
                 Text(
@@ -652,7 +652,7 @@ class _NewFormState extends State<NewForm> {
                           child: SvgPicture.asset(
                             linkPathByLabel(_links[i].label),
                             fit: BoxFit.cover,
-                            color: AppColors.grey.withOpacity(0.7),
+                            color: Theme.of(context).colorScheme.shadow.withOpacity(0.7),
                           ),
                         ),
                       ),
@@ -696,7 +696,7 @@ class _NewFormState extends State<NewForm> {
                 Icon(
                   Icons.add_circle_rounded,
                   size: 20,
-                  color: AppColors.grey.withOpacity(0.7),
+                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.7),
                 ),
                 const SizedBox(width: 10),
                 Text(

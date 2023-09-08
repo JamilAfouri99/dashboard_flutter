@@ -17,13 +17,11 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller, // Use the provided controller here
-      style: Theme.of(context).textTheme.bodySmall,
-
+      style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(
         labelText: 'Password',
-        labelStyle: Theme.of(context).textTheme.bodySmall,
         hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              color: AppColors.grey.withOpacity(0.5),
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
             ),
         suffixIcon: GestureDetector(
           onTap: () {

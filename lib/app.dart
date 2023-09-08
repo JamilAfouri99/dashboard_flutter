@@ -3,6 +3,7 @@ import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/configuration/constants.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
 import 'package:qcarder/cubit/theme/theme_cubit.dart';
+import 'package:qcarder/cubit/theme/theme_state.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
 import 'package:qcarder/cubit/users/users_cubit.dart';
 import 'package:qcarder/services/global_services.dart';
@@ -50,15 +51,17 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => AvatarCubit()),
         BlocProvider(create: (_) => ThemeCubit()),
       ],
-      child: BlocBuilder<ThemeCubit, AppThemeMode>(
-        builder: (context, themeMode) => MaterialApp(
-          title: 'qcarder',
+      child: BlocConsumer<ThemeCubit, ThemeState>(
+        listener: (context, state) => {},
+        builder: (context, state) => MaterialApp(
+          title: 'QCarder',
           onGenerateRoute: router.Router.generateRoute,
           initialRoute: RouteConstants.splash,
           debugShowCheckedModeBanner: false,
           theme: lightTheme,
-          darkTheme: lightTheme,
-          themeMode: themeMode == AppThemeMode.light ? ThemeMode.light : ThemeMode.dark,
+          // TODO: implement the theme
+          // darkTheme: darkTheme,
+          // themeMode: state.themeMode,
           navigatorKey: KeysService.navigatorKey,
           scaffoldMessengerKey: KeysService.snackbarKey,
           supportedLocales: const [

@@ -73,7 +73,7 @@ class _SigninScreenState extends State<SigninScreen> {
                             labelText: 'Email',
                             hintText: 'user@qcarder.com',
                             hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  color: AppColors.grey.withOpacity(0.5),
+                                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
                                 ),
                           ),
                           validator: (value) {
@@ -101,10 +101,13 @@ class _SigninScreenState extends State<SigninScreen> {
                                   size: 28,
                                   color: isRemember
                                       ? AppColors.primary
-                                      : AppColors.grey.withOpacity(0.6),
+                                      : Theme.of(context).colorScheme.shadow.withOpacity(0.6),
                                 ),
                               ),
                               TextButton(
+                                  style: ButtonStyle(
+                                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                  ),
                                   child: Text(
                                     'Remember me',
                                     style: Theme.of(context).textTheme.bodyMedium,

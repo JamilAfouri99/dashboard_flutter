@@ -48,7 +48,7 @@ class _ViewFormState extends State<ViewForm> {
                 shape: BoxShape.circle,
                 border: Border.all(
                   width: 4,
-                  color: AppColors.grey.withOpacity(0.2),
+                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
                 ),
               ),
               child: InkWell(
@@ -133,7 +133,7 @@ class _ViewFormState extends State<ViewForm> {
             //     child: Text(
             //       category,
             //       style:
-            //           Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.grey),
+            //           Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.shadow),
             //     ),
             //   ),
             //   ],
@@ -145,7 +145,7 @@ class _ViewFormState extends State<ViewForm> {
                 color: AppColors.light,
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.grey.withOpacity(0.5),
+                    color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 3),
@@ -156,9 +156,9 @@ class _ViewFormState extends State<ViewForm> {
                 children: [
                   if (widget.user.profile.title != null && widget.user.profile.title!.isNotEmpty)
                     ListTile(
-                      leading: const Icon(
+                      leading: Icon(
                         Icons.work_outline,
-                        color: AppColors.grey,
+                        color: Theme.of(context).colorScheme.shadow,
                       ),
                       title: Text(
                         widget.user.profile.title ?? '',
@@ -168,9 +168,9 @@ class _ViewFormState extends State<ViewForm> {
                   if (widget.user.profile.company != null &&
                       widget.user.profile.company!.isNotEmpty)
                     ListTile(
-                      leading: const Icon(
+                      leading: Icon(
                         Icons.business,
-                        color: AppColors.grey,
+                        color: Theme.of(context).colorScheme.shadow,
                       ),
                       title: Text(
                         widget.user.profile.company ?? '',
@@ -182,9 +182,9 @@ class _ViewFormState extends State<ViewForm> {
                   if (widget.user.profile.address != null &&
                       widget.user.profile.address!.isNotEmpty)
                     ListTile(
-                      leading: const Icon(
+                      leading: Icon(
                         Icons.pin_drop_outlined,
-                        color: AppColors.grey,
+                        color: Theme.of(context).colorScheme.shadow,
                       ),
                       title: Text(
                         widget.user.profile.address ?? '',
@@ -193,9 +193,9 @@ class _ViewFormState extends State<ViewForm> {
                     ),
                   if (widget.user.profile.birthday != null)
                     ListTile(
-                      leading: const Icon(
+                      leading: Icon(
                         Icons.cake_outlined,
-                        color: AppColors.grey,
+                        color: Theme.of(context).colorScheme.shadow,
                       ),
                       title: Text(
                         widget.user.profile.birthday != null
@@ -206,9 +206,9 @@ class _ViewFormState extends State<ViewForm> {
                     ),
                   if (widget.user.profile.notes != null && widget.user.profile.notes!.isNotEmpty)
                     ListTile(
-                      leading: const Icon(
+                      leading: Icon(
                         Icons.view_headline_rounded,
-                        color: AppColors.grey,
+                        color: Theme.of(context).colorScheme.shadow,
                       ),
                       title: Text(
                         widget.user.profile.notes ?? '',
@@ -271,9 +271,9 @@ class _ViewFormState extends State<ViewForm> {
   Widget _emailsWidget(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: ListTile(
-        leading: const Icon(
+        leading: Icon(
           Icons.mail_outline_outlined,
-          color: AppColors.grey,
+          color: Theme.of(context).colorScheme.shadow,
         ),
         // subtitle: Text(email.label),
         title: widget.user.profile.emails.isNotEmpty && widget.user.profile.emails.length > 1
@@ -311,9 +311,9 @@ class _ViewFormState extends State<ViewForm> {
   Widget _phonesWidget(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: ListTile(
-        leading: const Icon(
+        leading: Icon(
           Icons.phone_outlined,
-          color: AppColors.grey,
+          color: Theme.of(context).colorScheme.shadow,
         ),
         // subtitle: Text(phone.label),
         title: widget.user.profile.phoneNumbers.isNotEmpty &&

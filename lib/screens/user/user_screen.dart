@@ -220,12 +220,12 @@ class UserScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(
                       width: 4,
-                      color: AppColors.grey.withOpacity(0.2),
+                      color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
                     ),
                   ),
                   child: ClipOval(
                     child: Container(
-                      color: AppColors.grey,
+                      color: Theme.of(context).colorScheme.shadow,
                       height: 120,
                       width: 120,
                     ),
@@ -236,7 +236,7 @@ class UserScreen extends StatelessWidget {
                   width: 120,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: AppColors.grey,
+                    color: Theme.of(context).colorScheme.shadow,
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),

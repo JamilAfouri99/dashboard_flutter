@@ -1,6 +1,5 @@
 import 'package:qcarder/configuration/image_constants.dart';
 import 'package:qcarder/configuration/theme.dart';
-import 'package:qcarder/cubit/theme/theme_cubit.dart';
 import 'package:qcarder/cubit/users/users_cubit.dart';
 import 'package:qcarder/cubit/users/users_state.dart';
 import 'package:qcarder/navigation/router_manager.dart';
@@ -23,11 +22,9 @@ class UsersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => UsersCubit()..fetch()),
-        BlocProvider(create: (_) => ThemeCubit()),
-      ],
+      providers: [BlocProvider(create: (_) => UsersCubit()..fetch())],
       child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: const GlobalAppBar(),
         drawer: const GlobalDrawer(),
         floatingActionButton: floatingActionButton(context),
@@ -48,7 +45,7 @@ class UsersScreen extends StatelessWidget {
                     child: Icon(
                       Icons.search,
                       size: 28,
-                      color: AppColors.grey.withOpacity(0.6),
+                      color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
                     ),
                   ),
                   BlocBuilder<UsersCubit, UsersState>(
@@ -59,8 +56,9 @@ class UsersScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: 'Search users',
                           border: InputBorder.none,
-                          hintStyle:
-                              TextStyle(color: AppColors.grey.withOpacity(0.6), fontSize: 16),
+                          hintStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
+                              fontSize: 16),
                         ),
                       ),
                     ),
@@ -107,10 +105,10 @@ Widget _users(BuildContext context) {
   return PagedListView<int, User>.separated(
     pagingController: context.read<UsersCubit>().pagingController,
     separatorBuilder: (context, index) => Divider(
-      color: AppColors.primary.withOpacity(0.3),
+      color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
     ),
     builderDelegate: PagedChildBuilderDelegate<User>(
-      noMoreItemsIndicatorBuilder: (context) => _noMoreItems(),
+      noMoreItemsIndicatorBuilder: (context) => _noMoreItems(context),
       itemBuilder: (context, user, index) => _user(user, context),
       firstPageProgressIndicatorBuilder: (context) => _usersShimmer(context),
     ),
@@ -128,8 +126,8 @@ Widget _user(User user, BuildContext context) {
               cacheKey: user.avatar ?? '',
               imageUrl: user.avatar ?? '',
               fit: BoxFit.cover,
-              placeholder: (context, url) => const CircularProgressIndicator(
-                color: AppColors.primary,
+              placeholder: (context, url) => CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
               ),
               errorWidget: (context, url, error) => const Icon(
                 Icons.error,
@@ -148,13 +146,15 @@ Widget _user(User user, BuildContext context) {
     ),
     subtitle: Text(
       user.profile.title ?? '',
-      style:
-          Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.grey.withOpacity(0.7)),
+      style: Theme.of(context)
+          .textTheme
+          .bodySmall!
+          .copyWith(color: Theme.of(context).colorScheme.shadow.withOpacity(0.7)),
     ),
     trailing: IconButton(
-      icon: const Icon(
+      icon: Icon(
         Icons.remove_red_eye_outlined,
-        color: AppColors.primary,
+        color: Theme.of(context).colorScheme.primary,
       ),
       onPressed: () {
         Uri uri = Uri.parse('https://qcarder.com/users/${user.id}');
@@ -171,13 +171,13 @@ Widget _user(User user, BuildContext context) {
   );
 }
 
-_noMoreItems() {
+_noMoreItems(BuildContext context) {
   return Center(
     child: Container(
       padding: const EdgeInsets.all(20),
       child: Text(
         'QCarder © 2023',
-        style: TextStyle(color: AppColors.grey.withOpacity(0.8)),
+        style: TextStyle(color: Theme.of(context).colorScheme.shadow.withOpacity(0.8)),
       ),
     ),
   );
@@ -231,7 +231,7 @@ Widget _usersShimmer(BuildContext context) {
 }
 
 FloatingActionButton floatingActionButton(BuildContext context) => FloatingActionButton(
-      backgroundColor: AppColors.primary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       onPressed: () => RouteManager.navigateWithData(
         context,
         () => const UserScreen(),
