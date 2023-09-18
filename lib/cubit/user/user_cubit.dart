@@ -109,13 +109,9 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> isUpdateForm() async {
-    emit(UserLoading());
-    await Future.delayed(
-      const Duration(milliseconds: 500),
-      () => isEditable = true,
-    );
-    emit(UserLoaded(null));
+  Future<void> isUpdateForm(String userId) async {
+    isEditable = true;
+    getUserById(userId);
   }
 
   Future<void> isNewForm() async {

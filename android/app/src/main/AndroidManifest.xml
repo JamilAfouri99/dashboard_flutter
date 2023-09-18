@@ -2,7 +2,7 @@
     package="com.example.qcarder">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- <uses-permission android:name="android.permission.NFC" /> -->
+
     <application
         android:label="QCarder"
         android:name="${applicationName}"
@@ -31,7 +31,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-            <!-- start deep linking -->
+            <!-- Start Deep Linking -->
             <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -40,25 +40,20 @@
                 <data android:scheme="http" android:host="qcarder.com" />
                 <data android:scheme="https" />
             </intent-filter>
-            <!-- end deep linking -->
+            <!-- End Deep Linking -->
+
         </activity>
-        <!-- Don't delete the meta-data below.
-             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <!-- Don't delete the meta-data below. This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
-        <!-- <meta-data
-            android:name="flutter_deeplinking_enabled"
-            android:value="true" />
-        <intent-filter android:autoVerify="true">
-        </intent-filter>
-        <data
-            android:scheme="http"
-            android:host="dashcase.net" />
-        <data android:scheme="https" />
-        <ation android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <category android:name="android.intent.category.DEFAULT"/> -->
+            android:value="2"
+        />
     </application>
-    <!-- <uses-feature android:name="android.hardware.nfc" android:required="true" /> -->
+
+    <!-- Start NFC -->
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <!-- End NFC -->
+
 </manifest>

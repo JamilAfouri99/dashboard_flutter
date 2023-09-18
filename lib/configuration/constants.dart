@@ -4,6 +4,7 @@ class RouteConstants {
   static const String login = '/login';
   static const String signUp = '/signUp';
   static const String users = '/users';
+  static String viewUser(String userId) => '/users/$userId';
   static const String user = '/user';
   static const String nfc = '/nfc';
 }

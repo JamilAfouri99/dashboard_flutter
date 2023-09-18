@@ -77,32 +77,32 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: Divider(),
                   ),
                   // TODO: APP THEME
-                  // PopupMenuItem<String>(
-                  //   value: 'theme',
-                  //   child: Row(
-                  //     children: [
-                  //       Icon(
-                  //         theme.themeMode == ThemeMode.light
-                  //             ? Icons.dark_mode_outlined
-                  //             : Icons.light_mode_outlined,
-                  //         size: 22,
-                  //         color: Theme.of(context).colorScheme.shadow,
-                  //       ),
-                  //       const SizedBox(width: 5),
-                  //       Text(
-                  //         theme.themeMode == ThemeMode.light ? 'Dark Theme' : 'Light Theme',
-                  //         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  //               color: Theme.of(context).colorScheme.shadow,
-                  //             ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // const PopupMenuItem<String>(
-                  //   height: 0.0,
-                  //   padding: EdgeInsets.zero,
-                  //   child: Divider(),
-                  // ),
+                  PopupMenuItem<String>(
+                    value: 'theme',
+                    child: Row(
+                      children: [
+                        Icon(
+                          theme.themeMode == ThemeMode.light
+                              ? Icons.dark_mode_outlined
+                              : Icons.light_mode_outlined,
+                          size: 22,
+                          color: Theme.of(context).colorScheme.shadow,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          theme.themeMode == ThemeMode.light ? 'Dark Theme' : 'Light Theme',
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                color: Theme.of(context).colorScheme.shadow,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem<String>(
+                    height: 0.0,
+                    padding: EdgeInsets.zero,
+                    child: Divider(),
+                  ),
                   PopupMenuItem<String>(
                     value: 'logout',
                     child: Row(

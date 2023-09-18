@@ -13,7 +13,7 @@ Future<void> main() async {
   await _googleLicenseInit();
   final locale = await _localizationInit();
   await Firebase.initializeApp();
-  
+
   runApp(MyApp(locale));
 }
 

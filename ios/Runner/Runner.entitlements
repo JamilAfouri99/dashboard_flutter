@@ -6,5 +6,15 @@
 	<array>
 		<string>applinks:qcarder.com</string>
 	</array>
+
+	<key>com.apple.developer.nfc.readersession.formats</key>
+	<array>
+		<string>TAG</string>
+		<string>NDEF</string>
+        <string>com.apple.known.nfc</string>
+		<string>NFCTagReaderSession</string>
+	</array>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array></array>
 </dict>
 </plist>

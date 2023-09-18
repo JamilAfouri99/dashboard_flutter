@@ -54,6 +54,7 @@ class _EditableFormState extends State<EditableForm> {
 
   @override
   void initState() {
+    print('widget.user ${widget.user}');
     super.initState();
     _imageController.text = widget.user.avatar ?? '';
     _displayNameController.text = widget.user.profile.displayName ?? '';
@@ -359,7 +360,7 @@ class _EditableFormState extends State<EditableForm> {
                                 context: context,
                                 builder: (context) => ConfirmationDialog(
                                   action: ConfirmationDialogAction.cancel,
-                                  user: widget.user,
+                                  userId: widget.user.id,
                                 ),
                               )),
                     ),
@@ -376,7 +377,7 @@ class _EditableFormState extends State<EditableForm> {
                               context: context,
                               builder: (context) => ConfirmationDialog(
                                 action: ConfirmationDialogAction.update,
-                                user: widget.user,
+                                updatedUser: widget.user,
                                 updateProfile: _updateProfile(),
                               ),
                             );
