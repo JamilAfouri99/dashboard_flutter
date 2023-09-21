@@ -166,7 +166,7 @@ Widget _user(User user, BuildContext context) {
     ),
     onTap: () => RouteManager.navigateWithData(
       context,
-      () => UserScreen(user: user),
+      () => UserScreen(userId: user.id),
     ),
   );
 }

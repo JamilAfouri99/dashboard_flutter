@@ -3,10 +3,14 @@ import 'package:qcarder/configuration/image_constants.dart';
 import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/cubit/auth/auth_state.dart';
+import 'package:qcarder/cubit/user_role/user_role_cubit.dart';
+import 'package:qcarder/cubit/user_role/user_role_state.dart';
+import 'package:qcarder/helpers/role_checker.dart';
 import 'package:qcarder/navigation/router_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qcarder_api/api.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -49,75 +53,84 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (state is AuthenticatedState) {
-            RouteManager.popAndPushNamed(
-              routeName: RouteConstants.users,
-              context: context,
+      body: BlocBuilder<UserRoleCubit, UserRoleState>(builder: (context, userRole) {
+        return BlocConsumer<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AuthenticatedState) {
+              _handleAuthenticated(context, userRole.role);
+            } else if (state is UnauthenticatedState) {
+              RouteManager.popAndPushNamed(
+                routeName: RouteConstants.login,
+                context: context,
+              );
+            } else if (state is AuthenticationFailed) {
+              // CustomSnackbar.show(context, state.reason.toString(), type: SnackbarType.error);
+              RouteManager.popAndPushNamed(
+                routeName: RouteConstants.login,
+                context: context,
+              );
+            }
+          },
+          // Existing BlocConsumer code...
+          builder: (context, state) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    ImageConstants.letterLogo,
+                    width: 150,
+                  ),
+                  const SizedBox(height: 50),
+                  AnimatedBuilder(
+                    animation: _dotAnimation,
+                    builder: (context, child) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Dot(
+                            radius: 3,
+                            color: AppColors.primary,
+                            animation: _dotAnimation,
+                            intervalBegin: 0.0,
+                            intervalEnd: 0.33,
+                          ),
+                          const SizedBox(width: 10),
+                          Dot(
+                            radius: 3,
+                            color: AppColors.primary,
+                            animation: _dotAnimation,
+                            intervalBegin: 0.33,
+                            intervalEnd: 0.66,
+                          ),
+                          const SizedBox(width: 10),
+                          Dot(
+                            radius: 3,
+                            color: AppColors.primary,
+                            animation: _dotAnimation,
+                            intervalBegin: 0.66,
+                            intervalEnd: 1.0,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             );
-          } else if (state is UnauthenticatedState) {
-            RouteManager.popAndPushNamed(
-              routeName: RouteConstants.login,
-              context: context,
-            );
-          } else if (state is AuthenticationFailed) {
-            // CustomSnackbar.show(context, state.reason.toString(), type: SnackbarType.error);
-            RouteManager.popAndPushNamed(
-              routeName: RouteConstants.login,
-              context: context,
-            );
-          }
-        },
-        // Existing BlocConsumer code...
-        builder: (context, state) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  ImageConstants.letterLogo,
-                  width: 150,
-                ),
-                const SizedBox(height: 50),
-                AnimatedBuilder(
-                  animation: _dotAnimation,
-                  builder: (context, child) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Dot(
-                          radius: 3,
-                          color: AppColors.primary,
-                          animation: _dotAnimation,
-                          intervalBegin: 0.0,
-                          intervalEnd: 0.33,
-                        ),
-                        const SizedBox(width: 10),
-                        Dot(
-                          radius: 3,
-                          color: AppColors.primary,
-                          animation: _dotAnimation,
-                          intervalBegin: 0.33,
-                          intervalEnd: 0.66,
-                        ),
-                        const SizedBox(width: 10),
-                        Dot(
-                          radius: 3,
-                          color: AppColors.primary,
-                          animation: _dotAnimation,
-                          intervalBegin: 0.66,
-                          intervalEnd: 1.0,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+          },
+        );
+      }),
+    );
+  }
+
+  void _handleAuthenticated(BuildContext context, AuthUserRoleEnum userRole) {
+    String route =
+        RoleChecker.canAccessUsersScreen(userRole) ? RouteConstants.users : RouteConstants.users;
+
+    RouteManager.popAndPushNamed(
+      routeName: route,
+      context: context,
     );
   }
 }

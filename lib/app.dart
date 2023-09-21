@@ -3,6 +3,7 @@ import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/configuration/theme.dart';
 import 'package:qcarder/configuration/constants.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
+import 'package:qcarder/cubit/user_role/user_role_cubit.dart';
 import 'package:qcarder/cubit/theme/theme_cubit.dart';
 import 'package:qcarder/cubit/theme/theme_state.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
@@ -47,22 +48,21 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthCubit()..checkAccessToken()),
+        BlocProvider(create: (_) => UserRoleCubit()),
         BlocProvider(create: (_) => UsersCubit()),
         BlocProvider(create: (_) => UserCubit()),
         BlocProvider(create: (_) => AvatarCubit()),
         BlocProvider(create: (_) => ThemeCubit()),
       ],
-      child: BlocConsumer<ThemeCubit, ThemeState>(
-        listener: (context, state) => {},
+      child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) => MaterialApp(
           title: 'QCarder',
           onGenerateRoute: router.Router.generateRoute,
           initialRoute: RouteConstants.splash,
           debugShowCheckedModeBanner: false,
           theme: lightTheme,
-          // TODO: implement the theme
-          // darkTheme: darkTheme,
-          // themeMode: state.themeMode,
+          darkTheme: darkTheme,
+          themeMode: state.themeMode,
           navigatorKey: KeysService.navigatorKey,
           scaffoldMessengerKey: KeysService.snackbarKey,
           supportedLocales: const [

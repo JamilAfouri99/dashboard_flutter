@@ -12,20 +12,20 @@ import 'package:qcarder/widgets/shimmer_widget.dart';
 import 'package:qcarder/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qcarder_api/api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserScreen extends StatelessWidget {
-  final User? user;
+  final String? userId;
 
-  const UserScreen({super.key, this.user});
+  const UserScreen({super.key, this.userId});
 
   @override
   Widget build(BuildContext context) {
+    print(userId);
     return MultiBlocProvider(
       providers: [
-        user != null
-            ? BlocProvider(create: (_) => UserCubit()..getUserById(user!.id))
+        userId != null
+            ? BlocProvider(create: (_) => UserCubit()..getUserById(userId!))
             : BlocProvider(create: (_) => UserCubit()),
       ],
       child: BlocConsumer<UserCubit, UserState>(
@@ -42,7 +42,7 @@ class UserScreen extends StatelessWidget {
               toolbarHeight: 70,
               automaticallyImplyLeading: false,
               backgroundColor: AppColors.darkPrimary,
-              leading: isEditable || user == null
+              leading: isEditable || userId == null
                   ? null
                   : IconButton(
                       icon: const Icon(
@@ -56,11 +56,11 @@ class UserScreen extends StatelessWidget {
                         );
                       },
                     ),
-              actions: [if (user != null) _userActions(context, isEditable)],
+              actions: [if (userId != null) _userActions(context, isEditable)],
               elevation: 0,
               centerTitle: true,
               title: Text(
-                user == null
+                userId == null
                     ? 'New User'
                     : isEditable
                         ? 'Update Profile'
@@ -68,7 +68,7 @@ class UserScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.light),
               ),
             ),
-            floatingActionButton: user != null && !isEditable && state is! UserLoading
+            floatingActionButton: userId != null && !isEditable && state is! UserLoading
                 ? _floatingActionButton(context)
                 : null,
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -78,8 +78,8 @@ class UserScreen extends StatelessWidget {
                     ? Center(child: Text(state.reason.toString()))
                     : RefreshIndicator(
                         onRefresh: () {
-                          if (user != null) {
-                            return context.read<UserCubit>().getUserById(user!.id);
+                          if (userId != null) {
+                            return context.read<UserCubit>().getUserById(userId!);
                           }
                           return Future(() => null);
                         },
@@ -87,9 +87,9 @@ class UserScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               state is UserLoaded
-                                  ? isEditable
-                                      ? EditableForm(user: state.user ?? user!)
-                                      : ViewForm(user: state.user ?? user!)
+                                  ? isEditable && state.user != null
+                                      ? EditableForm(user: state.user!)
+                                      : ViewForm(user: state.user!)
                                   : const NewForm()
                             ],
                           ),
@@ -107,21 +107,21 @@ class UserScreen extends StatelessWidget {
       onSelected: (String result) {
         switch (result) {
           case 'view':
-            Uri uri = Uri.parse('https://qcarder.com/users/${user!.id}');
+            Uri uri = Uri.parse('https://qcarder.com/users/$userId');
             launchUrl(
               uri,
               mode: LaunchMode.externalApplication,
             );
             break;
           case 'edit':
-            context.read<UserCubit>().isUpdateForm();
+            context.read<UserCubit>().isUpdateForm(userId!);
             break;
           case 'delete':
             showDialog(
               context: context,
               builder: (context) => ConfirmationDialog(
                 action: ConfirmationDialogAction.delete,
-                user: user,
+                userId: userId,
               ),
             );
             break;
@@ -259,7 +259,7 @@ class UserScreen extends StatelessWidget {
     final UserCubit bloc = context.read<UserCubit>();
     return FloatingActionButton(
       backgroundColor: AppColors.primary,
-      onPressed: () => bloc.isUpdateForm(),
+      onPressed: () => bloc.isUpdateForm(userId!),
       tooltip: 'Edit',
       child: const Icon(Icons.edit),
     );

@@ -17,7 +17,8 @@ import 'package:http/http.dart' as http;
 
 class ConfirmationDialog extends StatelessWidget {
   final ConfirmationDialogAction action;
-  final User? user;
+  final String? userId;
+  final User? updatedUser;
   final PostUserDto? newUser;
   final PatchUserProfileDto? updateProfile;
   final http.MultipartFile? avatar;
@@ -25,7 +26,8 @@ class ConfirmationDialog extends StatelessWidget {
   const ConfirmationDialog({
     super.key,
     required this.action,
-    this.user,
+    this.userId,
+    this.updatedUser,
     this.newUser,
     this.updateProfile,
     this.avatar,
@@ -147,8 +149,8 @@ class ConfirmationDialog extends StatelessWidget {
   }
 
   Future<void> _deleteContact(BuildContext context, UserCubit userCubit) async {
-    if (user == null) return;
-    await userCubit.deleteUser(user!.id);
+    if (userId == null) return;
+    await userCubit.deleteUser(userId!);
     final state = userCubit.state;
     if (context.mounted) {
       if (state is UserFailed) {
@@ -214,14 +216,14 @@ class ConfirmationDialog extends StatelessWidget {
   }
 
   void _updateProfile(BuildContext context, UserCubit userCubit) {
-    if (user == null || updateProfile == null) return;
-    userCubit.updateProfile(user!, updateProfile!).then((_) {
+    if (updatedUser == null || updateProfile == null) return;
+    userCubit.updateProfile(updatedUser!, updateProfile!).then((_) {
       UserState state = userCubit.state;
       if (state is UserLoaded) {
         Navigator.pop(context);
         RouteManager.pushAndRemoveCurrentWithData(
           context,
-          () => UserScreen(user: state.user),
+          () => UserScreen(userId: updatedUser!.id),
         );
       } else if (state is UserFailed) {
         throw state.reason;
@@ -239,14 +241,14 @@ class ConfirmationDialog extends StatelessWidget {
   void _cancelContact(BuildContext context) {
     Navigator.pop(context);
     context.read<UserCubit>().isNewForm();
-    user == null
+    userId == null
         ? RouteManager.pushAndRemoveAll(
             context: context,
             routeName: RouteConstants.users,
           )
         : RouteManager.pushAndRemoveCurrentWithData(
             context,
-            () => UserScreen(user: user),
+            () => UserScreen(userId: userId),
           );
   }
 }

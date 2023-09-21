@@ -1,5 +1,6 @@
 import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/cubit/user_role/user_role_cubit.dart';
 import 'package:qcarder/models/tokens.dart';
 import 'package:qcarder/navigation/router_manager.dart';
 import 'package:qcarder/repositories/credentials.dart';
@@ -16,11 +17,13 @@ class AuthCubit extends Cubit<AuthState> {
   late AuthApi authApi;
   late Repository repository;
   late RemoteService remoteService;
+  late UserRoleCubit userRoleCubit;
   bool rememberMe = false;
 
   AuthCubit() : super(UnknownAuthState()) {
     authApi = AuthApi(apiClient);
     remoteService = RemoteService();
+    userRoleCubit = context.read<UserRoleCubit>();
   }
 
   // call in splash screen
@@ -39,6 +42,9 @@ class AuthCubit extends Cubit<AuthState> {
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
       );
+
+      final AuthUserRoleEnum userRole = result.value!.role;
+      userRoleCubit.updateUserRole(userRole);
 
       emit(AuthenticatedState(
         authUser: result.value!,
@@ -65,6 +71,9 @@ class AuthCubit extends Cubit<AuthState> {
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
       );
+
+      final AuthUserRoleEnum userRole = result.value!.role;
+      userRoleCubit.updateUserRole(userRole);
 
       emit(AuthenticatedState(
         authUser: result.value!,
@@ -99,6 +108,9 @@ class AuthCubit extends Cubit<AuthState> {
         accessToken: AccessToken(result.value!.accessToken),
         refreshToken: RefreshToken(result.value!.refreshToken),
       );
+
+      final AuthUserRoleEnum userRole = result.value!.role;
+      userRoleCubit.updateUserRole(userRole);
 
       emit(AuthenticatedState(
         authUser: result.value!,
