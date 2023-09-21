@@ -79,7 +79,7 @@ class _EditableFormState extends State<EditableForm> {
       _phones.add(PhoneNumber(
         phoneNumber: _phoneControllers[0].text,
         label: _phoneLabelControllers[0].text,
-        country: '',
+        country: 'XX',
       ));
     }
     // link
@@ -584,7 +584,7 @@ class _EditableFormState extends State<EditableForm> {
                 PhoneNumber(
                   phoneNumber: _phoneControllers.last.text,
                   label: _phoneLabelControllers.last.text,
-                  country: '',
+                  country: 'XX',
                 ),
               );
               setState(() {});
@@ -705,7 +705,14 @@ class _EditableFormState extends State<EditableForm> {
       notes: _noteController.text,
       title: _titleController.text,
       emails: _emails,
-      phoneNumbers: _phones,
+      phoneNumbers: _phones.asMap().entries.map<PhoneNumber>((entry) {
+        int index = entry.key;
+        PhoneNumber phone = entry.value;
+        phone.phoneNumber = _phoneControllers[index].text;
+        phone.label = _phoneLabelControllers[index].text;
+        phone.country = 'XX';
+        return phone;
+      }).toList(),
       links: _linkControllers[0].text.isEmpty
           ? []
           : _links.asMap().entries.map<Link>((entry) {
@@ -744,7 +751,8 @@ class _EditableFormState extends State<EditableForm> {
               ),
               title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _links[linkIndex].label = stringToEnumLink(Links.values[index].toString().split('.')[1]);
+                _links[linkIndex].label =
+                    stringToEnumLink(Links.values[index].toString().split('.')[1]);
                 setState(() {});
                 Navigator.of(context).pop();
               },

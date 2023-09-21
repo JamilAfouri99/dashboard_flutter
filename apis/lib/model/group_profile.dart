@@ -17,7 +17,7 @@ class GroupProfile {
     required this.createdAt,
     required this.updatedAt,
     required this.groupId,
-    required this.banner,
+    this.banner,
   });
 
   String id;
@@ -79,10 +79,8 @@ class GroupProfile {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key),
-              'Required key "GroupProfile[$key]" is missing from JSON.');
-          assert(json[key] != null,
-              'Required key "GroupProfile[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "GroupProfile[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "GroupProfile[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -92,7 +90,7 @@ class GroupProfile {
         createdAt: mapDateTime(json, r'createdAt', '')!,
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
         groupId: mapValueOfType<String>(json, r'groupId')!,
-        banner: mapValueOfType<String>(json, r'banner'),
+        banner: json[r'banner'] == null ? null : mapValueOfType<String>(json, r'banner'),
       );
     }
     return null;
@@ -153,6 +151,5 @@ class GroupProfile {
     'createdAt',
     'updatedAt',
     'groupId',
-    'banner',
   };
 }

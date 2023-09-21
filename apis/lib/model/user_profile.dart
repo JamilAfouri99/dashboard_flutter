@@ -18,12 +18,12 @@ class UserProfile {
     required this.updatedAt,
     required this.userId,
     required this.displayName,
-    required this.banner,
-    required this.title,
-    required this.company,
     required this.birthday,
-    required this.address,
-    required this.notes,
+    this.banner,
+    this.title,
+    this.company,
+    this.address,
+    this.notes,
     this.emails = const [],
     this.phoneNumbers = const [],
     this.links = const [],
@@ -157,10 +157,8 @@ class UserProfile {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key),
-              'Required key "UserProfile[$key]" is missing from JSON.');
-          assert(json[key] != null,
-              'Required key "UserProfile[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "UserProfile[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "UserProfile[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -171,15 +169,15 @@ class UserProfile {
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
         userId: mapValueOfType<String>(json, r'userId')!,
         displayName: mapValueOfType<String>(json, r'displayName'),
-        banner: mapValueOfType<String>(json, r'banner'),
-        title: mapValueOfType<String>(json, r'title'),
-        company: mapValueOfType<String>(json, r'company'),
+        banner: json[r'banner'] == null ? null : mapValueOfType<String>(json, r'banner'),
+        title: json[r'title'] == null ? null : mapValueOfType<String>(json, r'title'),
+        company: json[r'company'] == null ? null : mapValueOfType<String>(json, r'company'),
         birthday: mapDateTime(json, r'birthday', ''),
-        address: mapValueOfType<String>(json, r'address'),
-        notes: mapValueOfType<String>(json, r'notes'),
+        address: json[r'address'] == null ? null : mapValueOfType<String>(json, r'address'),
+        notes: json[r'notes'] == null ? null : mapValueOfType<String>(json, r'notes'),
         emails: Email.listFromJson(json[r'emails']),
         phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers']),
-        links: Link.listFromJson(json[r'links']),
+        links: json[r'links'].length == 0 ? [] : Link.listFromJson(json[r'links']),
       );
     }
     return null;
@@ -241,12 +239,7 @@ class UserProfile {
     'updatedAt',
     'userId',
     'displayName',
-    'banner',
-    'title',
-    'company',
     'birthday',
-    'address',
-    'notes',
     'emails',
     'phoneNumbers',
     'links',

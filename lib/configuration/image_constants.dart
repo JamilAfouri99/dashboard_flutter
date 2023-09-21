@@ -12,7 +12,7 @@ class ImageConstants {
 
   // links
   static const String facebook = '${linksPrefix}Facebook_black.svg';
-  static const String wahtsapp = '${linksPrefix}WhatsApp_black.svg';
+  static const String whatsapp = '${linksPrefix}WhatsApp_black.svg';
   static const String gmail = '${linksPrefix}Gmail_black.svg';
   static const String linkedin = '${linksPrefix}LinkedIN_black.svg';
   static const String twitter = '${linksPrefix}Twitter_black.svg';

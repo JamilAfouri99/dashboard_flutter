@@ -57,7 +57,7 @@ class _NewFormState extends State<NewForm> {
     _phones.add(PhoneNumber(
       phoneNumber: _phoneControllers[0].text,
       label: _phoneLabelControllers[0].text,
-      country: '',
+      country: 'XX',
     ));
     _emails.add(Email(email: _emailControllers[0].text, label: _emailLabelControllers[0].text));
   }
@@ -602,7 +602,7 @@ class _NewFormState extends State<NewForm> {
               _phones.add(PhoneNumber(
                 phoneNumber: _phoneControllers.last.text,
                 label: _phoneLabelControllers.last.text,
-                country: '',
+                country: 'XX',
               ));
               setState(() {});
             },
@@ -768,7 +768,8 @@ class _NewFormState extends State<NewForm> {
               ),
               title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _links[linkIndex].label = stringToEnumLink(Links.values[index].toString().split('.')[1]);
+                _links[linkIndex].label =
+                    stringToEnumLink(Links.values[index].toString().split('.')[1]);
                 setState(() {});
                 Navigator.of(context).pop();
               },

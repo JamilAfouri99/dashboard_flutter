@@ -12,7 +12,7 @@ enum Token {
 
 enum Links {
   facebook,
-  wahtsapp,
+  whatsapp,
   gmail,
   linkedin,
   twitter,

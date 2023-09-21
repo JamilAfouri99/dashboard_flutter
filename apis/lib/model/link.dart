@@ -23,8 +23,7 @@ class Link {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Link && other.link == link && other.label == label;
+      identical(this, other) || other is Link && other.link == link && other.label == label;
 
   @override
   int get hashCode =>
@@ -53,10 +52,8 @@ class Link {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key),
-              'Required key "Link[$key]" is missing from JSON.');
-          assert(json[key] != null,
-              'Required key "Link[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "Link[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "Link[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -166,8 +163,7 @@ class LinkLabelEnum {
     X,
   ];
 
-  static LinkLabelEnum? fromJson(dynamic value) =>
-      LinkLabelEnumTypeTransformer().decode(value);
+  static LinkLabelEnum? fromJson(dynamic value) => LinkLabelEnumTypeTransformer().decode(value);
 
   static List<LinkLabelEnum> listFromJson(
     dynamic json, {
@@ -189,8 +185,7 @@ class LinkLabelEnum {
 /// Transformation class that can [encode] an instance of [LinkLabelEnum] to String,
 /// and [decode] dynamic data back to [LinkLabelEnum].
 class LinkLabelEnumTypeTransformer {
-  factory LinkLabelEnumTypeTransformer() =>
-      _instance ??= const LinkLabelEnumTypeTransformer._();
+  factory LinkLabelEnumTypeTransformer() => _instance ??= const LinkLabelEnumTypeTransformer._();
 
   const LinkLabelEnumTypeTransformer._();
 
@@ -206,30 +201,30 @@ class LinkLabelEnumTypeTransformer {
   /// and users are still using an old app with the old code.
   LinkLabelEnum? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
-      switch (data) {
-        case r'Facebook':
+      switch ((data as String).toLowerCase()) {
+        case r'facebook':
           return LinkLabelEnum.facebook;
-        case r'GitHub':
+        case r'github':
           return LinkLabelEnum.gitHub;
-        case r'Gmail':
+        case r'gmail':
           return LinkLabelEnum.gmail;
-        case r'Instagram':
+        case r'instagram':
           return LinkLabelEnum.instagram;
-        case r'Link':
+        case r'link':
           return LinkLabelEnum.link;
-        case r'LinkedIn':
+        case r'linkedin':
           return LinkLabelEnum.linkedIn;
-        case r'OutLook':
+        case r'outlook':
           return LinkLabelEnum.outLook;
-        case r'QCarder':
+        case r'qcarder':
           return LinkLabelEnum.qCarder;
-        case r'Skype':
+        case r'skype':
           return LinkLabelEnum.skype;
-        case r'Slack':
+        case r'slack':
           return LinkLabelEnum.slack;
-        case r'WhatsApp':
+        case r'whatsapp':
           return LinkLabelEnum.whatsApp;
-        case r'X':
+        case r'x':
           return LinkLabelEnum.X;
         default:
           if (!allowNull) {

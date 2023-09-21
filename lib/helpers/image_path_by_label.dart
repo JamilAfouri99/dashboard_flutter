@@ -5,8 +5,8 @@ String linkPathByLabel(LinkLabelEnum label) {
   switch (label.toJson().split('.').last.toLowerCase()) {
     case 'facebook':
       return ImageConstants.facebook;
-    case 'wahtsapp':
-      return ImageConstants.wahtsapp;
+    case 'whatsapp':
+      return ImageConstants.whatsapp;
     case 'gmail':
       return ImageConstants.gmail;
     case 'linkedin':
@@ -25,8 +25,8 @@ String linkPathByLabel(LinkLabelEnum label) {
       return ImageConstants.slack;
     case 'qcarder':
       return ImageConstants.letterLogoWhite;
-      case 'link':
-      return ImageConstants.letterLogoWhite;
+    case 'link':
+      return ImageConstants.defaultLink;
     default:
       return ImageConstants.defaultLink;
   }
@@ -36,7 +36,7 @@ LinkLabelEnum stringToEnumLink(String label) {
   switch (label.toLowerCase()) {
     case 'facebook':
       return LinkLabelEnum.facebook;
-    case 'wahtsapp':
+    case 'whatsapp':
       return LinkLabelEnum.whatsApp;
     case 'gmail':
       return LinkLabelEnum.gmail;
@@ -56,7 +56,7 @@ LinkLabelEnum stringToEnumLink(String label) {
       return LinkLabelEnum.slack;
     case 'qcarder':
       return LinkLabelEnum.qCarder;
-      case 'link':
+    case 'link':
       return LinkLabelEnum.link;
     default:
       return LinkLabelEnum.link;
