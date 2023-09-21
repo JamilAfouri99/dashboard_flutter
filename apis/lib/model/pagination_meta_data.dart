@@ -17,8 +17,8 @@ class PaginationMetaData {
     required this.lastPage,
     required this.currentPage,
     required this.perPage,
-    this.prev,
-    this.next,
+    required this.prev,
+    required this.next,
   });
 
   num total;
@@ -102,14 +102,16 @@ class PaginationMetaData {
         lastPage: num.parse(json[r'lastPage'].toString()),
         currentPage: num.parse(json[r'currentPage'].toString()),
         perPage: num.parse(json[r'perPage'].toString()),
-        prev: json[r'prev'] == null ? null : num.parse(json[r'prev'].toString()),
-        next: json[r'next'] == null ? null : num.parse(json[r'next'].toString()),
+        prev:
+            json[r'prev'] == null ? null : num.parse(json[r'prev'].toString()),
+        next:
+            json[r'next'] == null ? null : num.parse(json[r'next'].toString()),
       );
     }
     return null;
   }
 
-  static List<PaginationMetaData>? listFromJson(
+  static List<PaginationMetaData> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -146,15 +148,13 @@ class PaginationMetaData {
   }) {
     final map = <String, List<PaginationMetaData>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = PaginationMetaData.listFromJson(
+        map[entry.key] = PaginationMetaData.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;
@@ -166,5 +166,7 @@ class PaginationMetaData {
     'lastPage',
     'currentPage',
     'perPage',
+    'prev',
+    'next',
   };
 }

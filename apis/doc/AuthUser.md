@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 **avatar** | **String** |  | 
 **role** | **String** |  | 
 **status** | **String** |  | 
-**groupId** | **num** |  | 
+**groupId** | **String** |  | 
 **accessToken** | **String** |  | 
 **refreshToken** | **String** |  | 
 

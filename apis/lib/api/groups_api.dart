@@ -10,7 +10,6 @@
 
 part of openapi.api;
 
-
 class GroupsApi {
   GroupsApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
@@ -24,12 +23,16 @@ class GroupsApi {
   /// * [String] profileId (required):
   ///
   /// * [DeleteGroupProfileFilesDto] deleteGroupProfileFilesDto (required):
-  ///   Specify which files are to be deleted by sending the file field with a value of \"true\" 
-  Future<Response> deleteUserProfileFilesWithHttpInfo(String groupId, String profileId, DeleteGroupProfileFilesDto deleteGroupProfileFilesDto,) async {
+  ///   Specify which files are to be deleted by sending the file field with a value of \"true\"
+  Future<Response> deleteUserProfileFilesWithHttpInfo(
+    String groupId,
+    String profileId,
+    DeleteGroupProfileFilesDto deleteGroupProfileFilesDto,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/groups/{userId}/profile/{profileId}/files'
-      .replaceAll('{groupId}', groupId)
-      .replaceAll('{profileId}', profileId);
+        .replaceAll('{groupId}', groupId)
+        .replaceAll('{profileId}', profileId);
 
     // ignore: prefer_final_locals
     Object? postBody = deleteGroupProfileFilesDto;
@@ -39,7 +42,6 @@ class GroupsApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -59,9 +61,17 @@ class GroupsApi {
   /// * [String] profileId (required):
   ///
   /// * [DeleteGroupProfileFilesDto] deleteGroupProfileFilesDto (required):
-  ///   Specify which files are to be deleted by sending the file field with a value of \"true\" 
-  Future<void> deleteUserProfileFiles(String groupId, String profileId, DeleteGroupProfileFilesDto deleteGroupProfileFilesDto,) async {
-    final response = await deleteUserProfileFilesWithHttpInfo(groupId, profileId, deleteGroupProfileFilesDto,);
+  ///   Specify which files are to be deleted by sending the file field with a value of \"true\"
+  Future<void> deleteUserProfileFiles(
+    String groupId,
+    String profileId,
+    DeleteGroupProfileFilesDto deleteGroupProfileFilesDto,
+  ) async {
+    final response = await deleteUserProfileFilesWithHttpInfo(
+      groupId,
+      profileId,
+      deleteGroupProfileFilesDto,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -73,10 +83,12 @@ class GroupsApi {
   /// * [String] groupId (required):
   ///
   /// * [PatchGroupDto] patchGroupDto (required):
-  Future<Response> patchUserGroupWithHttpInfo(String groupId, PatchGroupDto patchGroupDto,) async {
+  Future<Response> patchUserGroupWithHttpInfo(
+    String groupId,
+    PatchGroupDto patchGroupDto,
+  ) async {
     // ignore: prefer_const_declarations
-    final path = r'/groups/{groupId}'
-      .replaceAll('{groupId}', groupId);
+    final path = r'/groups/{groupId}'.replaceAll('{groupId}', groupId);
 
     // ignore: prefer_final_locals
     Object? postBody = patchGroupDto;
@@ -86,7 +98,6 @@ class GroupsApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -104,17 +115,26 @@ class GroupsApi {
   /// * [String] groupId (required):
   ///
   /// * [PatchGroupDto] patchGroupDto (required):
-  Future<PatchGroupResponseDto?> patchUserGroup(String groupId, PatchGroupDto patchGroupDto,) async {
-    final response = await patchUserGroupWithHttpInfo(groupId, patchGroupDto,);
+  Future<PatchGroupResponseDto?> patchUserGroup(
+    String groupId,
+    PatchGroupDto patchGroupDto,
+  ) async {
+    final response = await patchUserGroupWithHttpInfo(
+      groupId,
+      patchGroupDto,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'PatchGroupResponseDto',) as PatchGroupResponseDto;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'PatchGroupResponseDto',
+      ) as PatchGroupResponseDto;
     }
     return null;
   }
@@ -127,11 +147,15 @@ class GroupsApi {
   /// * [String] profileId (required):
   ///
   /// * [MultipartFile] banner (required):
-  Future<Response> postGroupFilesWithHttpInfo(String groupId, String profileId, MultipartFile banner,) async {
+  Future<Response> postGroupFilesWithHttpInfo(
+    String groupId,
+    String profileId,
+    MultipartFile banner,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/groups/{groupId}/profile/{profileId}/files'
-      .replaceAll('{groupId}', groupId)
-      .replaceAll('{profileId}', profileId);
+        .replaceAll('{groupId}', groupId)
+        .replaceAll('{profileId}', profileId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -171,8 +195,16 @@ class GroupsApi {
   /// * [String] profileId (required):
   ///
   /// * [MultipartFile] banner (required):
-  Future<void> postGroupFiles(String groupId, String profileId, MultipartFile banner,) async {
-    final response = await postGroupFilesWithHttpInfo(groupId, profileId, banner,);
+  Future<void> postGroupFiles(
+    String groupId,
+    String profileId,
+    MultipartFile banner,
+  ) async {
+    final response = await postGroupFilesWithHttpInfo(
+      groupId,
+      profileId,
+      banner,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

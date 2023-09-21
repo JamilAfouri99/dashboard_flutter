@@ -10,9 +10,9 @@
 
 part of openapi.api;
 
-
 class APIHealthCheckApi {
-  APIHealthCheckApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+  APIHealthCheckApi([ApiClient? apiClient])
+      : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
@@ -29,7 +29,6 @@ class APIHealthCheckApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,

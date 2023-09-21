@@ -79,8 +79,10 @@ class PostUserDto {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PostUserDto[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PostUserDto[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PostUserDto[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PostUserDto[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -89,13 +91,13 @@ class PostUserDto {
         email: mapValueOfType<String>(json, r'email')!,
         firstName: mapValueOfType<String>(json, r'firstName')!,
         lastName: mapValueOfType<String>(json, r'lastName')!,
-        profile: json[r'profile'] == null ? null : PatchUserProfileDto.fromJson(json[r'profile']),
+        profile: PatchUserProfileDto.fromJson(json[r'profile']),
       );
     }
     return null;
   }
 
-  static List<PostUserDto>? listFromJson(
+  static List<PostUserDto> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -132,15 +134,13 @@ class PostUserDto {
   }) {
     final map = <String, List<PostUserDto>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = PostUserDto.listFromJson(
+        map[entry.key] = PostUserDto.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;

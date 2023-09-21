@@ -19,20 +19,21 @@ class DeleteUserFilesDto {
   bool avatar;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is DeleteUserFilesDto &&
-     other.avatar == avatar;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DeleteUserFilesDto && other.avatar == avatar;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (avatar.hashCode);
+      // ignore: unnecessary_parenthesis
+      (avatar.hashCode);
 
   @override
   String toString() => 'DeleteUserFilesDto[avatar=$avatar]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'avatar'] = this.avatar;
+    json[r'avatar'] = this.avatar;
     return json;
   }
 
@@ -48,8 +49,10 @@ class DeleteUserFilesDto {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "DeleteUserFilesDto[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "DeleteUserFilesDto[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "DeleteUserFilesDto[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "DeleteUserFilesDto[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -61,7 +64,10 @@ class DeleteUserFilesDto {
     return null;
   }
 
-  static List<DeleteUserFilesDto>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<DeleteUserFilesDto> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <DeleteUserFilesDto>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -89,15 +95,19 @@ class DeleteUserFilesDto {
   }
 
   // maps a json object with a list of DeleteUserFilesDto-objects as value to a dart map
-  static Map<String, List<DeleteUserFilesDto>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<DeleteUserFilesDto>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<DeleteUserFilesDto>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = DeleteUserFilesDto.listFromJson(entry.value, growable: growable,);
-        if (value != null) {
-          map[entry.key] = value;
-        }
+        map[entry.key] = DeleteUserFilesDto.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -108,4 +118,3 @@ class DeleteUserFilesDto {
     'avatar',
   };
 }
-

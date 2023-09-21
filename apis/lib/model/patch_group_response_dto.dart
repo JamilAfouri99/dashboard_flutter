@@ -112,16 +112,16 @@ class PatchGroupResponseDto {
       }());
 
       return PatchGroupResponseDto(
-        id: json[r'id'] == null ? null : mapValueOfType<String>(json, r'id'),
-        createdAt: json[r'createdAt'] == null ? null : mapDateTime(json, r'createdAt', ''),
-        updatedAt: json[r'updatedAt'] == null ? null : mapDateTime(json, r'updatedAt', ''),
-        name: json[r'name'] == null ? null : mapValueOfType<String>(json, r'name'),
+        id: mapValueOfType<String>(json, r'id'),
+        createdAt: mapDateTime(json, r'createdAt', ''),
+        updatedAt: mapDateTime(json, r'updatedAt', ''),
+        name: mapValueOfType<String>(json, r'name'),
       );
     }
     return null;
   }
 
-  static List<PatchGroupResponseDto>? listFromJson(
+  static List<PatchGroupResponseDto> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -158,15 +158,13 @@ class PatchGroupResponseDto {
   }) {
     final map = <String, List<PatchGroupResponseDto>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = PatchGroupResponseDto.listFromJson(
+        map[entry.key] = PatchGroupResponseDto.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;

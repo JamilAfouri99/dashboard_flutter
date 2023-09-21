@@ -29,6 +29,7 @@ part 'auth/http_bearer_auth.dart';
 
 part 'api/api_health_check_api.dart';
 part 'api/auth_api.dart';
+part 'api/contact_api.dart';
 part 'api/groups_api.dart';
 part 'api/users_api.dart';
 
@@ -48,13 +49,17 @@ part 'model/patch_user_dto.dart';
 part 'model/patch_user_profile_dto.dart';
 part 'model/patch_user_response_dto.dart';
 part 'model/phone_number.dart';
+part 'model/post_contact_form_dto.dart';
 part 'model/post_user_dto.dart';
+part 'model/public_group.dart';
+part 'model/public_group_profile.dart';
+part 'model/public_user.dart';
+part 'model/public_user_profile.dart';
 part 'model/signin_dto.dart';
 part 'model/signup_dto.dart';
 part 'model/unauthorized.dart';
 part 'model/user.dart';
 part 'model/user_profile.dart';
-
 
 const _delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};
 const _dateEpochMarker = 'epoch';

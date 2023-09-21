@@ -24,7 +24,9 @@ class Unauthorized {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Unauthorized && other.statusCode == statusCode && other.message == message;
+      other is Unauthorized &&
+          other.statusCode == statusCode &&
+          other.message == message;
 
   @override
   int get hashCode =>
@@ -53,8 +55,10 @@ class Unauthorized {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Unauthorized[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Unauthorized[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "Unauthorized[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "Unauthorized[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -67,7 +71,7 @@ class Unauthorized {
     return null;
   }
 
-  static List<Unauthorized>? listFromJson(
+  static List<Unauthorized> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -104,15 +108,13 @@ class Unauthorized {
   }) {
     final map = <String, List<Unauthorized>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = Unauthorized.listFromJson(
+        map[entry.key] = Unauthorized.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;

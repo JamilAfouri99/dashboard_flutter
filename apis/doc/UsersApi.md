@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**deleteUser**](UsersApi.md#deleteuser) | **DELETE** /users/{userId} | 
 [**deleteUserFiles**](UsersApi.md#deleteuserfiles) | **DELETE** /users/{userId}/files | 
 [**deleteUserProfileFiles**](UsersApi.md#deleteuserprofilefiles) | **DELETE** /users/{userId}/profile/{profileId}/files | 
+[**getPublicUser**](UsersApi.md#getpublicuser) | **GET** /users/{userId}/profile | 
 [**getUserById**](UsersApi.md#getuserbyid) | **GET** /users/{userId} | 
 [**getUsers**](UsersApi.md#getusers) | **GET** /users | 
 [**patchUser**](UsersApi.md#patchuser) | **PATCH** /users/{userId} | 
@@ -209,6 +210,47 @@ void (empty response body)
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getPublicUser**
+> PublicUser getPublicUser(userId)
+
+
+
+### Example
+```dart
+import 'package:qcarder_api/api.dart';
+
+final api_instance = UsersApi();
+final userId = xXx7xXx7xXx7xXx7; // String | 
+
+try {
+    final result = api_instance.getPublicUser(userId);
+    print(result);
+} catch (e) {
+    print('Exception when calling UsersApi->getPublicUser: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+
+### Return type
+
+[**PublicUser**](PublicUser.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -17,13 +17,13 @@ class UserProfile {
     required this.createdAt,
     required this.updatedAt,
     required this.userId,
-    this.displayName,
-    this.banner,
-    this.title,
-    this.company,
-    this.birthday,
-    this.address,
-    this.notes,
+    required this.displayName,
+    required this.banner,
+    required this.title,
+    required this.company,
+    required this.birthday,
+    required this.address,
+    required this.notes,
     this.emails = const [],
     this.phoneNumbers = const [],
     this.links = const [],
@@ -157,8 +157,10 @@ class UserProfile {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "UserProfile[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "UserProfile[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "UserProfile[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "UserProfile[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -168,23 +170,22 @@ class UserProfile {
         createdAt: mapDateTime(json, r'createdAt', '')!,
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
         userId: mapValueOfType<String>(json, r'userId')!,
-        displayName:
-            json[r'displayName'] == null ? null : mapValueOfType<String>(json, r'displayName'),
-        banner: json[r'banner'] == null ? null : mapValueOfType<String>(json, r'banner'),
-        title: json[r'title'] == null ? null : mapValueOfType<String>(json, r'title'),
-        company: json[r'company'] == null ? null : mapValueOfType<String>(json, r'company'),
-        birthday: json[r'birthday'] == null ? null : mapDateTime(json, r'birthday', ''),
-        address: json[r'address'] == null ? null : mapValueOfType<String>(json, r'address'),
-        notes: json[r'notes'] == null ? null : mapValueOfType<String>(json, r'notes'),
-        emails: Email.listFromJson(json[r'emails'])!,
-        phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers'])!,
-        links: Link.listFromJson(json[r'links'])!,
+        displayName: mapValueOfType<String>(json, r'displayName'),
+        banner: mapValueOfType<String>(json, r'banner'),
+        title: mapValueOfType<String>(json, r'title'),
+        company: mapValueOfType<String>(json, r'company'),
+        birthday: mapDateTime(json, r'birthday', ''),
+        address: mapValueOfType<String>(json, r'address'),
+        notes: mapValueOfType<String>(json, r'notes'),
+        emails: Email.listFromJson(json[r'emails']),
+        phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers']),
+        links: Link.listFromJson(json[r'links']),
       );
     }
     return null;
   }
 
-  static List<UserProfile>? listFromJson(
+  static List<UserProfile> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -221,15 +222,13 @@ class UserProfile {
   }) {
     final map = <String, List<UserProfile>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = UserProfile.listFromJson(
+        map[entry.key] = UserProfile.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;
@@ -241,6 +240,13 @@ class UserProfile {
     'createdAt',
     'updatedAt',
     'userId',
+    'displayName',
+    'banner',
+    'title',
+    'company',
+    'birthday',
+    'address',
+    'notes',
     'emails',
     'phoneNumbers',
     'links',

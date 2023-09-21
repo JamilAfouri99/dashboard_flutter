@@ -49,7 +49,7 @@ app.*.map.json
 .env.production
 
 # Api Docs
-api_docs.yaml
+# api_docs.yaml
 
 # Personal
 todo.md

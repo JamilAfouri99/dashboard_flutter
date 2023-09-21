@@ -33,7 +33,7 @@ dependencies:
   firebase_dynamic_links: ^5.3.4
 
   # open api
-  openapi_generator_annotations: ^4.10.0
+  openapi_generator_annotations: ^4.13.1
   qcarder_api:
     path: apis
 
@@ -43,8 +43,8 @@ dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
 
   # open api
-  openapi_generator: ^4.10.0
-  build_runner: ^2.4.1
+  openapi_generator: ^4.13.1
+  build_runner: ^2.4.6
   dart_style: ^2.3.1
   build_test: ^2.1.7
   flutter_lints: ^2.0.0

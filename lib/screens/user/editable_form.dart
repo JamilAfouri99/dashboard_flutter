@@ -89,7 +89,7 @@ class _EditableFormState extends State<EditableForm> {
       }
     } else {
       _linkControllers.add(TextEditingController());
-      _links.add(Link(link: _linkControllers[0].text, label: ''));
+      _links.add(Link(link: _linkControllers[0].text, label: stringToEnumLink('link')));
     }
     // email
     if (widget.user.profile.emails.isNotEmpty) {
@@ -671,7 +671,7 @@ class _EditableFormState extends State<EditableForm> {
           child: InkWell(
             onTap: () {
               _linkControllers.add(TextEditingController());
-              _links.add(Link(link: '', label: _linkControllers.last.text));
+              _links.add(Link(link: '', label: stringToEnumLink(_linkControllers.last.text)));
               setState(() {});
             },
             child: Row(
@@ -711,7 +711,7 @@ class _EditableFormState extends State<EditableForm> {
               int index = entry.key;
               Link link = entry.value;
               link.link = _linkControllers[index].text;
-              link.label = link.label.isNotEmpty ? link.label : 'link';
+              link.label = link.label.toString().isNotEmpty ? link.label : stringToEnumLink('link');
               return link;
             }).toList(),
     );
@@ -735,7 +735,7 @@ class _EditableFormState extends State<EditableForm> {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: SvgPicture.asset(
-                    linkPathByLabel(Links.values[index].toString().split('.')[1]),
+                    linkPathByLabel(stringToEnumLink(Links.values[index].toString().split('.')[1])),
                     fit: BoxFit.cover,
                     color: AppColors.primary,
                   ),
@@ -743,7 +743,7 @@ class _EditableFormState extends State<EditableForm> {
               ),
               title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _links[linkIndex].label = Links.values[index].toString().split('.')[1];
+                _links[linkIndex].label = stringToEnumLink(Links.values[index].toString().split('.')[1]);
                 setState(() {});
                 Navigator.of(context).pop();
               },

@@ -17,7 +17,7 @@ class GroupProfile {
     required this.createdAt,
     required this.updatedAt,
     required this.groupId,
-    this.banner,
+    required this.banner,
   });
 
   String id;
@@ -79,8 +79,10 @@ class GroupProfile {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "GroupProfile[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "GroupProfile[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "GroupProfile[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "GroupProfile[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -90,13 +92,13 @@ class GroupProfile {
         createdAt: mapDateTime(json, r'createdAt', '')!,
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
         groupId: mapValueOfType<String>(json, r'groupId')!,
-        banner: json[r'banner'] == null ? null : mapValueOfType<String>(json, r'banner'),
+        banner: mapValueOfType<String>(json, r'banner'),
       );
     }
     return null;
   }
 
-  static List<GroupProfile>? listFromJson(
+  static List<GroupProfile> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -133,15 +135,13 @@ class GroupProfile {
   }) {
     final map = <String, List<GroupProfile>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = GroupProfile.listFromJson(
+        map[entry.key] = GroupProfile.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;
@@ -153,5 +153,6 @@ class GroupProfile {
     'createdAt',
     'updatedAt',
     'groupId',
+    'banner',
   };
 }

@@ -19,13 +19,13 @@ class PatchGroupDto {
   String? name;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PatchGroupDto &&
-     other.name == name;
+  bool operator ==(Object other) =>
+      identical(this, other) || other is PatchGroupDto && other.name == name;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (name == null ? 0 : name!.hashCode);
+      // ignore: unnecessary_parenthesis
+      (name == null ? 0 : name!.hashCode);
 
   @override
   String toString() => 'PatchGroupDto[name=$name]';
@@ -52,8 +52,10 @@ class PatchGroupDto {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PatchGroupDto[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PatchGroupDto[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PatchGroupDto[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PatchGroupDto[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -65,7 +67,10 @@ class PatchGroupDto {
     return null;
   }
 
-  static List<PatchGroupDto>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PatchGroupDto> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PatchGroupDto>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -93,22 +98,24 @@ class PatchGroupDto {
   }
 
   // maps a json object with a list of PatchGroupDto-objects as value to a dart map
-  static Map<String, List<PatchGroupDto>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PatchGroupDto>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PatchGroupDto>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = PatchGroupDto.listFromJson(entry.value, growable: growable,);
-        if (value != null) {
-          map[entry.key] = value;
-        }
+        map[entry.key] = PatchGroupDto.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
-  };
+  static const requiredKeys = <String>{};
 }
-

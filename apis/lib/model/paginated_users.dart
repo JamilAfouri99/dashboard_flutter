@@ -22,23 +22,22 @@ class PaginatedUsers {
   PaginationMetaData meta;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PaginatedUsers &&
-     other.data == data &&
-     other.meta == meta;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PaginatedUsers && other.data == data && other.meta == meta;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (data.hashCode) +
-    (meta.hashCode);
+      // ignore: unnecessary_parenthesis
+      (data.hashCode) + (meta.hashCode);
 
   @override
   String toString() => 'PaginatedUsers[data=$data, meta=$meta]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'data'] = this.data;
-      json[r'meta'] = this.meta;
+    json[r'data'] = this.data;
+    json[r'meta'] = this.meta;
     return json;
   }
 
@@ -54,21 +53,26 @@ class PaginatedUsers {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PaginatedUsers[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PaginatedUsers[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PaginatedUsers[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PaginatedUsers[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return PaginatedUsers(
-        data: User.listFromJson(json[r'data'])!,
+        data: User.listFromJson(json[r'data']),
         meta: PaginationMetaData.fromJson(json[r'meta'])!,
       );
     }
     return null;
   }
 
-  static List<PaginatedUsers>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<PaginatedUsers> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <PaginatedUsers>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -96,15 +100,19 @@ class PaginatedUsers {
   }
 
   // maps a json object with a list of PaginatedUsers-objects as value to a dart map
-  static Map<String, List<PaginatedUsers>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<PaginatedUsers>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<PaginatedUsers>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = PaginatedUsers.listFromJson(entry.value, growable: growable,);
-        if (value != null) {
-          map[entry.key] = value;
-        }
+        map[entry.key] = PaginatedUsers.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -116,4 +124,3 @@ class PaginatedUsers {
     'meta',
   };
 }
-

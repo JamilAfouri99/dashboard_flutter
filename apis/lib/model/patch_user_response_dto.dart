@@ -190,24 +190,22 @@ class PatchUserResponseDto {
       }());
 
       return PatchUserResponseDto(
-        id: json[r'id'] == null ? null : mapValueOfType<String>(json, r'id'),
-        createdAt: json[r'createdAt'] == null ? null : mapDateTime(json, r'createdAt', ''),
-        updatedAt: json[r'updatedAt'] == null ? null : mapDateTime(json, r'updatedAt', ''),
-        email: json[r'email'] == null ? null : mapValueOfType<String>(json, r'email'),
-        firstName: json[r'firstName'] == null ? null : mapValueOfType<String>(json, r'firstName'),
-        lastName: json[r'lastName'] == null ? null : mapValueOfType<String>(json, r'lastName'),
-        avatar: json[r'avatar'] == null ? null : mapValueOfType<String>(json, r'avatar'),
-        role: json[r'role'] == null ? null : PatchUserResponseDtoRoleEnum.fromJson(json[r'role']),
-        status: json[r'status'] == null
-            ? null
-            : PatchUserResponseDtoStatusEnum.fromJson(json[r'status']),
-        groupId: json[r'groupId'] == null ? null : json[r'groupId'],
+        id: mapValueOfType<String>(json, r'id'),
+        createdAt: mapDateTime(json, r'createdAt', ''),
+        updatedAt: mapDateTime(json, r'updatedAt', ''),
+        email: mapValueOfType<String>(json, r'email'),
+        firstName: mapValueOfType<String>(json, r'firstName'),
+        lastName: mapValueOfType<String>(json, r'lastName'),
+        avatar: mapValueOfType<String>(json, r'avatar'),
+        role: PatchUserResponseDtoRoleEnum.fromJson(json[r'role']),
+        status: PatchUserResponseDtoStatusEnum.fromJson(json[r'status']),
+        groupId: mapValueOfType<String>(json, r'groupId'),
       );
     }
     return null;
   }
 
-  static List<PatchUserResponseDto>? listFromJson(
+  static List<PatchUserResponseDto> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -244,15 +242,13 @@ class PatchUserResponseDto {
   }) {
     final map = <String, List<PatchUserResponseDto>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = PatchUserResponseDto.listFromJson(
+        map[entry.key] = PatchUserResponseDto.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;
@@ -290,7 +286,7 @@ class PatchUserResponseDtoRoleEnum {
   static PatchUserResponseDtoRoleEnum? fromJson(dynamic value) =>
       PatchUserResponseDtoRoleEnumTypeTransformer().decode(value);
 
-  static List<PatchUserResponseDtoRoleEnum>? listFromJson(
+  static List<PatchUserResponseDtoRoleEnum> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -373,7 +369,7 @@ class PatchUserResponseDtoStatusEnum {
   static PatchUserResponseDtoStatusEnum? fromJson(dynamic value) =>
       PatchUserResponseDtoStatusEnumTypeTransformer().decode(value);
 
-  static List<PatchUserResponseDtoStatusEnum>? listFromJson(
+  static List<PatchUserResponseDtoStatusEnum> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -408,7 +404,8 @@ class PatchUserResponseDtoStatusEnumTypeTransformer {
   ///
   /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
   /// and users are still using an old app with the old code.
-  PatchUserResponseDtoStatusEnum? decode(dynamic data, {bool allowNull = true}) {
+  PatchUserResponseDtoStatusEnum? decode(dynamic data,
+      {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
         case r'ACTIVE':

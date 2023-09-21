@@ -10,7 +10,6 @@
 
 part of openapi.api;
 
-
 class AuthApi {
   AuthApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
@@ -29,7 +28,6 @@ class AuthApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -53,7 +51,9 @@ class AuthApi {
   /// Parameters:
   ///
   /// * [SigninDto] signinDto (required):
-  Future<Response> signinWithHttpInfo(SigninDto signinDto,) async {
+  Future<Response> signinWithHttpInfo(
+    SigninDto signinDto,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/auth/signin';
 
@@ -65,7 +65,6 @@ class AuthApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -81,17 +80,24 @@ class AuthApi {
   /// Parameters:
   ///
   /// * [SigninDto] signinDto (required):
-  Future<AuthUser?> signin(SigninDto signinDto,) async {
-    final response = await signinWithHttpInfo(signinDto,);
+  Future<AuthUser?> signin(
+    SigninDto signinDto,
+  ) async {
+    final response = await signinWithHttpInfo(
+      signinDto,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'AuthUser',) as AuthUser;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'AuthUser',
+      ) as AuthUser;
     }
     return null;
   }
@@ -109,7 +115,6 @@ class AuthApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -130,9 +135,12 @@ class AuthApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'AuthUser',) as AuthUser;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'AuthUser',
+      ) as AuthUser;
     }
     return null;
   }
@@ -150,7 +158,6 @@ class AuthApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -171,9 +178,12 @@ class AuthApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'AuthUser',) as AuthUser;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'AuthUser',
+      ) as AuthUser;
     }
     return null;
   }
@@ -182,7 +192,9 @@ class AuthApi {
   /// Parameters:
   ///
   /// * [SignupDto] signupDto (required):
-  Future<Response> signupWithHttpInfo(SignupDto signupDto,) async {
+  Future<Response> signupWithHttpInfo(
+    SignupDto signupDto,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/auth/signup';
 
@@ -194,7 +206,6 @@ class AuthApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -210,17 +221,24 @@ class AuthApi {
   /// Parameters:
   ///
   /// * [SignupDto] signupDto (required):
-  Future<AuthUser?> signup(SignupDto signupDto,) async {
-    final response = await signupWithHttpInfo(signupDto,);
+  Future<AuthUser?> signup(
+    SignupDto signupDto,
+  ) async {
+    final response = await signupWithHttpInfo(
+      signupDto,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'AuthUser',) as AuthUser;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'AuthUser',
+      ) as AuthUser;
     }
     return null;
   }

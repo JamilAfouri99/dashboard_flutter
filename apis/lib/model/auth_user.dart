@@ -19,10 +19,10 @@ class AuthUser {
     required this.email,
     required this.firstName,
     required this.lastName,
-    this.avatar,
+    required this.avatar,
     required this.role,
     required this.status,
-    this.groupId,
+    required this.groupId,
     required this.accessToken,
     required this.refreshToken,
   });
@@ -125,8 +125,10 @@ class AuthUser {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "AuthUser[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "AuthUser[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "AuthUser[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "AuthUser[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -138,10 +140,10 @@ class AuthUser {
         email: mapValueOfType<String>(json, r'email')!,
         firstName: mapValueOfType<String>(json, r'firstName')!,
         lastName: mapValueOfType<String>(json, r'lastName')!,
-        avatar: json[r'avatar'] == null ? null : mapValueOfType<String>(json, r'avatar'),
+        avatar: mapValueOfType<String>(json, r'avatar'),
         role: AuthUserRoleEnum.fromJson(json[r'role'])!,
         status: AuthUserStatusEnum.fromJson(json[r'status'])!,
-        groupId: json[r'groupId'] == null ? null : json[r'groupId'],
+        groupId: mapValueOfType<String>(json, r'groupId'),
         accessToken: mapValueOfType<String>(json, r'access_token')!,
         refreshToken: mapValueOfType<String>(json, r'refresh_token')!,
       );
@@ -149,7 +151,7 @@ class AuthUser {
     return null;
   }
 
-  static List<AuthUser>? listFromJson(
+  static List<AuthUser> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -186,15 +188,13 @@ class AuthUser {
   }) {
     final map = <String, List<AuthUser>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = AuthUser.listFromJson(
+        map[entry.key] = AuthUser.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;
@@ -208,8 +208,10 @@ class AuthUser {
     'email',
     'firstName',
     'lastName',
+    'avatar',
     'role',
     'status',
+    'groupId',
     'access_token',
     'refresh_token',
   };
@@ -243,7 +245,7 @@ class AuthUserRoleEnum {
   static AuthUserRoleEnum? fromJson(dynamic value) =>
       AuthUserRoleEnumTypeTransformer().decode(value);
 
-  static List<AuthUserRoleEnum>? listFromJson(
+  static List<AuthUserRoleEnum> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -326,7 +328,7 @@ class AuthUserStatusEnum {
   static AuthUserStatusEnum? fromJson(dynamic value) =>
       AuthUserStatusEnumTypeTransformer().decode(value);
 
-  static List<AuthUserStatusEnum>? listFromJson(
+  static List<AuthUserStatusEnum> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {

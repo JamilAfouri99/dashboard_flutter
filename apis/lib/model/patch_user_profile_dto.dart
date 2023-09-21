@@ -132,22 +132,21 @@ class PatchUserProfileDto {
       }());
 
       return PatchUserProfileDto(
-        displayName:
-            json[r'displayName'] == null ? null : mapValueOfType<String>(json, r'displayName'),
-        title: json[r'title'] == null ? null : mapValueOfType<String>(json, r'title'),
-        company: json[r'company'] == null ? null : mapValueOfType<String>(json, r'company'),
-        birthday: json[r'birthday'] == null ? null : mapDateTime(json, r'birthday', ''),
-        address: json[r'address'] == null ? null : mapValueOfType<String>(json, r'address'),
-        notes: json[r'notes'] == null ? null : mapValueOfType<String>(json, r'notes'),
-        emails: Email.listFromJson(json[r'emails']) ?? const [],
-        phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers']) ?? const [],
-        links: Link.listFromJson(json[r'links']) ?? const [],
+        displayName: mapValueOfType<String>(json, r'displayName'),
+        title: mapValueOfType<String>(json, r'title'),
+        company: mapValueOfType<String>(json, r'company'),
+        birthday: mapDateTime(json, r'birthday', ''),
+        address: mapValueOfType<String>(json, r'address'),
+        notes: mapValueOfType<String>(json, r'notes'),
+        emails: Email.listFromJson(json[r'emails']),
+        phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers']),
+        links: Link.listFromJson(json[r'links']),
       );
     }
     return null;
   }
 
-  static List<PatchUserProfileDto>? listFromJson(
+  static List<PatchUserProfileDto> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -184,15 +183,13 @@ class PatchUserProfileDto {
   }) {
     final map = <String, List<PatchUserProfileDto>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = PatchUserProfileDto.listFromJson(
+        map[entry.key] = PatchUserProfileDto.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;

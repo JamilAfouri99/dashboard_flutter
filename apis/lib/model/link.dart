@@ -19,26 +19,25 @@ class Link {
 
   String link;
 
-  String label;
+  LinkLabelEnum label;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is Link &&
-     other.link == link &&
-     other.label == label;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Link && other.link == link && other.label == label;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (link.hashCode) +
-    (label.hashCode);
+      // ignore: unnecessary_parenthesis
+      (link.hashCode) + (label.hashCode);
 
   @override
   String toString() => 'Link[link=$link, label=$label]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'link'] = this.link;
-      json[r'label'] = this.label;
+    json[r'link'] = this.link;
+    json[r'label'] = this.label;
     return json;
   }
 
@@ -54,21 +53,26 @@ class Link {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Link[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Link[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "Link[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "Link[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return Link(
         link: mapValueOfType<String>(json, r'link')!,
-        label: mapValueOfType<String>(json, r'label')!,
+        label: LinkLabelEnum.fromJson(json[r'label'])!,
       );
     }
     return null;
   }
 
-  static List<Link>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<Link> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <Link>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -96,15 +100,19 @@ class Link {
   }
 
   // maps a json object with a list of Link-objects as value to a dart map
-  static Map<String, List<Link>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<Link>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<Link>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = Link.listFromJson(entry.value, growable: growable,);
-        if (value != null) {
-          map[entry.key] = value;
-        }
+        map[entry.key] = Link.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -117,3 +125,121 @@ class Link {
   };
 }
 
+class LinkLabelEnum {
+  /// Instantiate a new enum with the provided [value].
+  const LinkLabelEnum._(this.value);
+
+  /// The underlying value of this enum member.
+  final String value;
+
+  @override
+  String toString() => value;
+
+  String toJson() => value;
+
+  static const facebook = LinkLabelEnum._(r'Facebook');
+  static const gitHub = LinkLabelEnum._(r'GitHub');
+  static const gmail = LinkLabelEnum._(r'Gmail');
+  static const instagram = LinkLabelEnum._(r'Instagram');
+  static const link = LinkLabelEnum._(r'Link');
+  static const linkedIn = LinkLabelEnum._(r'LinkedIn');
+  static const outLook = LinkLabelEnum._(r'OutLook');
+  static const qCarder = LinkLabelEnum._(r'QCarder');
+  static const skype = LinkLabelEnum._(r'Skype');
+  static const slack = LinkLabelEnum._(r'Slack');
+  static const whatsApp = LinkLabelEnum._(r'WhatsApp');
+  static const X = LinkLabelEnum._(r'X');
+
+  /// List of all possible values in this [enum][LinkLabelEnum].
+  static const values = <LinkLabelEnum>[
+    facebook,
+    gitHub,
+    gmail,
+    instagram,
+    link,
+    linkedIn,
+    outLook,
+    qCarder,
+    skype,
+    slack,
+    whatsApp,
+    X,
+  ];
+
+  static LinkLabelEnum? fromJson(dynamic value) =>
+      LinkLabelEnumTypeTransformer().decode(value);
+
+  static List<LinkLabelEnum> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
+    final result = <LinkLabelEnum>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = LinkLabelEnum.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
+}
+
+/// Transformation class that can [encode] an instance of [LinkLabelEnum] to String,
+/// and [decode] dynamic data back to [LinkLabelEnum].
+class LinkLabelEnumTypeTransformer {
+  factory LinkLabelEnumTypeTransformer() =>
+      _instance ??= const LinkLabelEnumTypeTransformer._();
+
+  const LinkLabelEnumTypeTransformer._();
+
+  String encode(LinkLabelEnum data) => data.value;
+
+  /// Decodes a [dynamic value][data] to a LinkLabelEnum.
+  ///
+  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
+  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
+  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
+  ///
+  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
+  /// and users are still using an old app with the old code.
+  LinkLabelEnum? decode(dynamic data, {bool allowNull = true}) {
+    if (data != null) {
+      switch (data) {
+        case r'Facebook':
+          return LinkLabelEnum.facebook;
+        case r'GitHub':
+          return LinkLabelEnum.gitHub;
+        case r'Gmail':
+          return LinkLabelEnum.gmail;
+        case r'Instagram':
+          return LinkLabelEnum.instagram;
+        case r'Link':
+          return LinkLabelEnum.link;
+        case r'LinkedIn':
+          return LinkLabelEnum.linkedIn;
+        case r'OutLook':
+          return LinkLabelEnum.outLook;
+        case r'QCarder':
+          return LinkLabelEnum.qCarder;
+        case r'Skype':
+          return LinkLabelEnum.skype;
+        case r'Slack':
+          return LinkLabelEnum.slack;
+        case r'WhatsApp':
+          return LinkLabelEnum.whatsApp;
+        case r'X':
+          return LinkLabelEnum.X;
+        default:
+          if (!allowNull) {
+            throw ArgumentError('Unknown enum value to decode: $data');
+          }
+      }
+    }
+    return null;
+  }
+
+  /// Singleton [LinkLabelEnumTypeTransformer] instance.
+  static LinkLabelEnumTypeTransformer? _instance;
+}

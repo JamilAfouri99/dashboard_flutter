@@ -22,23 +22,22 @@ class Email {
   String label;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is Email &&
-     other.email == email &&
-     other.label == label;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Email && other.email == email && other.label == label;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (email.hashCode) +
-    (label.hashCode);
+      // ignore: unnecessary_parenthesis
+      (email.hashCode) + (label.hashCode);
 
   @override
   String toString() => 'Email[email=$email, label=$label]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'email'] = this.email;
-      json[r'label'] = this.label;
+    json[r'email'] = this.email;
+    json[r'label'] = this.label;
     return json;
   }
 
@@ -54,8 +53,10 @@ class Email {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Email[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Email[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "Email[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "Email[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -68,7 +69,10 @@ class Email {
     return null;
   }
 
-  static List<Email>? listFromJson(dynamic json, {bool growable = false,}) {
+  static List<Email> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <Email>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -96,15 +100,19 @@ class Email {
   }
 
   // maps a json object with a list of Email-objects as value to a dart map
-  static Map<String, List<Email>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<Email>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<Email>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = Email.listFromJson(entry.value, growable: growable,);
-        if (value != null) {
-          map[entry.key] = value;
-        }
+        map[entry.key] = Email.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -116,4 +124,3 @@ class Email {
     'label',
   };
 }
-

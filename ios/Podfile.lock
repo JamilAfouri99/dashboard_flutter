@@ -4,10 +4,10 @@ PODS:
   - Firebase/DynamicLinks (10.12.0):
     - Firebase/CoreOnly
     - FirebaseDynamicLinks (~> 10.12.0)
-  - firebase_core (2.15.0):
+  - firebase_core (2.15.1):
     - Firebase/CoreOnly (= 10.12.0)
     - Flutter
-  - firebase_dynamic_links (5.3.4):
+  - firebase_dynamic_links (5.3.5):
     - Firebase/DynamicLinks (= 10.12.0)
     - firebase_core
     - Flutter
@@ -88,8 +88,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Firebase: 07150e75d142fb9399f6777fa56a187b17f833a0
-  firebase_core: e477125798fc37cd4ab43ca6a8536bf7e0929c00
-  firebase_dynamic_links: d85cf455646322fd101c8a5a5942c3d47132fe80
+  firebase_core: 4a3246a02f828a01c74a2c26427037786d90f17f
+  firebase_dynamic_links: cc3fd36190c7b58c27353915271d2c0d031ee11b
   FirebaseCore: f86a1394906b97ac445ae49c92552a9425831bed
   FirebaseCoreInternal: 950500ad8a08963657f6d8c67b579740c06d6aa1
   FirebaseDynamicLinks: 1a387da899779e5ef34f4d6f8bdba882f90d0e67
@@ -100,7 +100,7 @@ SPEC CHECKSUMS:
   nfc_manager: d7da7cb781f7744b94df5fe9dbca904ac4a0939e
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
-  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
 

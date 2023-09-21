@@ -16,7 +16,7 @@ class Group {
     required this.id,
     required this.createdAt,
     required this.updatedAt,
-    this.name,
+    required this.name,
     required this.profile,
   });
 
@@ -79,8 +79,10 @@ class Group {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Group[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Group[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "Group[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "Group[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -89,14 +91,14 @@ class Group {
         id: mapValueOfType<String>(json, r'id')!,
         createdAt: mapDateTime(json, r'createdAt', '')!,
         updatedAt: mapDateTime(json, r'updatedAt', '')!,
-        name: json[r'name'] == null ? null : mapValueOfType<String>(json, r'name'),
+        name: mapValueOfType<String>(json, r'name'),
         profile: GroupProfile.fromJson(json[r'profile'])!,
       );
     }
     return null;
   }
 
-  static List<Group>? listFromJson(
+  static List<Group> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -133,15 +135,13 @@ class Group {
   }) {
     final map = <String, List<Group>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = Group.listFromJson(
+        map[entry.key] = Group.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;
@@ -152,6 +152,7 @@ class Group {
     'id',
     'createdAt',
     'updatedAt',
+    'name',
     'profile',
   };
 }

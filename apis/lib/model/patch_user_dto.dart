@@ -113,24 +113,26 @@ class PatchUserDto {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PatchUserDto[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PatchUserDto[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PatchUserDto[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PatchUserDto[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return PatchUserDto(
-        email: json[r'email'] == null ? null : mapValueOfType<String>(json, r'email'),
-        firstName: json[r'firstName'] == null ? null : mapValueOfType<String>(json, r'firstName'),
-        lastName: json[r'lastName'] == null ? null : mapValueOfType<String>(json, r'lastName'),
-        role: json[r'role'] == null ? null : PatchUserDtoRoleEnum.fromJson(json[r'role']),
-        status: json[r'status'] == null ? null : PatchUserDtoStatusEnum.fromJson(json[r'status']),
+        email: mapValueOfType<String>(json, r'email'),
+        firstName: mapValueOfType<String>(json, r'firstName'),
+        lastName: mapValueOfType<String>(json, r'lastName'),
+        role: PatchUserDtoRoleEnum.fromJson(json[r'role']),
+        status: PatchUserDtoStatusEnum.fromJson(json[r'status']),
       );
     }
     return null;
   }
 
-  static List<PatchUserDto>? listFromJson(
+  static List<PatchUserDto> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -167,15 +169,13 @@ class PatchUserDto {
   }) {
     final map = <String, List<PatchUserDto>>{};
     if (json is Map && json.isNotEmpty) {
-      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      // ignore: parameter_assignments
+      json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        final value = PatchUserDto.listFromJson(
+        map[entry.key] = PatchUserDto.listFromJson(
           entry.value,
           growable: growable,
         );
-        if (value != null) {
-          map[entry.key] = value;
-        }
       }
     }
     return map;
@@ -213,7 +213,7 @@ class PatchUserDtoRoleEnum {
   static PatchUserDtoRoleEnum? fromJson(dynamic value) =>
       PatchUserDtoRoleEnumTypeTransformer().decode(value);
 
-  static List<PatchUserDtoRoleEnum>? listFromJson(
+  static List<PatchUserDtoRoleEnum> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
@@ -296,7 +296,7 @@ class PatchUserDtoStatusEnum {
   static PatchUserDtoStatusEnum? fromJson(dynamic value) =>
       PatchUserDtoStatusEnumTypeTransformer().decode(value);
 
-  static List<PatchUserDtoStatusEnum>? listFromJson(
+  static List<PatchUserDtoStatusEnum> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
