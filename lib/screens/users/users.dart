@@ -65,6 +65,7 @@ class UsersScreen extends StatelessWidget {
                             fontSize: 16,
                           ),
                         ),
+                        cursorColor: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     const Spacer(),
@@ -104,6 +105,7 @@ class UsersScreen extends StatelessWidget {
                     );
                   } else if (state is UsersLoaded) {
                     return RefreshIndicator(
+                      color: Theme.of(context).colorScheme.onSurface,
                       onRefresh: () => Future.sync(
                         () => context.read<UsersCubit>().pagingController.refresh(),
                       ),
@@ -147,7 +149,7 @@ Widget _user(User user, BuildContext context) {
               imageUrl: user.avatar ?? '',
               fit: BoxFit.cover,
               placeholder: (context, url) => CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               errorWidget: (context, url, error) => const Icon(
                 Icons.error,
@@ -174,7 +176,7 @@ Widget _user(User user, BuildContext context) {
     trailing: IconButton(
       icon: Icon(
         Icons.remove_red_eye_outlined,
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
       onPressed: () {
         Uri uri = Uri.parse('https://qcarder.com/users/${user.id}');
@@ -200,14 +202,14 @@ _noMoreItems(BuildContext context) {
         children: [
           Text(
             'QCarder © 2023',
-            style: TextStyle(color: AppColors.grey.withOpacity(0.8)),
+            style: TextStyle(color: Theme.of(context).colorScheme.shadow.withOpacity(0.8)),
           ),
           Text(
             ' | ',
-            style: TextStyle(color: AppColors.grey.withOpacity(0.8)),
+            style: TextStyle(color: Theme.of(context).colorScheme.shadow.withOpacity(0.8)),
           ),
           AppVersion(
-            color: AppColors.grey.withOpacity(0.8),
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.8),
           )
         ],
       ),
@@ -217,7 +219,7 @@ _noMoreItems(BuildContext context) {
 
 Widget _usersShimmer(BuildContext context) {
   return Shimmer(
-    linearGradient: shimmerGradient,
+    linearGradient: shimmerGradient(context),
     child: ShimmerLoading(
       isLoading: true,
       child: SingleChildScrollView(
@@ -225,13 +227,13 @@ Widget _usersShimmer(BuildContext context) {
           children: List.generate(
             10,
             (index) => ListTile(
-              leading: const CircleAvatar(
+              leading: CircleAvatar(
                 radius: 30,
-                backgroundColor: Colors.grey,
+                backgroundColor: Theme.of(context).colorScheme.inverseSurface,
               ),
               title: Container(
                 height: 10,
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.inverseSurface,
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +243,7 @@ Widget _usersShimmer(BuildContext context) {
                   ),
                   Container(
                     height: 10,
-                    color: Colors.grey,
+                    color: Theme.of(context).colorScheme.inverseSurface,
                   ),
                   Container(
                     height: 10,
@@ -249,7 +251,7 @@ Widget _usersShimmer(BuildContext context) {
                   Container(
                     height: 10,
                     width: MediaQuery.of(context).size.width * 0.2,
-                    color: Colors.grey,
+                    color: Theme.of(context).colorScheme.inverseSurface,
                   ),
                 ],
               ),
@@ -263,7 +265,7 @@ Widget _usersShimmer(BuildContext context) {
 }
 
 FloatingActionButton floatingActionButton(BuildContext context) => FloatingActionButton(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: AppColors.primary,
       onPressed: () => RouteManager.navigateWithData(
         context,
         () => const UserScreen(),

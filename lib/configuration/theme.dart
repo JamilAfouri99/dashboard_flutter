@@ -22,7 +22,7 @@ class AppColors {
   static const Color dark = Colors.black;
   static const Color noColor = Colors.transparent;
   static const Color grey = Color(0xFF515966);
-  static const Color lightGrey = Color(0xFF94A3B8);
+  static const Color lightGrey = Color.fromARGB(255, 231, 235, 241);
   static const Color errorField = Color(0xFFFAEDEF);
   static const Color stagingColor = Color(0xFFFAE9FF);
   static const Color paymentExpandedWidget = Color(0xFFF8FAFB);
@@ -84,8 +84,9 @@ final lightTheme = ThemeData(
   colorScheme: const ColorScheme(
     brightness: Brightness.light,
     primary: AppColors.primary,
-    onPrimary: AppColors.light,
-    secondary: AppColors.secondary,
+    onPrimary: AppColors.darkPrimary,
+    inversePrimary: AppColors.secondary,
+    secondary: AppColors.darkPrimary,
     onSecondary: AppColors.light,
     shadow: AppColors.grey,
     background: AppColors.light,
@@ -94,6 +95,7 @@ final lightTheme = ThemeData(
     onSurface: AppColors.primary,
     error: AppColors.onError,
     onError: AppColors.light,
+    inverseSurface: AppColors.grey,
   ).copyWith(background: AppColors.light),
 );
 
@@ -149,7 +151,7 @@ final darkTheme = ThemeData(
     backgroundColor: AppColors.darkPrimary,
     elevation: 2,
     shadowColor: Colors.white,
-    iconTheme: IconThemeData(color: AppColors.darkPrimary),
+    iconTheme: IconThemeData(color: AppColors.primary),
   ),
   indicatorColor: AppColors.primary,
   tabBarTheme: const TabBarTheme(labelColor: AppColors.primary),
@@ -179,7 +181,7 @@ final darkTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       shadowColor: Colors.transparent,
-      backgroundColor: AppColors.darkPrimary,
+      backgroundColor: AppColors.primary,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
     ),
   ),
@@ -191,20 +193,21 @@ final darkTheme = ThemeData(
     ),
   ),
   iconTheme: const IconThemeData(color: AppColors.primary),
-  colorScheme: const ColorScheme(
-    brightness: Brightness.dark,
-    primary: AppColors.darkPrimary,
-    onPrimary: AppColors.light,
-    secondary: AppColors.primary,
-    shadow: AppColors.lightGrey,
-    onSecondary: AppColors.light,
-    background: AppColors.darkPrimary,
-    onBackground: AppColors.dark,
-    surface: AppColors.light,
-    onSurface: AppColors.primary,
-    error: AppColors.onError,
-    onError: AppColors.light,
-  ).copyWith(
+  colorScheme: ColorScheme(
+          brightness: Brightness.dark,
+          primary: AppColors.darkPrimary,
+          onPrimary: AppColors.light,
+          secondary: AppColors.primary,
+          shadow: AppColors.lightGrey,
+          onSecondary: AppColors.light,
+          background: AppColors.darkPrimary,
+          onBackground: AppColors.dark,
+          onSurface: AppColors.light,
+          error: AppColors.onError,
+          onError: AppColors.light,
+          surface: AppColors.light,
+          inverseSurface: AppColors.lightGrey.withOpacity(0.05))
+      .copyWith(
     background: AppColors.darkPrimary,
   ),
 );

@@ -85,7 +85,7 @@ class Shimmer extends StatefulWidget {
   }
 
   const Shimmer({
-    Key? key,
+    super.key,
     required this.linearGradient,
     this.child,
   });
@@ -162,18 +162,20 @@ class _SlidingGradientTransform extends GradientTransform {
   }
 }
 
-const shimmerGradient = LinearGradient(
-  colors: [
-    Color(0xFFF4F5F6),
-    Color(0xFFEBEBF4),
-    Color(0xFFF4F5F6),
-  ],
-  stops: [
-    0.1,
-    0.3,
-    0.4,
-  ],
-  begin: Alignment(-1.0, -0.3),
-  end: Alignment(1.0, 0.3),
-  tileMode: TileMode.clamp,
-);
+LinearGradient shimmerGradient(BuildContext context) {
+  return LinearGradient(
+    colors: [
+      const Color(0xFFF4F5F6),
+      Theme.of(context).colorScheme.background,
+      const Color(0xFFF4F5F6),
+    ],
+    stops: const [
+      0.1,
+      0.3,
+      0.4,
+    ],
+    begin: const Alignment(-1.0, -0.3),
+    end: const Alignment(1.0, 0.3),
+    tileMode: TileMode.clamp,
+  );
+}

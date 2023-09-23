@@ -61,8 +61,8 @@ class _MyAppState extends State<MyApp> {
           initialRoute: RouteConstants.splash,
           debugShowCheckedModeBanner: false,
           theme: lightTheme,
-          darkTheme: darkTheme,
-          themeMode: state.themeMode,
+          // darkTheme: darkTheme,
+          // themeMode: state.themeMode,
           navigatorKey: KeysService.navigatorKey,
           scaffoldMessengerKey: KeysService.snackbarKey,
           supportedLocales: const [

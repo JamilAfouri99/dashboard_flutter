@@ -25,7 +25,10 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         title,
-        style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: AppColors.darkPrimary),
+        style: Theme.of(context)
+            .textTheme
+            .headlineSmall!
+            .copyWith(color: Theme.of(context).colorScheme.onPrimary),
       ),
       actions: [
         usersTopActions(context),
@@ -71,33 +74,33 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ],
                     ),
                   ),
-                  const PopupMenuItem<String>(
-                    height: 0.0,
-                    padding: EdgeInsets.zero,
-                    child: Divider(),
-                  ),
-                  // TODO: APP THEME
-                  PopupMenuItem<String>(
-                    value: 'theme',
-                    child: Row(
-                      children: [
-                        Icon(
-                          theme.themeMode == ThemeMode.light
-                              ? Icons.dark_mode_outlined
-                              : Icons.light_mode_outlined,
-                          size: 22,
-                          color: Theme.of(context).colorScheme.shadow,
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          theme.themeMode == ThemeMode.light ? 'Dark Theme' : 'Light Theme',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Theme.of(context).colorScheme.shadow,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // const PopupMenuItem<String>(
+                  //   height: 0.0,
+                  //   padding: EdgeInsets.zero,
+                  //   child: Divider(),
+                  // ),
+                  // // TODO: APP THEME
+                  // PopupMenuItem<String>(
+                  //   value: 'theme',
+                  //   child: Row(
+                  //     children: [
+                  //       Icon(
+                  //         theme.themeMode == ThemeMode.light
+                  //             ? Icons.dark_mode_outlined
+                  //             : Icons.light_mode_outlined,
+                  //         size: 22,
+                  //         color: Theme.of(context).colorScheme.shadow,
+                  //       ),
+                  //       const SizedBox(width: 5),
+                  //       Text(
+                  //         theme.themeMode == ThemeMode.light ? 'Dark Theme' : 'Light Theme',
+                  //         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  //               color: Theme.of(context).colorScheme.shadow,
+                  //             ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   const PopupMenuItem<String>(
                     height: 0.0,
                     padding: EdgeInsets.zero,

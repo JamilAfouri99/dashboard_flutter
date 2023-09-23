@@ -205,7 +205,7 @@ class UserScreen extends StatelessWidget {
   }
 
   Widget _userShimmer(BuildContext context) => Shimmer(
-        linearGradient: shimmerGradient,
+        linearGradient: shimmerGradient(context),
         child: ShimmerLoading(
           isLoading: true,
           child: SingleChildScrollView(
