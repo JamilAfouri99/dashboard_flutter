@@ -21,7 +21,6 @@ class UserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(userId);
     return MultiBlocProvider(
       providers: [
         userId != null

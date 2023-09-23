@@ -5,6 +5,7 @@ import 'package:qcarder/cubit/users/users_state.dart';
 import 'package:qcarder/navigation/router_manager.dart';
 import 'package:qcarder/screens/user/user_screen.dart';
 import 'package:qcarder/widgets/app_bar.dart';
+import 'package:qcarder/widgets/app_version.dart';
 import 'package:qcarder/widgets/drawer.dart';
 import 'package:qcarder/widgets/failed_widget.dart';
 import 'package:qcarder/widgets/shimmer_widget.dart';
@@ -17,7 +18,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UsersScreen extends StatelessWidget {
-  const UsersScreen({Key? key}) : super(key: key);
+  final TextEditingController searchText = TextEditingController();
+
+  UsersScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,34 +41,51 @@ class UsersScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(25.0),
                 border: Border.all(color: Colors.grey.withOpacity(0.5)),
               ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0, right: 10),
-                    child: Icon(
-                      Icons.search,
-                      size: 28,
-                      color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
+              child: BlocBuilder<UsersCubit, UsersState>(
+                builder: (context, state) => Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 10),
+                      child: Icon(
+                        Icons.search,
+                        size: 28,
+                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
+                      ),
                     ),
-                  ),
-                  BlocBuilder<UsersCubit, UsersState>(
-                    builder: (context, state) => Expanded(
+                    Expanded(
                       child: TextField(
+                        controller: searchText,
                         style: const TextStyle(fontWeight: FontWeight.w500),
                         onChanged: (value) => context.read<UsersCubit>().updateSearch(value),
                         decoration: InputDecoration(
                           hintText: 'Search users',
                           border: InputBorder.none,
                           hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
-                              fontSize: 16),
+                            color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const Spacer(),
+                    IconButton(
+                      icon: Icon(
+                        Icons.clear,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
+                      ),
+                      onPressed: () {
+                        if (searchText.text.isNotEmpty) {
+                          searchText.clear();
+                          context.read<UsersCubit>().updateSearch('');
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
+
             // List of contacts
             // TextButton(
             //   onPressed: () => RouteManager.routerManager(
@@ -175,9 +195,21 @@ _noMoreItems(BuildContext context) {
   return Center(
     child: Container(
       padding: const EdgeInsets.all(20),
-      child: Text(
-        'QCarder © 2023',
-        style: TextStyle(color: Theme.of(context).colorScheme.shadow.withOpacity(0.8)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'QCarder © 2023',
+            style: TextStyle(color: AppColors.grey.withOpacity(0.8)),
+          ),
+          Text(
+            ' | ',
+            style: TextStyle(color: AppColors.grey.withOpacity(0.8)),
+          ),
+          AppVersion(
+            color: AppColors.grey.withOpacity(0.8),
+          )
+        ],
       ),
     ),
   );

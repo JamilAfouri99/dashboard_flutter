@@ -54,7 +54,6 @@ class _EditableFormState extends State<EditableForm> {
 
   @override
   void initState() {
-    print('widget.user ${widget.user}');
     super.initState();
     _imageController.text = widget.user.avatar ?? '';
     _displayNameController.text = widget.user.profile.displayName ?? '';
@@ -696,7 +695,6 @@ class _EditableFormState extends State<EditableForm> {
   }
 
   PatchUserProfileDto _updateProfile() {
-    print(_emails);
     return PatchUserProfileDto(
       address: _addressController.text,
       birthday: DateFormat('MMM d, yyyy').parse(_birthdayController.text),

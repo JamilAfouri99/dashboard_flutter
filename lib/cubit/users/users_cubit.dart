@@ -81,7 +81,7 @@ class UsersCubit extends Cubit<UsersState> {
     _searchDebouncer?.cancel();
 
     // Create a new timer with a delay of 500 milliseconds
-    _searchDebouncer = Timer(Duration(milliseconds: 500), () {
+    _searchDebouncer = Timer(const Duration(milliseconds: 500), () {
       pagingController.refresh();
     });
   }

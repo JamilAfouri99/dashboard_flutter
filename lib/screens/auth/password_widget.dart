@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qcarder/configuration/theme.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
