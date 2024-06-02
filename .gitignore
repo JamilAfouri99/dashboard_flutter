@@ -54,3 +54,4 @@ app.*.map.json
 # Personal
 todo.md
 result.json
+api_docs.yaml
