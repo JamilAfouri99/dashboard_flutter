@@ -87,8 +87,10 @@ class ConfirmationDialog extends StatelessWidget {
                           alignment: Alignment.center,
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 8),
                         ),
                         onPressed: () {
                           Navigator.pop(context); // Close the dialog
@@ -102,7 +104,10 @@ class ConfirmationDialog extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         gradient: LinearGradient(
-                          colors: [AppColors.primary, AppColors.primary.withOpacity(0.6)],
+                          colors: [
+                            AppColors.primary,
+                            AppColors.primary.withOpacity(0.6)
+                          ],
                           begin: Alignment.centerRight,
                           end: Alignment.centerLeft,
                         ),
@@ -113,8 +118,10 @@ class ConfirmationDialog extends StatelessWidget {
                           alignment: Alignment.center,
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 8),
                         ),
                         onPressed: () {
                           _handleAction(context); // Handle the selected action

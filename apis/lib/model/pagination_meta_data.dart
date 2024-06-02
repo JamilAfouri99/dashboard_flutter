@@ -17,8 +17,8 @@ class PaginationMetaData {
     required this.lastPage,
     required this.currentPage,
     required this.perPage,
-    this.prev,
-    this.next,
+    required this.prev,
+    required this.next,
   });
 
   num total;
@@ -98,12 +98,12 @@ class PaginationMetaData {
       }());
 
       return PaginationMetaData(
-        total: num.parse(json[r'total'].toString()),
-        lastPage: num.parse(json[r'lastPage'].toString()),
-        currentPage: num.parse(json[r'currentPage'].toString()),
-        perPage: num.parse(json[r'perPage'].toString()),
-        prev: json[r'prev'] == null ? null : num.parse(json[r'prev'].toString()),
-        next: json[r'next'] == null ? null : num.parse(json[r'next'].toString()),
+        total: num.parse('${json[r'total']}'),
+        lastPage: num.parse('${json[r'lastPage']}'),
+        currentPage: num.parse('${json[r'currentPage']}'),
+        perPage: num.parse('${json[r'perPage']}'),
+        prev: json[r'prev'] == null ? null : num.parse('${json[r'prev']}'),
+        next: json[r'next'] == null ? null : num.parse('${json[r'next']}'),
       );
     }
     return null;
@@ -164,5 +164,7 @@ class PaginationMetaData {
     'lastPage',
     'currentPage',
     'perPage',
+    'prev',
+    'next',
   };
 }

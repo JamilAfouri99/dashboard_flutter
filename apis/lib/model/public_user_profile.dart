@@ -56,9 +56,9 @@ class PublicUserProfile {
           other.birthday == birthday &&
           other.address == address &&
           other.notes == notes &&
-          other.emails == emails &&
-          other.phoneNumbers == phoneNumbers &&
-          other.links == links;
+          _deepEquality.equals(other.emails, emails) &&
+          _deepEquality.equals(other.phoneNumbers, phoneNumbers) &&
+          _deepEquality.equals(other.links, links);
 
   @override
   int get hashCode =>
@@ -146,7 +146,7 @@ class PublicUserProfile {
         banner: mapValueOfType<String>(json, r'banner'),
         title: mapValueOfType<String>(json, r'title'),
         company: mapValueOfType<String>(json, r'company'),
-        birthday: mapDateTime(json, r'birthday', ''),
+        birthday: mapDateTime(json, r'birthday', r''),
         address: mapValueOfType<String>(json, r'address'),
         notes: mapValueOfType<String>(json, r'notes'),
         emails: Email.listFromJson(json[r'emails']),

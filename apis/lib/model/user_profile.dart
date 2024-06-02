@@ -18,12 +18,12 @@ class UserProfile {
     required this.updatedAt,
     required this.userId,
     required this.displayName,
+    required this.banner,
+    required this.title,
+    required this.company,
     required this.birthday,
-    this.banner,
-    this.title,
-    this.company,
-    this.address,
-    this.notes,
+    required this.address,
+    required this.notes,
     this.emails = const [],
     this.phoneNumbers = const [],
     this.links = const [],
@@ -72,9 +72,9 @@ class UserProfile {
           other.birthday == birthday &&
           other.address == address &&
           other.notes == notes &&
-          other.emails == emails &&
-          other.phoneNumbers == phoneNumbers &&
-          other.links == links;
+          _deepEquality.equals(other.emails, emails) &&
+          _deepEquality.equals(other.phoneNumbers, phoneNumbers) &&
+          _deepEquality.equals(other.links, links);
 
   @override
   int get hashCode =>
@@ -157,27 +157,29 @@ class UserProfile {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "UserProfile[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "UserProfile[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "UserProfile[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "UserProfile[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return UserProfile(
         id: mapValueOfType<String>(json, r'id')!,
-        createdAt: mapDateTime(json, r'createdAt', '')!,
-        updatedAt: mapDateTime(json, r'updatedAt', '')!,
+        createdAt: mapDateTime(json, r'createdAt', r'')!,
+        updatedAt: mapDateTime(json, r'updatedAt', r'')!,
         userId: mapValueOfType<String>(json, r'userId')!,
         displayName: mapValueOfType<String>(json, r'displayName'),
-        banner: json[r'banner'] == null ? null : mapValueOfType<String>(json, r'banner'),
-        title: json[r'title'] == null ? null : mapValueOfType<String>(json, r'title'),
-        company: json[r'company'] == null ? null : mapValueOfType<String>(json, r'company'),
-        birthday: mapDateTime(json, r'birthday', ''),
-        address: json[r'address'] == null ? null : mapValueOfType<String>(json, r'address'),
-        notes: json[r'notes'] == null ? null : mapValueOfType<String>(json, r'notes'),
+        banner: mapValueOfType<String>(json, r'banner'),
+        title: mapValueOfType<String>(json, r'title'),
+        company: mapValueOfType<String>(json, r'company'),
+        birthday: mapDateTime(json, r'birthday', r''),
+        address: mapValueOfType<String>(json, r'address'),
+        notes: mapValueOfType<String>(json, r'notes'),
         emails: Email.listFromJson(json[r'emails']),
         phoneNumbers: PhoneNumber.listFromJson(json[r'phoneNumbers']),
-        links: json[r'links'].length == 0 ? [] : Link.listFromJson(json[r'links']),
+        links: Link.listFromJson(json[r'links']),
       );
     }
     return null;
@@ -239,7 +241,12 @@ class UserProfile {
     'updatedAt',
     'userId',
     'displayName',
+    'banner',
+    'title',
+    'company',
     'birthday',
+    'address',
+    'notes',
     'emails',
     'phoneNumbers',
     'links',

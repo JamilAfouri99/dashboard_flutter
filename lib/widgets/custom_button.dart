@@ -29,8 +29,12 @@ class CustomButton extends StatelessWidget {
               )
             : LinearGradient(
                 colors: [
-                  isDisabled ? AppColors.primary.withAlpha(120) : AppColors.primary,
-                  isDisabled ? AppColors.primary.withAlpha(120) : AppColors.primary
+                  isDisabled
+                      ? AppColors.primary.withAlpha(120)
+                      : AppColors.primary,
+                  isDisabled
+                      ? AppColors.primary.withAlpha(120)
+                      : AppColors.primary
                 ],
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,
@@ -42,7 +46,8 @@ class CustomButton extends StatelessWidget {
           alignment: Alignment.center,
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           minimumSize: const Size(double.infinity, 56),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         ),
@@ -50,10 +55,8 @@ class CustomButton extends StatelessWidget {
         child: leading == null
             ? Text(
                 title,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(color: isInverted ? AppColors.primary : AppColors.light),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: isInverted ? AppColors.primary : AppColors.light),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -64,10 +67,9 @@ class CustomButton extends StatelessWidget {
                   ),
                   Text(
                     title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(color: isInverted ? AppColors.primary : AppColors.light),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color:
+                            isInverted ? AppColors.primary : AppColors.light),
                   )
                 ],
               ),

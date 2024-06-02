@@ -44,7 +44,8 @@ final lightTheme = ThemeData(
   ),
   indicatorColor: AppColors.primary,
   tabBarTheme: const TabBarTheme(labelColor: AppColors.primary),
-  drawerTheme: const DrawerThemeData(backgroundColor: Colors.white, elevation: 2),
+  drawerTheme:
+      const DrawerThemeData(backgroundColor: Colors.white, elevation: 2),
   scaffoldBackgroundColor: Colors.white,
   inputDecorationTheme: InputDecorationTheme(
     helperStyle: const TextStyle(
@@ -161,7 +162,8 @@ final darkTheme = ThemeData(
   ),
   indicatorColor: AppColors.primary,
   tabBarTheme: const TabBarTheme(labelColor: AppColors.primary),
-  drawerTheme: const DrawerThemeData(backgroundColor: AppColors.darkPrimary, elevation: 2),
+  drawerTheme: const DrawerThemeData(
+      backgroundColor: AppColors.darkPrimary, elevation: 2),
   scaffoldBackgroundColor: AppColors.darkPrimary,
   inputDecorationTheme: InputDecorationTheme(
     helperStyle: TextStyle(

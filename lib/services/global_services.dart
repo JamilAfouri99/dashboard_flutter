@@ -4,7 +4,8 @@ import 'package:qcarder_api/api.dart';
 
 class KeysService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  static GlobalKey<ScaffoldMessengerState>? snackbarKey = GlobalKey<ScaffoldMessengerState>();
+  static GlobalKey<ScaffoldMessengerState>? snackbarKey =
+      GlobalKey<ScaffoldMessengerState>();
   static GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 }
 

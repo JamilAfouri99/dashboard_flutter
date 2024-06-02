@@ -24,7 +24,9 @@ class PaginatedUsers {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PaginatedUsers && other.data == data && other.meta == meta;
+      other is PaginatedUsers &&
+          _deepEquality.equals(other.data, data) &&
+          other.meta == meta;
 
   @override
   int get hashCode =>

@@ -60,8 +60,9 @@ class _EditableFormState extends State<EditableForm> {
     _titleController.text = widget.user.profile.title ?? '';
     _companyController.text = widget.user.profile.company ?? '';
     _addressController.text = widget.user.profile.address ?? '';
-    _birthdayController.text =
-        widget.user.profile.birthday != null ? widget.user.profile.birthday!.ymd : '';
+    _birthdayController.text = widget.user.profile.birthday != null
+        ? widget.user.profile.birthday!.ymd
+        : '';
     _noteController.text = widget.user.profile.notes ?? '';
     // _categoryController.text = widget.user!.categories[0];
     // phone
@@ -89,7 +90,8 @@ class _EditableFormState extends State<EditableForm> {
       }
     } else {
       _linkControllers.add(TextEditingController());
-      _links.add(Link(link: _linkControllers[0].text, label: stringToEnumLink('link')));
+      _links.add(Link(
+          link: _linkControllers[0].text, label: stringToEnumLink('link')));
     }
     // email
     if (widget.user.profile.emails.isNotEmpty) {
@@ -101,7 +103,9 @@ class _EditableFormState extends State<EditableForm> {
     } else {
       _emailControllers.add(TextEditingController());
       _emailLabelControllers.add(TextEditingController());
-      _emails.add(Email(email: _emailControllers[0].text, label: _emailLabelControllers[0].text));
+      _emails.add(Email(
+          email: _emailControllers[0].text,
+          label: _emailLabelControllers[0].text));
     }
   }
 
@@ -152,7 +156,9 @@ class _EditableFormState extends State<EditableForm> {
                   contentType: MediaType('image', 'jpeg'),
                 );
                 if (context.mounted) {
-                  context.read<AvatarCubit>().uploadAvatar(widget.user.id, multipartFile);
+                  context
+                      .read<AvatarCubit>()
+                      .uploadAvatar(widget.user.id, multipartFile);
                   binaryImage = await file.readAsBytes();
                   setState(() {});
                 }
@@ -166,7 +172,10 @@ class _EditableFormState extends State<EditableForm> {
                       shape: BoxShape.circle,
                       border: Border.all(
                         width: 4,
-                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .shadow
+                            .withOpacity(0.2),
                       ),
                     ),
                     child: BlocConsumer<AvatarCubit, AvatarState>(
@@ -180,7 +189,8 @@ class _EditableFormState extends State<EditableForm> {
                         }
                       },
                       builder: (context, state) {
-                        if (state is AvatarLoading) return const CircularProgressIndicator();
+                        if (state is AvatarLoading)
+                          return const CircularProgressIndicator();
                         return ClipOval(
                           child: binaryImage != null
                               ? Image.memory(
@@ -199,7 +209,8 @@ class _EditableFormState extends State<EditableForm> {
                                           const CircularProgressIndicator(
                                         color: AppColors.primary,
                                       ),
-                                      errorWidget: (context, url, error) => const Icon(
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(
                                         Icons.error,
                                         color: AppColors.onError,
                                       ),
@@ -407,7 +418,9 @@ class _EditableFormState extends State<EditableForm> {
                     Expanded(
                       flex: 4,
                       child: TextFormField(
-                        inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp(r'\s'))
+                        ],
                         decoration: const InputDecoration(
                           labelText: 'Email',
                           prefixIcon: Icon(
@@ -617,7 +630,9 @@ class _EditableFormState extends State<EditableForm> {
               Expanded(
                 flex: 5,
                 child: TextFormField(
-                  inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(RegExp(r'\s'))
+                  ],
                   decoration: InputDecoration(
                     labelText: 'Link',
                     prefixIcon: GestureDetector(
@@ -633,7 +648,10 @@ class _EditableFormState extends State<EditableForm> {
                           child: SvgPicture.asset(
                             linkPathByLabel(_links[i].label),
                             fit: BoxFit.cover,
-                            color: Theme.of(context).colorScheme.shadow.withOpacity(0.7),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .shadow
+                                .withOpacity(0.7),
                           ),
                         ),
                       ),
@@ -671,7 +689,9 @@ class _EditableFormState extends State<EditableForm> {
           child: InkWell(
             onTap: () {
               _linkControllers.add(TextEditingController());
-              _links.add(Link(link: '', label: stringToEnumLink(_linkControllers.last.text)));
+              _links.add(Link(
+                  link: '',
+                  label: stringToEnumLink(_linkControllers.last.text)));
               setState(() {});
             },
             child: Row(
@@ -717,7 +737,9 @@ class _EditableFormState extends State<EditableForm> {
               int index = entry.key;
               Link link = entry.value;
               link.link = _linkControllers[index].text;
-              link.label = link.label.toString().isNotEmpty ? link.label : stringToEnumLink('link');
+              link.label = link.label.toString().isNotEmpty
+                  ? link.label
+                  : stringToEnumLink('link');
               return link;
             }).toList(),
     );
@@ -741,16 +763,18 @@ class _EditableFormState extends State<EditableForm> {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: SvgPicture.asset(
-                    linkPathByLabel(stringToEnumLink(Links.values[index].toString().split('.')[1])),
+                    linkPathByLabel(stringToEnumLink(
+                        Links.values[index].toString().split('.')[1])),
                     fit: BoxFit.cover,
                     color: AppColors.primary,
                   ),
                 ),
               ),
-              title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
+              title: Text(
+                  Links.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _links[linkIndex].label =
-                    stringToEnumLink(Links.values[index].toString().split('.')[1]);
+                _links[linkIndex].label = stringToEnumLink(
+                    Links.values[index].toString().split('.')[1]);
                 setState(() {});
                 Navigator.of(context).pop();
               },
@@ -779,14 +803,17 @@ class _EditableFormState extends State<EditableForm> {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: SvgPicture.asset(
-                    flagPathByName(Flags.values[index].toString().split('.')[1]),
+                    flagPathByName(
+                        Flags.values[index].toString().split('.')[1]),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              title: Text(Flags.values[index].toString().split('.')[1].toUpperCase()),
+              title: Text(
+                  Flags.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _phones[flagIndex].country = Flags.values[index].toString().split('.')[1];
+                _phones[flagIndex].country =
+                    Flags.values[index].toString().split('.')[1];
                 setState(() {});
                 Navigator.of(context).pop();
               },

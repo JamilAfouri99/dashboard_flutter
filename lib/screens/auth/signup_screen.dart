@@ -137,7 +137,8 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     TextButton(
-                      onPressed: context.watch<AuthCubit>().state is AuthenticatingState
+                      onPressed: context.watch<AuthCubit>().state
+                              is AuthenticatingState
                           ? null
                           : () {
                               RouteManager.navigateTo(

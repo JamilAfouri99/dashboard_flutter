@@ -21,7 +21,8 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: AppColors.light,
       leading: Builder(
         builder: (context) => IconButton(
-          icon: const Icon(Icons.density_medium_outlined, color: AppColors.grey),
+          icon:
+              const Icon(Icons.density_medium_outlined, color: AppColors.grey),
           onPressed: () => Scaffold.of(context).openDrawer(),
         ),
       ),
@@ -67,15 +68,20 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                       children: [
                         Text(
                           'User',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Theme.of(context).colorScheme.shadow,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Theme.of(context).colorScheme.shadow,
+                                  ),
                         ),
                         Text(
                           state.authUser.email,
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Theme.of(context).colorScheme.shadow.withOpacity(0.8),
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .shadow
+                                        .withOpacity(0.8),
+                                  ),
                         ),
                       ],
                     ),
@@ -124,9 +130,10 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                         const SizedBox(width: 5),
                         Text(
                           'Sign out',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Theme.of(context).colorScheme.shadow,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Theme.of(context).colorScheme.shadow,
+                                  ),
                         ),
                       ],
                     ),

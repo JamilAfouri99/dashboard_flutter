@@ -43,7 +43,8 @@ class _UnavailableDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Error'),
-      content: const Text('NFC may not be supported or may be temporarily turned off.'),
+      content: const Text(
+          'NFC may not be supported or may be temporarily turned off.'),
       actions: [
         TextButton(
           child: const Text('GOT IT'),

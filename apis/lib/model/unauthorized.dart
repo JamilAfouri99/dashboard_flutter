@@ -64,7 +64,7 @@ class Unauthorized {
       }());
 
       return Unauthorized(
-        statusCode: num.parse(json[r'statusCode'].toString()),
+        statusCode: num.parse('${json[r'statusCode']}'),
         message: mapValueOfType<String>(json, r'message')!,
       );
     }

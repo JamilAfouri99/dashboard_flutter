@@ -31,7 +31,8 @@ class GlobalErrorWidget extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 12),
           child: Text(
             title,
-            style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w700),
+            style: const TextStyle(
+                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w700),
           ),
         ),
         Container(
@@ -39,7 +40,10 @@ class GlobalErrorWidget extends StatelessWidget {
             child: Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
             )),
         Container(
           width: MediaQuery.of(context).size.width * 0.55,

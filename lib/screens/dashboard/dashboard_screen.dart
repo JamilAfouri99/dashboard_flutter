@@ -11,7 +11,8 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Contacts', style: Theme.of(context).textTheme.titleLarge),
+          title:
+              Text('Contacts', style: Theme.of(context).textTheme.titleLarge),
           actions: [
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) {

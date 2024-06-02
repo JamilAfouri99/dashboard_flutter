@@ -38,7 +38,8 @@ class RemoteService {
     }
   }
 
-  Future<Result<void>> _tokenHandler(bool withAccessToken, bool withRefreshToken) async {
+  Future<Result<void>> _tokenHandler(
+      bool withAccessToken, bool withRefreshToken) async {
     String? token;
 
     if (withRefreshToken) {
@@ -66,9 +67,11 @@ class RemoteService {
     return Result.ok(null);
   }
 
-  Future<Result<AccessToken>> _latestAccessTokenHandler(Repository tokensRepository) async {
+  Future<Result<AccessToken>> _latestAccessTokenHandler(
+      Repository tokensRepository) async {
     try {
-      final RefreshToken? refreshToken = await tokensRepository.getRefreshToken();
+      final RefreshToken? refreshToken =
+          await tokensRepository.getRefreshToken();
       if (refreshToken == null || isTokenExpired(refreshToken.token)) {
         throw NetworkExceptions.handleAuthenticationFailed();
       }
@@ -76,7 +79,8 @@ class RemoteService {
       final res = await _refreshTokenHandler(tokensRepository, refreshToken);
       if (res.isError) throw res.error;
 
-      final AccessToken? latestAccessToken = await tokensRepository.getAccessToken();
+      final AccessToken? latestAccessToken =
+          await tokensRepository.getAccessToken();
       if (latestAccessToken == null) {
         throw NetworkExceptions.handleAuthenticationFailed();
       }
@@ -90,10 +94,12 @@ class RemoteService {
   Future<Result<void>> _refreshTokenHandler(
       Repository tokensRepository, RefreshToken refreshToken) async {
     try {
-      apiClient.addDefaultHeader('Authorization', 'Bearer ${refreshToken.token}');
+      apiClient.addDefaultHeader(
+          'Authorization', 'Bearer ${refreshToken.token}');
 
       final AuthUser? response = await authApi.signinUsingRefreshToken();
-      if (response == null) throw NetworkExceptions.handleAuthenticationFailed();
+      if (response == null)
+        throw NetworkExceptions.handleAuthenticationFailed();
       await tokensRepository.setTokens(
         accessToken: AccessToken(response.accessToken),
         refreshToken: RefreshToken(response.refreshToken),

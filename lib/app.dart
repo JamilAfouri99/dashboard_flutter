@@ -1,4 +1,4 @@
-// Openapi Generator last run: : 2023-09-21T03:57:33.953632
+// Openapi Generator last run: : 2024-06-03T01:31:07.888183
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/utils/configuration/constants.dart';
@@ -11,27 +11,24 @@ import 'package:qcarder/cubit/users/users_cubit.dart';
 import 'package:qcarder/services/global_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qcarder_api/api.dart';
 import 'utils/navigation/router.dart' as router;
 import 'package:openapi_generator_annotations/openapi_generator_annotations.dart';
 
 @Openapi(
+  inputSpec: InputSpec(path: 'api_docs.yaml'),
+  outputDirectory: 'apis',
+  generatorName: Generator.dart,
   additionalProperties: AdditionalProperties(
     pubName: 'qcarder_api',
     pubAuthor: 'QCarder',
   ),
-  inputSpecFile: 'api_docs.yaml',
-  generatorName: Generator.dart,
-  outputDirectory: 'apis',
-  fetchDependencies: true,
-  overwriteExistingFiles: false,
-  alwaysRun: true,
-  useNextGen: true,
+  skipSpecValidation: true,
+  runSourceGenOnOutput: true,
 )
 class MyApp extends StatefulWidget {
   final Locale locale;
-  final ApiClient apiClient;
-  MyApp(this.locale, {super.key}) : apiClient = ClientService.apiClient;
+  // final ApiClient apiClient;
+  MyApp(this.locale, {super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();

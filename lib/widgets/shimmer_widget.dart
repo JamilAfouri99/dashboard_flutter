@@ -103,7 +103,8 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
         stops: widget.linearGradient.stops,
         begin: widget.linearGradient.begin,
         end: widget.linearGradient.end,
-        transform: _SlidingGradientTransform(slidePercent: _shimmerController.value),
+        transform:
+            _SlidingGradientTransform(slidePercent: _shimmerController.value),
       );
 
   Listenable get shimmerChanges => _shimmerController;

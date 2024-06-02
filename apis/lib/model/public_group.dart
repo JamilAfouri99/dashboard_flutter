@@ -13,7 +13,7 @@ part of openapi.api;
 class PublicGroup {
   /// Returns a new [PublicGroup] instance.
   PublicGroup({
-    this.name,
+    required this.name,
     required this.profile,
   });
 
@@ -57,14 +57,16 @@ class PublicGroup {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "PublicGroup[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "PublicGroup[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "PublicGroup[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "PublicGroup[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return PublicGroup(
-        name: json[r'name'] == null ? null : mapValueOfType<String>(json, r'name'),
+        name: mapValueOfType<String>(json, r'name'),
         profile: PublicGroupProfile.fromJson(json[r'profile'])!,
       );
     }
@@ -122,6 +124,7 @@ class PublicGroup {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
+    'name',
     'profile',
   };
 }

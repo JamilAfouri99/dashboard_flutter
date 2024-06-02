@@ -4,7 +4,8 @@ class AnimatedPlaceholder extends StatefulWidget {
   final double width;
   final double height;
 
-  const AnimatedPlaceholder({super.key, required this.width, required this.height});
+  const AnimatedPlaceholder(
+      {super.key, required this.width, required this.height});
 
   @override
   _AnimatedPlaceholderState createState() => _AnimatedPlaceholderState();

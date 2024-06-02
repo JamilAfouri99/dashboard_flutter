@@ -49,19 +49,26 @@ class UsersScreen extends StatelessWidget {
                       child: Icon(
                         Icons.search,
                         size: 28,
-                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .shadow
+                            .withOpacity(0.6),
                       ),
                     ),
                     Expanded(
                       child: TextField(
                         controller: searchText,
                         style: const TextStyle(fontWeight: FontWeight.w500),
-                        onChanged: (value) => context.read<UsersCubit>().updateSearch(value),
+                        onChanged: (value) =>
+                            context.read<UsersCubit>().updateSearch(value),
                         decoration: InputDecoration(
                           hintText: 'Search users',
                           border: InputBorder.none,
                           hintStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .shadow
+                                .withOpacity(0.6),
                             fontSize: 16,
                           ),
                         ),
@@ -73,7 +80,10 @@ class UsersScreen extends StatelessWidget {
                       icon: Icon(
                         Icons.clear,
                         size: 20,
-                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.6),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .shadow
+                            .withOpacity(0.6),
                       ),
                       onPressed: () {
                         if (searchText.text.isNotEmpty) {
@@ -107,7 +117,10 @@ class UsersScreen extends StatelessWidget {
                     return RefreshIndicator(
                       color: Theme.of(context).colorScheme.onSurface,
                       onRefresh: () => Future.sync(
-                        () => context.read<UsersCubit>().pagingController.refresh(),
+                        () => context
+                            .read<UsersCubit>()
+                            .pagingController
+                            .refresh(),
                       ),
                       child: _users(context),
                     );
@@ -141,7 +154,9 @@ Widget _user(User user, BuildContext context) {
   return ListTile(
     leading: ClipRRect(
       borderRadius: BorderRadius.circular(50.0),
-      child: user.avatar != null && user.avatar!.isNotEmpty && user.avatar!.contains('https')
+      child: user.avatar != null &&
+              user.avatar!.isNotEmpty &&
+              user.avatar!.contains('https')
           ? CachedNetworkImage(
               height: 50,
               width: 50,
@@ -168,10 +183,8 @@ Widget _user(User user, BuildContext context) {
     ),
     subtitle: Text(
       user.profile.title ?? '',
-      style: Theme.of(context)
-          .textTheme
-          .bodySmall!
-          .copyWith(color: Theme.of(context).colorScheme.shadow.withOpacity(0.7)),
+      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+          color: Theme.of(context).colorScheme.shadow.withOpacity(0.7)),
     ),
     trailing: IconButton(
       icon: Icon(
@@ -202,11 +215,13 @@ _noMoreItems(BuildContext context) {
         children: [
           Text(
             'QCarder © 2023',
-            style: TextStyle(color: Theme.of(context).colorScheme.shadow.withOpacity(0.8)),
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.shadow.withOpacity(0.8)),
           ),
           Text(
             ' | ',
-            style: TextStyle(color: Theme.of(context).colorScheme.shadow.withOpacity(0.8)),
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.shadow.withOpacity(0.8)),
           ),
           AppVersion(
             color: Theme.of(context).colorScheme.shadow.withOpacity(0.8),
@@ -264,7 +279,8 @@ Widget _usersShimmer(BuildContext context) {
   );
 }
 
-FloatingActionButton floatingActionButton(BuildContext context) => FloatingActionButton(
+FloatingActionButton floatingActionButton(BuildContext context) =>
+    FloatingActionButton(
       backgroundColor: AppColors.primary,
       onPressed: () => RouteManager.navigateWithData(
         context,

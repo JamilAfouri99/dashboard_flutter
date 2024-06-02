@@ -113,8 +113,8 @@ class PatchGroupResponseDto {
 
       return PatchGroupResponseDto(
         id: mapValueOfType<String>(json, r'id'),
-        createdAt: mapDateTime(json, r'createdAt', ''),
-        updatedAt: mapDateTime(json, r'updatedAt', ''),
+        createdAt: mapDateTime(json, r'createdAt', r''),
+        updatedAt: mapDateTime(json, r'updatedAt', r''),
         name: mapValueOfType<String>(json, r'name'),
       );
     }

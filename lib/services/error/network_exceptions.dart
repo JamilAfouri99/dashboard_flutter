@@ -80,7 +80,8 @@ class NetworkExceptions {
 
   static String _handleBadRequest(ApiException response) {
     final decodedBody = jsonDecode(response.message ?? '');
-    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+    if (decodedBody is Map<String, dynamic> &&
+        decodedBody.containsKey('message')) {
       final message = decodedBody['message'];
       if (message is List<dynamic> && message.isNotEmpty) {
         return message[0] as String;
@@ -93,7 +94,8 @@ class NetworkExceptions {
 
   static String _handleNotFound(ApiException response) {
     final decodedBody = jsonDecode(response.message ?? '');
-    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+    if (decodedBody is Map<String, dynamic> &&
+        decodedBody.containsKey('message')) {
       final message = decodedBody['message'];
       if (message is String && message.isNotEmpty) {
         return message;
@@ -104,7 +106,8 @@ class NetworkExceptions {
 
   static String _handleMethodNotAllowed(ApiException response) {
     final decodedBody = jsonDecode(response.message ?? '');
-    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+    if (decodedBody is Map<String, dynamic> &&
+        decodedBody.containsKey('message')) {
       final message = decodedBody['message'];
       if (message is String && message.isNotEmpty) {
         return message;
@@ -115,7 +118,8 @@ class NetworkExceptions {
 
   static String _handleConflict(ApiException response) {
     final decodedBody = jsonDecode(response.message ?? '');
-    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+    if (decodedBody is Map<String, dynamic> &&
+        decodedBody.containsKey('message')) {
       final message = decodedBody['message'];
       if (message is String && message.isNotEmpty) {
         return message;
@@ -126,7 +130,8 @@ class NetworkExceptions {
 
   static String _handleDataValidationFailed(ApiException response) {
     final decodedBody = jsonDecode(response.message ?? '');
-    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+    if (decodedBody is Map<String, dynamic> &&
+        decodedBody.containsKey('message')) {
       final message = decodedBody['message'];
       if (message is String && message.isNotEmpty) {
         return message;
@@ -137,7 +142,8 @@ class NetworkExceptions {
 
   static String _handleInternalServerError(ApiException response) {
     final decodedBody = jsonDecode(response.message ?? '');
-    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+    if (decodedBody is Map<String, dynamic> &&
+        decodedBody.containsKey('message')) {
       final message = decodedBody['message'];
       if (message is String && message.isNotEmpty) {
         return message;
@@ -150,14 +156,16 @@ class NetworkExceptions {
     final responseCode = response.code;
     final message = response.message != null
         ? response.message
-        : ErrorMessages.defaultError('Received invalid status code: $responseCode');
+        : ErrorMessages.defaultError(
+            'Received invalid status code: $responseCode');
     return message ?? '';
   }
 
   static String _handleNotAllowed(ApiException response) {
     // context.read<AuthCubit>().localLogout(context);
     final decodedBody = jsonDecode(response.message ?? '');
-    if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('message')) {
+    if (decodedBody is Map<String, dynamic> &&
+        decodedBody.containsKey('message')) {
       final message = decodedBody['message'];
       if (message.isNotEmpty) {
         return message;

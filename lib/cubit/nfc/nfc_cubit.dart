@@ -32,7 +32,8 @@ class NfcCubit extends Cubit<NfcState> {
     }
   }
 
-  Future<void> handleWriteTag(NfcTag tag, Iterable<WriteRecord> recordList) async {
+  Future<void> handleWriteTag(
+      NfcTag tag, Iterable<WriteRecord> recordList) async {
     final tech = Ndef.from(tag);
 
     if (tech == null) {

@@ -55,7 +55,8 @@ class NfcScreenState extends State<NfcScreen> {
                         child: SingleChildScrollView(
                           child: ValueListenableBuilder<dynamic>(
                             valueListenable: result,
-                            builder: (context, value, _) => Text('${value ?? ''}'),
+                            builder: (context, value, _) =>
+                                Text('${value ?? ''}'),
                           ),
                         ),
                       ),
@@ -69,10 +70,16 @@ class NfcScreenState extends State<NfcScreen> {
                         crossAxisSpacing: 4,
                         mainAxisSpacing: 4,
                         children: [
-                          ElevatedButton(child: Text('Tag Read'), onPressed: _tagRead),
-                          ElevatedButton(child: Text('Ndef Write'), onPressed: _ndefWrite),
-                          ElevatedButton(child: Text('Ndef Write Lock'), onPressed: _ndefWriteLock),
-                          ElevatedButton(child: Text('Native NFC'), onPressed: _startNFCEmulation),
+                          ElevatedButton(
+                              child: Text('Tag Read'), onPressed: _tagRead),
+                          ElevatedButton(
+                              child: Text('Ndef Write'), onPressed: _ndefWrite),
+                          ElevatedButton(
+                              child: Text('Ndef Write Lock'),
+                              onPressed: _ndefWriteLock),
+                          ElevatedButton(
+                              child: Text('Native NFC'),
+                              onPressed: _startNFCEmulation),
                         ],
                       ),
                     ),
@@ -106,8 +113,10 @@ class NfcScreenState extends State<NfcScreen> {
 
       NdefMessage message = NdefMessage([
         NdefRecord.createText('Jamil Afouri'),
-        NdefRecord.createUri(Uri.parse('https://www.facebook.com/jamelhesham/')),
-        NdefRecord.createMime('text/plain', Uint8List.fromList('Hello'.codeUnits)),
+        NdefRecord.createUri(
+            Uri.parse('https://www.facebook.com/jamelhesham/')),
+        NdefRecord.createMime(
+            'text/plain', Uint8List.fromList('Hello'.codeUnits)),
         NdefRecord.createExternal(
           'https://www.facebook.com/jamelhesham/',
           'mytype',

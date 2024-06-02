@@ -64,12 +64,16 @@ class UserScreen extends StatelessWidget {
                     : isEditable
                         ? 'Update Profile'
                         : 'Profile',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.light),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(color: AppColors.light),
               ),
             ),
-            floatingActionButton: userId != null && !isEditable && state is! UserLoading
-                ? _floatingActionButton(context)
-                : null,
+            floatingActionButton:
+                userId != null && !isEditable && state is! UserLoading
+                    ? _floatingActionButton(context)
+                    : null,
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             body: state is UserLoading
                 ? _userShimmer(context)
@@ -78,7 +82,9 @@ class UserScreen extends StatelessWidget {
                     : RefreshIndicator(
                         onRefresh: () {
                           if (userId != null) {
-                            return context.read<UserCubit>().getUserById(userId!);
+                            return context
+                                .read<UserCubit>()
+                                .getUserById(userId!);
                           }
                           return Future(() => null);
                         },
@@ -219,7 +225,8 @@ class UserScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(
                       width: 4,
-                      color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+                      color:
+                          Theme.of(context).colorScheme.shadow.withOpacity(0.2),
                     ),
                   ),
                   child: ClipOval(

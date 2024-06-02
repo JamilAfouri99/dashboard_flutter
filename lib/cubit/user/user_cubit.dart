@@ -19,7 +19,8 @@ class UserCubit extends Cubit<UserState> {
 
   Future<void> getUserById(String userId) async {
     emit(UserLoading());
-    final result = await remoteService.asyncTryCatch(() => usersApi.getUserById(userId));
+    final result =
+        await remoteService.asyncTryCatch(() => usersApi.getUserById(userId));
     if (result.isSuccess && result.value != null) {
       emit(UserLoaded(result.value!));
     }
@@ -34,7 +35,8 @@ class UserCubit extends Cubit<UserState> {
   ) async {
     emit(UserLoading());
     final result = await remoteService.asyncTryCatch(
-      () => usersApi.patchUserProfile(user.id, user.profile.id, updateUserProfile),
+      () => usersApi.patchUserProfile(
+          user.id, user.profile.id, updateUserProfile),
     );
     if (result.isSuccess && result.value != null) {
       user.profile = result.value!;
@@ -47,7 +49,8 @@ class UserCubit extends Cubit<UserState> {
 
   Future<void> updateUser(User user, PatchUserDto updateUser) async {
     emit(UserLoading());
-    final result = await remoteService.asyncTryCatch(() => usersApi.patchUser(user.id, updateUser));
+    final result = await remoteService
+        .asyncTryCatch(() => usersApi.patchUser(user.id, updateUser));
     if (result.isSuccess && result.value != null) {
       //FIXME: return the updaetd user
       emit(UserLoaded(user));
@@ -68,7 +71,8 @@ class UserCubit extends Cubit<UserState> {
       () => usersApi.patchUser(user.id, updateUser),
     );
     final profileUpdateResult = await remoteService.asyncTryCatch(
-      () => usersApi.patchUserProfile(user.id, user.profile.id, updateUserProfile),
+      () => usersApi.patchUserProfile(
+          user.id, user.profile.id, updateUserProfile),
     );
 
     if (userUpdateResult.isSuccess &&

@@ -38,11 +38,21 @@ class _NewFormState extends State<NewForm> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _birthdayController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
-  final List<TextEditingController> _phoneControllers = [TextEditingController()];
-  final List<TextEditingController> _phoneLabelControllers = [TextEditingController()];
-  final List<TextEditingController> _emailControllers = [TextEditingController()];
-  final List<TextEditingController> _emailLabelControllers = [TextEditingController()];
-  final List<TextEditingController> _linkControllers = [TextEditingController()];
+  final List<TextEditingController> _phoneControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _phoneLabelControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _emailControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _emailLabelControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _linkControllers = [
+    TextEditingController()
+  ];
 
   final List<Link> _links = [];
   final List<PhoneNumber> _phones = [];
@@ -53,13 +63,16 @@ class _NewFormState extends State<NewForm> {
   @override
   void initState() {
     super.initState();
-    _links.add(Link(link: '', label: stringToEnumLink(_linkControllers[0].text)));
+    _links
+        .add(Link(link: '', label: stringToEnumLink(_linkControllers[0].text)));
     _phones.add(PhoneNumber(
       phoneNumber: _phoneControllers[0].text,
       label: _phoneLabelControllers[0].text,
       country: 'XX',
     ));
-    _emails.add(Email(email: _emailControllers[0].text, label: _emailLabelControllers[0].text));
+    _emails.add(Email(
+        email: _emailControllers[0].text,
+        label: _emailLabelControllers[0].text));
   }
 
   @override
@@ -128,7 +141,10 @@ class _NewFormState extends State<NewForm> {
                       shape: BoxShape.circle,
                       border: Border.all(
                         width: 4,
-                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .shadow
+                            .withOpacity(0.2),
                       ),
                     ),
                     child: ClipOval(
@@ -388,7 +404,9 @@ class _NewFormState extends State<NewForm> {
                             size: 20,
                           ),
                         ),
-                        inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp(r'\s'))
+                        ],
                         scrollPadding: EdgeInsets.zero,
                         style: Theme.of(context).textTheme.bodySmall,
                         controller: _emailControllers[i],
@@ -652,7 +670,10 @@ class _NewFormState extends State<NewForm> {
                           child: SvgPicture.asset(
                             linkPathByLabel(_links[i].label),
                             fit: BoxFit.cover,
-                            color: Theme.of(context).colorScheme.shadow.withOpacity(0.7),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .shadow
+                                .withOpacity(0.7),
                           ),
                         ),
                       ),
@@ -688,7 +709,9 @@ class _NewFormState extends State<NewForm> {
           child: InkWell(
             onTap: () {
               _linkControllers.add(TextEditingController());
-              _links.add(Link(link: '', label: stringToEnumLink(_linkControllers.last.text)));
+              _links.add(Link(
+                  link: '',
+                  label: stringToEnumLink(_linkControllers.last.text)));
               setState(() {});
             },
             child: Row(
@@ -727,7 +750,9 @@ class _NewFormState extends State<NewForm> {
               int index = entry.key;
               Link link = entry.value;
               link.link = _linkControllers[index].text;
-              link.label = link.label.toString().isNotEmpty ? link.label : stringToEnumLink('link');
+              link.label = link.label.toString().isNotEmpty
+                  ? link.label
+                  : stringToEnumLink('link');
               return link;
             }).toList(),
     );
@@ -760,16 +785,18 @@ class _NewFormState extends State<NewForm> {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: SvgPicture.asset(
-                    linkPathByLabel(stringToEnumLink(Links.values[index].toString().split('.')[1])),
+                    linkPathByLabel(stringToEnumLink(
+                        Links.values[index].toString().split('.')[1])),
                     fit: BoxFit.cover,
                     color: AppColors.primary,
                   ),
                 ),
               ),
-              title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
+              title: Text(
+                  Links.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _links[linkIndex].label =
-                    stringToEnumLink(Links.values[index].toString().split('.')[1]);
+                _links[linkIndex].label = stringToEnumLink(
+                    Links.values[index].toString().split('.')[1]);
                 setState(() {});
                 Navigator.of(context).pop();
               },
@@ -798,14 +825,17 @@ class _NewFormState extends State<NewForm> {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: SvgPicture.asset(
-                    flagPathByName(Flags.values[index].toString().split('.')[1]),
+                    flagPathByName(
+                        Flags.values[index].toString().split('.')[1]),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              title: Text(Flags.values[index].toString().split('.')[1].toUpperCase()),
+              title: Text(
+                  Flags.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _phones[flagIndex].country = Flags.values[index].toString().split('.')[1];
+                _phones[flagIndex].country =
+                    Flags.values[index].toString().split('.')[1];
                 setState(() {});
                 Navigator.of(context).pop();
               },

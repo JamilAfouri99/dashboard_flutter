@@ -135,8 +135,8 @@ class AuthUser {
 
       return AuthUser(
         id: mapValueOfType<String>(json, r'id')!,
-        createdAt: mapDateTime(json, r'createdAt', '')!,
-        updatedAt: mapDateTime(json, r'updatedAt', '')!,
+        createdAt: mapDateTime(json, r'createdAt', r'')!,
+        updatedAt: mapDateTime(json, r'updatedAt', r'')!,
         email: mapValueOfType<String>(json, r'email')!,
         firstName: mapValueOfType<String>(json, r'firstName')!,
         lastName: mapValueOfType<String>(json, r'lastName')!,

@@ -1,4 +1,5 @@
-Map<String, List<T>> groupByFirstLetter<T>(List<T> items, String Function(T) getKey) {
+Map<String, List<T>> groupByFirstLetter<T>(
+    List<T> items, String Function(T) getKey) {
   var groupedItems = <String, List<T>>{};
 
   for (var item in items) {
