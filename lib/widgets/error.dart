@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/widgets/custom_button.dart';
 
 class GlobalErrorWidget extends StatelessWidget {

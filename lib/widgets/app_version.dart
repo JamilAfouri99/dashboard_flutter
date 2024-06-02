@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qcarder/configuration/theme.dart';
-import 'package:qcarder/models/app_info.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
+import 'package:qcarder/utils/models/app_info.dart';
 
 class AppVersion extends StatelessWidget {
   final Color color;

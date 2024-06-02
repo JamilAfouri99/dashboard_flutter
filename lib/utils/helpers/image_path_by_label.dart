@@ -1,4 +1,4 @@
-import 'package:qcarder/configuration/image_constants.dart';
+import 'package:qcarder/utils/configuration/image-constants.dart';
 import 'package:qcarder_api/api.dart';
 
 String linkPathByLabel(LinkLabelEnum label) {

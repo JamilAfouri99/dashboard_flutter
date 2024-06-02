@@ -1,10 +1,10 @@
-import 'package:qcarder/configuration/constants.dart';
-import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/utils/configuration/constants.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
 import 'package:qcarder/cubit/avatar/avatar_state.dart';
 import 'package:qcarder/cubit/user/user_state.dart';
-import 'package:qcarder/models/enums.dart';
-import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/utils/models/enums.dart';
+import 'package:qcarder/utils/navigation/router_manager.dart';
 import 'package:qcarder/screens/user/user_screen.dart';
 import 'package:qcarder/services/http/remote_service.dart';
 import 'package:qcarder/widgets/custom_progress_indicator.dart';

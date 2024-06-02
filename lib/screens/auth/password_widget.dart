@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qcarder/widgets/custom_text_field.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
@@ -14,23 +15,20 @@ class _PasswordFieldState extends State<PasswordField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller, // Use the provided controller here
-      style: Theme.of(context).textTheme.bodyMedium,
-      decoration: InputDecoration(
-        labelText: 'Password',
-        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
-            ),
-        suffixIcon: GestureDetector(
-          onTap: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-          child: Icon(
-            _obscureText ? Icons.visibility : Icons.visibility_off,
+    return CustomTextField(
+      controller: widget.controller,
+      hintText: 'Password',
+      hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
           ),
+      suffixIcon: GestureDetector(
+        onTap: () {
+          setState(() {
+            _obscureText = !_obscureText;
+          });
+        },
+        child: Icon(
+          _obscureText ? Icons.visibility : Icons.visibility_off,
         ),
       ),
       obscureText: _obscureText,

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:qcarder/cubit/users/users_state.dart';
-import 'package:qcarder/helpers/index.dart';
-import 'package:qcarder/helpers/search_validation.dart';
+import 'package:qcarder/utils/helpers/index.dart';
+import 'package:qcarder/utils/helpers/search_validation.dart';
 import 'package:qcarder/services/http/remote_service.dart';
 import 'package:qcarder/services/global_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

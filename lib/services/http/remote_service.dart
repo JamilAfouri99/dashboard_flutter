@@ -1,12 +1,13 @@
-import 'package:qcarder/helpers/index.dart';
-import 'package:qcarder/helpers/token_validator.dart';
-import 'package:qcarder/models/tokens.dart';
-import 'package:qcarder/repositories/credentials.dart';
+import 'package:qcarder/utils/helpers/index.dart';
+import 'package:qcarder/utils/helpers/token_validator.dart';
+import 'package:qcarder/utils/models/tokens.dart';
+import 'package:qcarder/utils/repositories/credentials.dart';
 import 'package:qcarder/services/error/network_exceptions.dart';
 import 'package:qcarder/services/global_services.dart';
 import 'package:qcarder_api/api.dart';
 
 class RemoteService {
+  bool isFirst = true;
   final makeRepository = Repository.make();
   Repository? tokensRepo;
 
@@ -52,7 +53,9 @@ class RemoteService {
     if (token == null || token.isEmpty) {
       return Result.err(ErrorMessages.authenticationFailed);
     } else {
-      final bool isExpired = isTokenExpired(token);
+      print(isFirst);
+      final bool isExpired = isFirst ? true : isTokenExpired(token);
+      isFirst = false;
       if (isExpired) {
         final res = await _latestAccessTokenHandler(tokensRepo!);
         if (res.isError || res.value == null) return Result.err(res.error);

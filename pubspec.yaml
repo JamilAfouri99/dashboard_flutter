@@ -25,7 +25,7 @@ dependencies:
   nfc_manager: ^3.3.0
   http_parser: ^4.0.2
   rename: ^2.1.1
-  cached_network_image: ^3.2.3
+  cached_network_image: ^3.3.0
   package_info_plus: ^4.1.0
 
   # firebase

@@ -1,9 +1,9 @@
 import 'package:qcarder/cubit/auth/auth_state.dart';
-import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/utils/configuration/constants.dart';
 import 'package:qcarder/cubit/user_role/user_role_cubit.dart';
-import 'package:qcarder/models/tokens.dart';
-import 'package:qcarder/navigation/router_manager.dart';
-import 'package:qcarder/repositories/credentials.dart';
+import 'package:qcarder/utils/models/tokens.dart';
+import 'package:qcarder/utils/navigation/router_manager.dart';
+import 'package:qcarder/utils/repositories/credentials.dart';
 import 'package:qcarder/services/error/network_exceptions.dart';
 import 'package:qcarder/services/http/remote_service.dart';
 import 'package:qcarder/services/global_services.dart';

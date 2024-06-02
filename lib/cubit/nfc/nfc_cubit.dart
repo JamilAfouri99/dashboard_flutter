@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager/platform_tags.dart';
 import 'package:qcarder/cubit/nfc/nfc_state.dart';
-import 'package:qcarder/models/nfc_record.dart';
+import 'package:qcarder/utils/models/nfc_record.dart';
 
 class NfcCubit extends Cubit<NfcState> {
   NfcCubit() : super(NfcUnknown());

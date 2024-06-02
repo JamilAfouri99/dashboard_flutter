@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:qcarder/configuration/constants.dart';
-import 'package:qcarder/configuration/image_constants.dart';
-import 'package:qcarder/configuration/theme.dart';
-import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/utils/configuration/constants.dart';
+import 'package:qcarder/utils/configuration/image-constants.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
+import 'package:qcarder/utils/navigation/router_manager.dart';
 
 class GlobalDrawer extends StatelessWidget {
   const GlobalDrawer({super.key});
@@ -13,7 +13,7 @@ class GlobalDrawer extends StatelessWidget {
     return Drawer(
       backgroundColor: AppColors.darkPrimary,
       child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 50),
+        padding: const EdgeInsets.symmetric(vertical: 80),
         children: [
           SvgPicture.asset(ImageConstants.fullWhiteLogo, width: 40, height: 40),
           itemBuilder(context, 'Group Users', RouteConstants.users),
@@ -24,7 +24,7 @@ class GlobalDrawer extends StatelessWidget {
 
   Widget itemBuilder(BuildContext context, String name, String route) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
       child: ListTile(
         onTap: () => RouteManager.pushAndRemoveAll(
           routeName: route,

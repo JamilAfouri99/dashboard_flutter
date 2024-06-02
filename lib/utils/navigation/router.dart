@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/utils/configuration/constants.dart';
 import 'package:qcarder/screens/auth/signin_screen.dart';
 import 'package:qcarder/screens/dashboard/dashboard_screen.dart';
 import 'package:qcarder/screens/nfc/nfc_screen.dart';

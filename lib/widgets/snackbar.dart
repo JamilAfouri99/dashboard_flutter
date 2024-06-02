@@ -1,4 +1,4 @@
-import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/services/global_services.dart';
 import 'package:flutter/material.dart';
 

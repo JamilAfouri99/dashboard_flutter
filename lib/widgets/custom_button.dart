@@ -1,4 +1,4 @@
-import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -22,7 +22,7 @@ class CustomButton extends StatelessWidget {
     return Container(
       // margin: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(100),
         gradient: isInverted
             ? const LinearGradient(
                 colors: [Color(0xffF3F6FC), Color(0xffF3F6FC)],
@@ -30,9 +30,7 @@ class CustomButton extends StatelessWidget {
             : LinearGradient(
                 colors: [
                   isDisabled ? AppColors.primary.withAlpha(120) : AppColors.primary,
-                  isDisabled
-                      ? AppColors.primary.withOpacity(0.6).withAlpha(120)
-                      : AppColors.primary.withOpacity(0.6)
+                  isDisabled ? AppColors.primary.withAlpha(120) : AppColors.primary
                 ],
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,

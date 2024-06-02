@@ -1,8 +1,8 @@
-import 'package:qcarder/configuration/image_constants.dart';
-import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/utils/configuration/image-constants.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/cubit/users/users_cubit.dart';
 import 'package:qcarder/cubit/users/users_state.dart';
-import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/utils/navigation/router_manager.dart';
 import 'package:qcarder/screens/user/user_screen.dart';
 import 'package:qcarder/widgets/app_bar.dart';
 import 'package:qcarder/widgets/app_version.dart';

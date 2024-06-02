@@ -1,12 +1,12 @@
-import 'package:qcarder/configuration/constants.dart';
-import 'package:qcarder/configuration/image_constants.dart';
-import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/utils/configuration/constants.dart';
+import 'package:qcarder/utils/configuration/image-constants.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:qcarder/cubit/user_role/user_role_cubit.dart';
 import 'package:qcarder/cubit/user_role/user_role_state.dart';
-import 'package:qcarder/helpers/role_checker.dart';
-import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/utils/helpers/role_checker.dart';
+import 'package:qcarder/utils/navigation/router_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';

@@ -1,7 +1,7 @@
 // Openapi Generator last run: : 2023-09-21T03:57:33.953632
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
-import 'package:qcarder/configuration/theme.dart';
-import 'package:qcarder/configuration/constants.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
+import 'package:qcarder/utils/configuration/constants.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
 import 'package:qcarder/cubit/user_role/user_role_cubit.dart';
 import 'package:qcarder/cubit/theme/theme_cubit.dart';
@@ -12,7 +12,7 @@ import 'package:qcarder/services/global_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcarder_api/api.dart';
-import 'Navigation/router.dart' as router;
+import 'utils/navigation/router.dart' as router;
 import 'package:openapi_generator_annotations/openapi_generator_annotations.dart';
 
 @Openapi(

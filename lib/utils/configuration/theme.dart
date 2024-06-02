@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color(0xFF4f46e5);
+  static const Color primary = Color(0xFF524AE3);
   static const Color darkPrimary = Color(0xFF0F172A);
   static const Color onPrimary = light;
   static const Color secondary = Color(0xFF1e293b);
@@ -21,7 +21,7 @@ class AppColors {
   static const Color light = Colors.white;
   static const Color dark = Colors.black;
   static const Color noColor = Colors.transparent;
-  static const Color grey = Color(0xFF515966);
+  static const Color grey = Color(0xFF64748B);
   static const Color lightGrey = Color.fromARGB(255, 231, 235, 241);
   static const Color errorField = Color(0xFFFAEDEF);
   static const Color stagingColor = Color(0xFFFAE9FF);
@@ -31,9 +31,10 @@ class AppColors {
 }
 
 final lightTheme = ThemeData(
+  useMaterial3: true,
   brightness: Brightness.light,
   primaryColor: AppColors.primary,
-  fontFamily: 'Inter',
+  fontFamily: 'Roboto',
   textTheme: textLightTheme,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,
@@ -60,7 +61,7 @@ final lightTheme = ThemeData(
     ),
     floatingLabelStyle: const TextStyle(
       fontSize: 14,
-      color: AppColors.primary,
+      color: AppColors.grey,
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(2),
@@ -69,7 +70,7 @@ final lightTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       shadowColor: Colors.transparent,
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.dark,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
     ),
   ),
@@ -118,22 +119,27 @@ TextTheme textLightTheme = const TextTheme(
   titleLarge: TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 18,
+    color: AppColors.dark,
   ),
   titleMedium: TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 16,
+    color: AppColors.dark,
   ),
   titleSmall: TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 14,
+    color: AppColors.dark,
   ),
   bodyLarge: TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 18,
+    color: AppColors.dark,
   ),
   bodyMedium: TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 16,
+    color: AppColors.secondary,
   ),
   bodySmall: TextStyle(
     fontSize: 14,
@@ -145,7 +151,7 @@ TextTheme textLightTheme = const TextTheme(
 final darkTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: AppColors.darkPrimary,
-  fontFamily: 'Inter',
+  fontFamily: 'Roboto',
   textTheme: textDarkTheme,
   appBarTheme: const AppBarTheme(
     backgroundColor: AppColors.darkPrimary,

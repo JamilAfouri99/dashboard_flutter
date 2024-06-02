@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:qcarder/cubit/theme/theme_cubit.dart';
@@ -15,13 +15,16 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   AppBar build(BuildContext context) {
     return AppBar(
       toolbarHeight: 70,
+      backgroundColor: AppColors.light,
+      shadowColor: AppColors.light,
+      foregroundColor: AppColors.light,
+      surfaceTintColor: AppColors.light,
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Icon(Icons.density_medium_outlined, color: Theme.of(context).colorScheme.shadow),
+          icon: const Icon(Icons.density_medium_outlined, color: AppColors.grey),
           onPressed: () => Scaffold.of(context).openDrawer(),
         ),
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
       centerTitle: true,
       title: Text(
         title,
@@ -43,6 +46,9 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
           builder: (context, state) {
             if (state is AuthenticatedState) {
               return PopupMenuButton<String>(
+                color: AppColors.light,
+                surfaceTintColor: AppColors.light,
+                shadowColor: AppColors.light,
                 onSelected: (result) {
                   switch (result) {
                     case 'theme':
@@ -60,7 +66,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Signed in as',
+                          'User',
                           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                 color: Theme.of(context).colorScheme.shadow,
                               ),

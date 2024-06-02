@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qcarder/configuration/constants.dart';
-import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/utils/configuration/constants.dart';
+import 'package:qcarder/utils/navigation/router_manager.dart';
 import 'package:qcarder/widgets/app_bar.dart';
 import 'package:qcarder/widgets/error.dart';
 

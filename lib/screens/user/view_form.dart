@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:qcarder/configuration/image_constants.dart';
-import 'package:qcarder/configuration/theme.dart';
-import 'package:qcarder/helpers/date_time.dart';
+import 'package:qcarder/utils/configuration/image-constants.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
+import 'package:qcarder/utils/helpers/date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:qcarder/helpers/image_path_by_label.dart';
-import 'package:qcarder/helpers/index.dart';
+import 'package:qcarder/utils/helpers/image_path_by_label.dart';
+import 'package:qcarder/utils/helpers/index.dart';
 import 'package:qcarder_api/api.dart';
 import 'package:url_launcher/url_launcher.dart';
 

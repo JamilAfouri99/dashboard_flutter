@@ -1,11 +1,12 @@
-import 'package:qcarder/configuration/image_constants.dart';
-import 'package:qcarder/configuration/theme.dart';
+import 'package:qcarder/utils/configuration/image-constants.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/cubit/auth/auth_state.dart';
-import 'package:qcarder/configuration/constants.dart';
-import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/utils/configuration/constants.dart';
+import 'package:qcarder/utils/navigation/router_manager.dart';
 import 'package:qcarder/screens/auth/password_widget.dart';
 import 'package:qcarder/widgets/custom_button.dart';
 import 'package:qcarder/widgets/custom_progress_indicator.dart';
+import 'package:qcarder/widgets/custom_text_field.dart';
 import 'package:qcarder/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,16 +67,13 @@ class _SigninScreenState extends State<SigninScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextFormField(
+                        CustomTextField(
+                          labelText: 'Email',
+                          hintText: 'user@qcarder.com',
                           controller: _emailController,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            hintText: 'user@qcarder.com',
-                            hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
-                                ),
-                          ),
+                          hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
+                              ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
@@ -140,7 +138,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               return const CustomProgressIndicator();
                             }
                             return CustomButton(
-                              title: 'Sign in'.toUpperCase(),
+                              title: 'Sign in',
                               onPressed: () async {
                                 final form = Form.of(context);
                                 if (form.validate()) {

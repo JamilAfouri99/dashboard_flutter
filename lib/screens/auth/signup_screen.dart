@@ -1,7 +1,7 @@
-import 'package:qcarder/configuration/image_constants.dart';
+import 'package:qcarder/utils/configuration/image-constants.dart';
 import 'package:qcarder/cubit/auth/auth_state.dart';
-import 'package:qcarder/configuration/constants.dart';
-import 'package:qcarder/navigation/router_manager.dart';
+import 'package:qcarder/utils/configuration/constants.dart';
+import 'package:qcarder/utils/navigation/router_manager.dart';
 import 'package:qcarder/widgets/custom_button.dart';
 import 'package:qcarder/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
