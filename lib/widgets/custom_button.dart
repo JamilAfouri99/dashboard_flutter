@@ -9,13 +9,13 @@ class CustomButton extends StatelessWidget {
   final Function() onPressed;
 
   const CustomButton({
-    Key? key,
+    super.key,
     required this.title,
     required this.onPressed,
     this.isInverted = false,
     this.isDisabled = false,
     this.leading,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +25,12 @@ class CustomButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(100),
         gradient: isInverted
             ? const LinearGradient(
-                colors: [Color(0xffF3F6FC), Color(0xffF3F6FC)],
+                colors: [AppColors.light, AppColors.light],
               )
             : LinearGradient(
                 colors: [
-                  isDisabled
-                      ? AppColors.primary.withAlpha(120)
-                      : AppColors.primary,
-                  isDisabled
-                      ? AppColors.primary.withAlpha(120)
-                      : AppColors.primary
+                  isDisabled ? AppColors.primary.withAlpha(120) : AppColors.primary,
+                  isDisabled ? AppColors.primary.withAlpha(120) : AppColors.primary
                 ],
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,
@@ -46,8 +42,7 @@ class CustomButton extends StatelessWidget {
           alignment: Alignment.center,
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           minimumSize: const Size(double.infinity, 56),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         ),
@@ -55,8 +50,10 @@ class CustomButton extends StatelessWidget {
         child: leading == null
             ? Text(
                 title,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: isInverted ? AppColors.primary : AppColors.light),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: isInverted ? AppColors.primary : AppColors.light),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -67,9 +64,10 @@ class CustomButton extends StatelessWidget {
                   ),
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color:
-                            isInverted ? AppColors.primary : AppColors.light),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(color: isInverted ? AppColors.primary : AppColors.light),
                   )
                 ],
               ),

@@ -10,8 +10,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:qcarder_api/api.dart';
 
 class UsersCubit extends Cubit<UsersState> {
-  final PagingController<int, User> pagingController =
-      PagingController(firstPageKey: 1);
+  final PagingController<int, User> pagingController = PagingController(firstPageKey: 1);
   final ApiClient apiClient = ClientService.apiClient;
   late UsersApi usersApi;
   late RemoteService remoteService;
@@ -92,12 +91,10 @@ class UsersCubit extends Cubit<UsersState> {
       users,
       (contact) => contact.firstName[0].toUpperCase(),
     );
-    final Map<String, List<User>> sortedContracts =
-        sortMapByKeys(groupedContacts);
+    final Map<String, List<User>> sortedContracts = sortMapByKeys(groupedContacts);
 
     // Flatten the sorted map values into a single list
-    final List<User> sortedUsers =
-        sortedContracts.values.expand((e) => e).toList();
+    final List<User> sortedUsers = sortedContracts.values.expand((e) => e).toList();
 
     return sortedUsers;
   }

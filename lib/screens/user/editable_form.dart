@@ -18,6 +18,7 @@ import 'package:qcarder/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qcarder/widgets/custom_text_field.dart';
 import 'package:qcarder/widgets/snackbar.dart';
 import 'package:qcarder_api/api.dart';
 import 'package:intl/intl.dart';
@@ -60,9 +61,8 @@ class _EditableFormState extends State<EditableForm> {
     _titleController.text = widget.user.profile.title ?? '';
     _companyController.text = widget.user.profile.company ?? '';
     _addressController.text = widget.user.profile.address ?? '';
-    _birthdayController.text = widget.user.profile.birthday != null
-        ? widget.user.profile.birthday!.ymd
-        : '';
+    _birthdayController.text =
+        widget.user.profile.birthday != null ? widget.user.profile.birthday!.ymd : '';
     _noteController.text = widget.user.profile.notes ?? '';
     // _categoryController.text = widget.user!.categories[0];
     // phone
@@ -90,8 +90,7 @@ class _EditableFormState extends State<EditableForm> {
       }
     } else {
       _linkControllers.add(TextEditingController());
-      _links.add(Link(
-          link: _linkControllers[0].text, label: stringToEnumLink('link')));
+      _links.add(Link(link: _linkControllers[0].text, label: stringToEnumLink('link')));
     }
     // email
     if (widget.user.profile.emails.isNotEmpty) {
@@ -103,9 +102,7 @@ class _EditableFormState extends State<EditableForm> {
     } else {
       _emailControllers.add(TextEditingController());
       _emailLabelControllers.add(TextEditingController());
-      _emails.add(Email(
-          email: _emailControllers[0].text,
-          label: _emailLabelControllers[0].text));
+      _emails.add(Email(email: _emailControllers[0].text, label: _emailLabelControllers[0].text));
     }
   }
 
@@ -156,9 +153,7 @@ class _EditableFormState extends State<EditableForm> {
                   contentType: MediaType('image', 'jpeg'),
                 );
                 if (context.mounted) {
-                  context
-                      .read<AvatarCubit>()
-                      .uploadAvatar(widget.user.id, multipartFile);
+                  context.read<AvatarCubit>().uploadAvatar(widget.user.id, multipartFile);
                   binaryImage = await file.readAsBytes();
                   setState(() {});
                 }
@@ -172,10 +167,7 @@ class _EditableFormState extends State<EditableForm> {
                       shape: BoxShape.circle,
                       border: Border.all(
                         width: 4,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .shadow
-                            .withOpacity(0.2),
+                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
                       ),
                     ),
                     child: BlocConsumer<AvatarCubit, AvatarState>(
@@ -189,8 +181,7 @@ class _EditableFormState extends State<EditableForm> {
                         }
                       },
                       builder: (context, state) {
-                        if (state is AvatarLoading)
-                          return const CircularProgressIndicator();
+                        if (state is AvatarLoading) return const CircularProgressIndicator();
                         return ClipOval(
                           child: binaryImage != null
                               ? Image.memory(
@@ -209,8 +200,7 @@ class _EditableFormState extends State<EditableForm> {
                                           const CircularProgressIndicator(
                                         color: AppColors.primary,
                                       ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(
+                                      errorWidget: (context, url, error) => const Icon(
                                         Icons.error,
                                         color: AppColors.onError,
                                       ),
@@ -245,52 +235,34 @@ class _EditableFormState extends State<EditableForm> {
               ),
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Display Name',
-                prefixIcon: Icon(
-                  Icons.person,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Display Name',
+              prefixIcon: const Icon(
+                Icons.person,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _displayNameController,
               validator: (value) => _validator(value),
             ),
-            // const SizedBox(height: 16),
-            // TextFormField(
-            //   decoration: const InputDecoration(
-            //     labelText: 'Category',
-            //     prefixIcon: Icon(Icons.category_outlined),
-            //   ),
-            //   controller: _categoryController,
-            //   validator: (value) => _validator(value),
-            // ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                prefixIcon: Icon(
-                  Icons.title,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Title',
+              prefixIcon: const Icon(
+                Icons.title,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _titleController,
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Company',
-                prefixIcon: Icon(
-                  Icons.business,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Company',
+              prefixIcon: const Icon(
+                Icons.business,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _companyController,
             ),
             const SizedBox(height: 16),
@@ -300,29 +272,23 @@ class _EditableFormState extends State<EditableForm> {
             const SizedBox(height: 16),
             linksWidget(),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Address',
-                prefixIcon: Icon(
-                  Icons.location_on_outlined,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Address',
+              prefixIcon: const Icon(
+                Icons.location_on_outlined,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _addressController,
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Birthday',
-                prefixIcon: Icon(
-                  Icons.calendar_month,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Birthday',
+              prefixIcon: const Icon(
+                Icons.calendar_month,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _birthdayController,
               validator: (value) => _validator(value),
               onTap: () async {
@@ -340,18 +306,14 @@ class _EditableFormState extends State<EditableForm> {
               readOnly: true,
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Note',
-                prefixIcon: Icon(
-                  Icons.note_add_outlined,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Note',
+              prefixIcon: const Icon(
+                Icons.note_add_outlined,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _noteController,
-              maxLines: null,
               keyboardType: TextInputType.multiline,
             ),
             const SizedBox(height: 24),
@@ -417,19 +379,14 @@ class _EditableFormState extends State<EditableForm> {
                   children: [
                     Expanded(
                       flex: 4,
-                      child: TextFormField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(RegExp(r'\s'))
-                        ],
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          prefixIcon: Icon(
-                            Icons.email_outlined,
-                            size: 20,
-                          ),
+                      child: CustomTextField(
+                        inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
+                        labelText: 'Email',
+                        prefixIcon: const Icon(
+                          Icons.email_outlined,
+                          size: 20,
                         ),
                         scrollPadding: EdgeInsets.zero,
-                        style: Theme.of(context).textTheme.bodySmall,
                         controller: _emailControllers[i],
                         onChanged: (value) {
                           _emails[i].email = _emailControllers[i].text;
@@ -440,12 +397,9 @@ class _EditableFormState extends State<EditableForm> {
                     const SizedBox(width: 5),
                     Expanded(
                       flex: 2,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Label',
-                        ),
+                      child: CustomTextField(
+                        labelText: 'Label',
                         scrollPadding: EdgeInsets.zero,
-                        style: Theme.of(context).textTheme.bodySmall,
                         controller: _emailLabelControllers[i],
                         onChanged: (value) {
                           _emails[i].label = _emailLabelControllers[i].text;
@@ -516,33 +470,13 @@ class _EditableFormState extends State<EditableForm> {
             children: [
               Expanded(
                 flex: 4,
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Phone',
-                    prefixIcon: Icon(
-                      Icons.phone,
-                      size: 20,
-                    ),
-                    // prefixIcon: GestureDetector(
-                    //   onTap: () => _showFlagsIcons(i),
-                    //   child: Container(
-                    //     width: 25,
-                    //     height: 25,
-                    //     padding: const EdgeInsets.all(10),
-                    //     decoration: const BoxDecoration(
-                    //       shape: BoxShape.circle,
-                    //     ),
-                    //     child: ClipOval(
-                    //       child: SvgPicture.asset(
-                    //         flagPathByName(_phones[i].country),
-                    //         fit: BoxFit.cover,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                child: CustomTextField(
+                  labelText: 'Phone',
+                  prefixIcon: const Icon(
+                    Icons.phone,
+                    size: 20,
                   ),
                   scrollPadding: EdgeInsets.zero,
-                  style: Theme.of(context).textTheme.bodySmall,
                   validator: _validator,
                   controller: _phoneControllers[i],
                   onChanged: (value) {
@@ -553,12 +487,9 @@ class _EditableFormState extends State<EditableForm> {
               const SizedBox(width: 5),
               Expanded(
                 flex: 2,
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Label',
-                  ),
+                child: CustomTextField(
+                  labelText: 'Label',
                   scrollPadding: EdgeInsets.zero,
-                  style: Theme.of(context).textTheme.bodySmall,
                   validator: _validator,
                   controller: _phoneLabelControllers[i],
                   onChanged: (value) {
@@ -629,36 +560,28 @@ class _EditableFormState extends State<EditableForm> {
             children: [
               Expanded(
                 flex: 5,
-                child: TextFormField(
-                  inputFormatters: [
-                    FilteringTextInputFormatter.deny(RegExp(r'\s'))
-                  ],
-                  decoration: InputDecoration(
-                    labelText: 'Link',
-                    prefixIcon: GestureDetector(
-                      onTap: () => _showLinksIcons(i),
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        padding: const EdgeInsets.all(12),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: ClipOval(
-                          child: SvgPicture.asset(
-                            linkPathByLabel(_links[i].label),
-                            fit: BoxFit.cover,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .shadow
-                                .withOpacity(0.7),
-                          ),
+                child: CustomTextField(
+                  inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
+                  labelText: 'Link',
+                  prefixIcon: GestureDetector(
+                    onTap: () => _showLinksIcons(i),
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: ClipOval(
+                        child: SvgPicture.asset(
+                          linkPathByLabel(_links[i].label),
+                          fit: BoxFit.cover,
+                          color: Theme.of(context).colorScheme.shadow.withOpacity(0.7),
                         ),
                       ),
                     ),
                   ),
                   scrollPadding: EdgeInsets.zero,
-                  style: Theme.of(context).textTheme.bodySmall,
                   controller: _linkControllers[i],
                   onChanged: (value) {
                     _links[i].link = _linkControllers[i].text;
@@ -689,9 +612,7 @@ class _EditableFormState extends State<EditableForm> {
           child: InkWell(
             onTap: () {
               _linkControllers.add(TextEditingController());
-              _links.add(Link(
-                  link: '',
-                  label: stringToEnumLink(_linkControllers.last.text)));
+              _links.add(Link(link: '', label: stringToEnumLink(_linkControllers.last.text)));
               setState(() {});
             },
             child: Row(
@@ -737,9 +658,7 @@ class _EditableFormState extends State<EditableForm> {
               int index = entry.key;
               Link link = entry.value;
               link.link = _linkControllers[index].text;
-              link.label = link.label.toString().isNotEmpty
-                  ? link.label
-                  : stringToEnumLink('link');
+              link.label = link.label.toString().isNotEmpty ? link.label : stringToEnumLink('link');
               return link;
             }).toList(),
     );
@@ -763,18 +682,16 @@ class _EditableFormState extends State<EditableForm> {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: SvgPicture.asset(
-                    linkPathByLabel(stringToEnumLink(
-                        Links.values[index].toString().split('.')[1])),
+                    linkPathByLabel(stringToEnumLink(Links.values[index].toString().split('.')[1])),
                     fit: BoxFit.cover,
                     color: AppColors.primary,
                   ),
                 ),
               ),
-              title: Text(
-                  Links.values[index].toString().split('.')[1].toUpperCase()),
+              title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _links[linkIndex].label = stringToEnumLink(
-                    Links.values[index].toString().split('.')[1]);
+                _links[linkIndex].label =
+                    stringToEnumLink(Links.values[index].toString().split('.')[1]);
                 setState(() {});
                 Navigator.of(context).pop();
               },
@@ -803,17 +720,14 @@ class _EditableFormState extends State<EditableForm> {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: SvgPicture.asset(
-                    flagPathByName(
-                        Flags.values[index].toString().split('.')[1]),
+                    flagPathByName(Flags.values[index].toString().split('.')[1]),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              title: Text(
-                  Flags.values[index].toString().split('.')[1].toUpperCase()),
+              title: Text(Flags.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _phones[flagIndex].country =
-                    Flags.values[index].toString().split('.')[1];
+                _phones[flagIndex].country = Flags.values[index].toString().split('.')[1];
                 setState(() {});
                 Navigator.of(context).pop();
               },

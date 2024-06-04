@@ -1,6 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:qcarder/utils/configuration/theme.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -12,9 +11,15 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final String? Function(String?)? validator;
   final GestureDetector? suffixIcon;
+  final Widget? prefixIcon;
+  final EdgeInsets? scrollPadding;
+  final bool? readOnly;
+  final void Function()? onTap;
+  final void Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     this.labelText,
     this.hintText,
     this.controller,
@@ -23,7 +28,13 @@ class CustomTextField extends StatelessWidget {
     this.hintStyle,
     this.validator,
     this.suffixIcon,
-  }) : super(key: key);
+    this.prefixIcon,
+    this.scrollPadding,
+    this.readOnly,
+    this.onTap,
+    this.onChanged,
+    this.inputFormatters,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +53,8 @@ class CustomTextField extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(
-            color: AppColors.grey, // Set the border color to gray
+          borderSide: BorderSide(
+            color: AppColors.grey.withOpacity(0.4), // Set the border color to gray
             width: 1.0,
           ),
         ),
@@ -55,11 +66,15 @@ class CustomTextField extends StatelessWidget {
             width: 1.0,
           ),
         ),
+        prefixIcon: prefixIcon,
       ),
-      style: const TextStyle(
-        color: AppColors.dark,
-      ),
+      scrollPadding: scrollPadding ?? const EdgeInsets.all(20.0),
+      style: const TextStyle(color: AppColors.dark, fontSize: 16),
       validator: validator,
+      readOnly: readOnly ?? false,
+      onTap: onTap,
+      onChanged: onChanged,
+      inputFormatters: inputFormatters,
     );
   }
 }

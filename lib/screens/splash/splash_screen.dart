@@ -13,14 +13,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qcarder_api/api.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _dotAnimation;
 
@@ -29,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 500),
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           _animationController.reverse(from: 2.0);
@@ -54,8 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocBuilder<UserRoleCubit, UserRoleState>(
-          builder: (context, userRole) {
+      body: BlocBuilder<UserRoleCubit, UserRoleState>(builder: (context, userRole) {
         return BlocConsumer<AuthCubit, AuthState>(
           listener: (context, state) {
             if (state is AuthenticatedState) {
@@ -127,9 +125,8 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _handleAuthenticated(BuildContext context, AuthUserRoleEnum userRole) {
-    String route = RoleChecker.canAccessUsersScreen(userRole)
-        ? RouteConstants.users
-        : RouteConstants.users;
+    String route =
+        RoleChecker.canAccessUsersScreen(userRole) ? RouteConstants.users : RouteConstants.users;
 
     RouteManager.popAndPushNamed(
       routeName: route,
@@ -156,23 +153,19 @@ class Dot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double progress =
-        (animation.value - intervalBegin) / (intervalEnd - intervalBegin);
-    final double scale =
-        1.0 + 0.5 * (1.0 - (progress.abs() * 2.0 - 1.0)).clamp(0.0, 1.0);
+    final double progress = (animation.value - intervalBegin) / (intervalEnd - intervalBegin);
+    final double scale = 1.0 + 0.5 * (1.0 - (progress.abs() * 2.0 - 1.0)).clamp(0.0, 1.0);
     final double opacity = (1.0 - progress).clamp(0.5, 1.0);
 
     // Reverse the animation for the second half of the cycle
-    final reversedProgress =
-        (animation.value - intervalBegin) / (intervalEnd - intervalBegin);
+    final reversedProgress = (animation.value - intervalBegin) / (intervalEnd - intervalBegin);
     final reverseOpacity = (1.0 - reversedProgress).clamp(0.1, 1.0);
 
     return Opacity(
       opacity: (animation.value <= intervalEnd) ? opacity : reverseOpacity,
       child: Transform.scale(
-        scale: (animation.value <= intervalEnd)
-            ? scale
-            : 1.0, // Scale is 1.0 during the second half
+        scale:
+            (animation.value <= intervalEnd) ? scale : 1.0, // Scale is 1.0 during the second half
         child: Container(
           width: radius * 1.5,
           height: radius * 1.5,

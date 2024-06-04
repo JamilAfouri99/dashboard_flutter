@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:qcarder/widgets/custom_text_field.dart';
 import 'package:qcarder_api/api.dart';
 
 class NewForm extends StatefulWidget {
@@ -38,21 +39,11 @@ class _NewFormState extends State<NewForm> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _birthdayController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
-  final List<TextEditingController> _phoneControllers = [
-    TextEditingController()
-  ];
-  final List<TextEditingController> _phoneLabelControllers = [
-    TextEditingController()
-  ];
-  final List<TextEditingController> _emailControllers = [
-    TextEditingController()
-  ];
-  final List<TextEditingController> _emailLabelControllers = [
-    TextEditingController()
-  ];
-  final List<TextEditingController> _linkControllers = [
-    TextEditingController()
-  ];
+  final List<TextEditingController> _phoneControllers = [TextEditingController()];
+  final List<TextEditingController> _phoneLabelControllers = [TextEditingController()];
+  final List<TextEditingController> _emailControllers = [TextEditingController()];
+  final List<TextEditingController> _emailLabelControllers = [TextEditingController()];
+  final List<TextEditingController> _linkControllers = [TextEditingController()];
 
   final List<Link> _links = [];
   final List<PhoneNumber> _phones = [];
@@ -63,16 +54,13 @@ class _NewFormState extends State<NewForm> {
   @override
   void initState() {
     super.initState();
-    _links
-        .add(Link(link: '', label: stringToEnumLink(_linkControllers[0].text)));
+    _links.add(Link(link: '', label: stringToEnumLink(_linkControllers[0].text)));
     _phones.add(PhoneNumber(
       phoneNumber: _phoneControllers[0].text,
       label: _phoneLabelControllers[0].text,
       country: 'XX',
     ));
-    _emails.add(Email(
-        email: _emailControllers[0].text,
-        label: _emailLabelControllers[0].text));
+    _emails.add(Email(email: _emailControllers[0].text, label: _emailLabelControllers[0].text));
   }
 
   @override
@@ -141,10 +129,7 @@ class _NewFormState extends State<NewForm> {
                       shape: BoxShape.circle,
                       border: Border.all(
                         width: 4,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .shadow
-                            .withOpacity(0.2),
+                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
                       ),
                     ),
                     child: ClipOval(
@@ -178,41 +163,32 @@ class _NewFormState extends State<NewForm> {
               ),
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'First Name',
-                prefixIcon: Icon(
-                  Icons.person,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'First Name',
+              prefixIcon: const Icon(
+                Icons.person,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _firstNameController,
               validator: (value) => _validator(value),
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Last Name',
-                prefixIcon: Icon(Icons.person, size: 20),
-              ),
+            CustomTextField(
+              labelText: 'Last Name',
+              prefixIcon: const Icon(Icons.person, size: 20),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _lastNameController,
               validator: (value) => _validator(value),
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Display Name',
-                prefixIcon: Icon(
-                  Icons.person,
-                  size: 20,
-                ),
+            CustomTextField(
+              prefixIcon: const Icon(
+                Icons.person,
+                size: 20,
               ),
+              labelText: 'Display Name',
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _displayNameController,
               validator: (value) => _validator(value),
             ),
@@ -226,29 +202,23 @@ class _NewFormState extends State<NewForm> {
             //   validator: (value) => _validator(value),
             // ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                prefixIcon: Icon(
-                  Icons.title,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Title',
+              prefixIcon: const Icon(
+                Icons.title,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _titleController,
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Company',
-                prefixIcon: Icon(
-                  Icons.business,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Company',
+              prefixIcon: const Icon(
+                Icons.business,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _companyController,
             ),
             const SizedBox(height: 16),
@@ -258,29 +228,23 @@ class _NewFormState extends State<NewForm> {
             const SizedBox(height: 16),
             linksWidget(),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Address',
-                prefixIcon: Icon(
-                  Icons.location_on_outlined,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Address',
+              prefixIcon: const Icon(
+                Icons.location_on_outlined,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _addressController,
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Birthday',
-                prefixIcon: Icon(
-                  Icons.calendar_month,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Birthday',
+              prefixIcon: Icon(
+                Icons.calendar_month,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _birthdayController,
               validator: (value) => _validator(value),
               onTap: () async {
@@ -298,18 +262,14 @@ class _NewFormState extends State<NewForm> {
               readOnly: true,
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Note',
-                prefixIcon: Icon(
-                  Icons.note_add_outlined,
-                  size: 20,
-                ),
+            CustomTextField(
+              labelText: 'Note',
+              prefixIcon: const Icon(
+                Icons.note_add_outlined,
+                size: 20,
               ),
               scrollPadding: EdgeInsets.zero,
-              style: Theme.of(context).textTheme.bodySmall,
               controller: _noteController,
-              maxLines: null,
               keyboardType: TextInputType.multiline,
             ),
             const SizedBox(height: 24),
@@ -396,19 +356,14 @@ class _NewFormState extends State<NewForm> {
                   children: [
                     Expanded(
                       flex: 4,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          prefixIcon: Icon(
-                            Icons.email_outlined,
-                            size: 20,
-                          ),
+                      child: CustomTextField(
+                        labelText: 'Email',
+                        prefixIcon: const Icon(
+                          Icons.email_outlined,
+                          size: 20,
                         ),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(RegExp(r'\s'))
-                        ],
+                        inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
                         scrollPadding: EdgeInsets.zero,
-                        style: Theme.of(context).textTheme.bodySmall,
                         controller: _emailControllers[i],
                         onChanged: (value) {
                           _emails[i].email = _emailControllers[i].text;
@@ -419,12 +374,9 @@ class _NewFormState extends State<NewForm> {
                     const SizedBox(width: 5),
                     Expanded(
                       flex: 2,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Label',
-                        ),
+                      child: CustomTextField(
+                        labelText: 'Label',
                         scrollPadding: EdgeInsets.zero,
-                        style: Theme.of(context).textTheme.bodySmall,
                         controller: _emailLabelControllers[i],
                         onChanged: (value) {
                           _emails[i].label = _emailLabelControllers[i].text;
@@ -542,33 +494,12 @@ class _NewFormState extends State<NewForm> {
             children: [
               Expanded(
                 flex: 4,
-                child: TextFormField(
+                child: CustomTextField(
                   scrollPadding: EdgeInsets.zero,
-                  style: Theme.of(context).textTheme.bodySmall,
-                  decoration: const InputDecoration(
-                    labelText: 'Phone',
-                    prefixIcon: Icon(
-                      Icons.phone,
-                      size: 20,
-                    ),
-
-                    // prefixIcon: GestureDetector(
-                    //   onTap: () => _showFlagsIcons(i),
-                    //   child: Container(
-                    //     width: 25,
-                    //     height: 25,
-                    //     padding: const EdgeInsets.all(10),
-                    //     decoration: const BoxDecoration(
-                    //       shape: BoxShape.circle,
-                    //     ),
-                    //     child: ClipOval(
-                    //       child: SvgPicture.asset(
-                    //         flagPathByName(_phones[i].country),
-                    //         fit: BoxFit.cover,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                  labelText: 'Phone',
+                  prefixIcon: const Icon(
+                    Icons.phone,
+                    size: 20,
                   ),
                   controller: _phoneControllers[i],
                   onChanged: (value) {
@@ -579,12 +510,9 @@ class _NewFormState extends State<NewForm> {
               const SizedBox(width: 5),
               Expanded(
                 flex: 2,
-                child: TextFormField(
+                child: CustomTextField(
                   scrollPadding: EdgeInsets.zero,
-                  style: Theme.of(context).textTheme.bodySmall,
-                  decoration: const InputDecoration(
-                    labelText: 'Label',
-                  ),
+                  labelText: 'Label',
                   controller: _phoneLabelControllers[i],
                   onChanged: (value) {
                     _phones[i].label = _phoneLabelControllers[i].text;
@@ -652,29 +580,23 @@ class _NewFormState extends State<NewForm> {
             children: [
               Expanded(
                 flex: 5,
-                child: TextFormField(
+                child: CustomTextField(
                   scrollPadding: EdgeInsets.zero,
-                  style: Theme.of(context).textTheme.bodySmall,
-                  decoration: InputDecoration(
-                    labelText: 'Link',
-                    prefixIcon: GestureDetector(
-                      onTap: () => _showLinksIcons(i),
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        padding: const EdgeInsets.all(12),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: ClipOval(
-                          child: SvgPicture.asset(
-                            linkPathByLabel(_links[i].label),
-                            fit: BoxFit.cover,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .shadow
-                                .withOpacity(0.7),
-                          ),
+                  labelText: 'Link',
+                  prefixIcon: GestureDetector(
+                    onTap: () => _showLinksIcons(i),
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: ClipOval(
+                        child: SvgPicture.asset(
+                          linkPathByLabel(_links[i].label),
+                          fit: BoxFit.cover,
+                          color: Theme.of(context).colorScheme.shadow.withOpacity(0.7),
                         ),
                       ),
                     ),
@@ -709,9 +631,7 @@ class _NewFormState extends State<NewForm> {
           child: InkWell(
             onTap: () {
               _linkControllers.add(TextEditingController());
-              _links.add(Link(
-                  link: '',
-                  label: stringToEnumLink(_linkControllers.last.text)));
+              _links.add(Link(link: '', label: stringToEnumLink(_linkControllers.last.text)));
               setState(() {});
             },
             child: Row(
@@ -750,9 +670,7 @@ class _NewFormState extends State<NewForm> {
               int index = entry.key;
               Link link = entry.value;
               link.link = _linkControllers[index].text;
-              link.label = link.label.toString().isNotEmpty
-                  ? link.label
-                  : stringToEnumLink('link');
+              link.label = link.label.toString().isNotEmpty ? link.label : stringToEnumLink('link');
               return link;
             }).toList(),
     );
@@ -785,18 +703,16 @@ class _NewFormState extends State<NewForm> {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: SvgPicture.asset(
-                    linkPathByLabel(stringToEnumLink(
-                        Links.values[index].toString().split('.')[1])),
+                    linkPathByLabel(stringToEnumLink(Links.values[index].toString().split('.')[1])),
                     fit: BoxFit.cover,
                     color: AppColors.primary,
                   ),
                 ),
               ),
-              title: Text(
-                  Links.values[index].toString().split('.')[1].toUpperCase()),
+              title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _links[linkIndex].label = stringToEnumLink(
-                    Links.values[index].toString().split('.')[1]);
+                _links[linkIndex].label =
+                    stringToEnumLink(Links.values[index].toString().split('.')[1]);
                 setState(() {});
                 Navigator.of(context).pop();
               },
@@ -825,17 +741,14 @@ class _NewFormState extends State<NewForm> {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: SvgPicture.asset(
-                    flagPathByName(
-                        Flags.values[index].toString().split('.')[1]),
+                    flagPathByName(Flags.values[index].toString().split('.')[1]),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              title: Text(
-                  Flags.values[index].toString().split('.')[1].toUpperCase()),
+              title: Text(Flags.values[index].toString().split('.')[1].toUpperCase()),
               onTap: () {
-                _phones[flagIndex].country =
-                    Flags.values[index].toString().split('.')[1];
+                _phones[flagIndex].country = Flags.values[index].toString().split('.')[1];
                 setState(() {});
                 Navigator.of(context).pop();
               },

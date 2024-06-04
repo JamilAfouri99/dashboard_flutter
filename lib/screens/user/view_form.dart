@@ -67,19 +67,15 @@ class _ViewFormState extends State<ViewForm> {
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.8,
+                                  width: MediaQuery.of(context).size.width * 0.8,
+                                  height: MediaQuery.of(context).size.width * 0.8,
                                   child: CachedNetworkImage(
                                     imageUrl: widget.user.avatar ?? '',
                                     fit: BoxFit.cover,
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(
+                                    placeholder: (context, url) => const CircularProgressIndicator(
                                       color: AppColors.darkPrimary,
                                     ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(
+                                    errorWidget: (context, url, error) => const Icon(
                                       Icons.error,
                                       color: AppColors.onError,
                                     ),
@@ -97,8 +93,7 @@ class _ViewFormState extends State<ViewForm> {
                           width: 120,
                           imageUrl: widget.user.avatar ?? '',
                           fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(
+                          placeholder: (context, url) => const CircularProgressIndicator(
                             color: AppColors.primary,
                           ),
                           errorWidget: (context, url, error) => const Icon(
@@ -150,8 +145,7 @@ class _ViewFormState extends State<ViewForm> {
                 color: AppColors.light,
                 boxShadow: [
                   BoxShadow(
-                    color:
-                        Theme.of(context).colorScheme.shadow.withOpacity(0.5),
+                    color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 3),
@@ -160,8 +154,7 @@ class _ViewFormState extends State<ViewForm> {
               ),
               child: Column(
                 children: [
-                  if (widget.user.profile.title != null &&
-                      widget.user.profile.title!.isNotEmpty)
+                  if (widget.user.profile.title != null && widget.user.profile.title!.isNotEmpty)
                     ListTile(
                       leading: Icon(
                         Icons.work_outline,
@@ -211,8 +204,7 @@ class _ViewFormState extends State<ViewForm> {
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
-                  if (widget.user.profile.notes != null &&
-                      widget.user.profile.notes!.isNotEmpty)
+                  if (widget.user.profile.notes != null && widget.user.profile.notes!.isNotEmpty)
                     ListTile(
                       leading: Icon(
                         Icons.view_headline_rounded,
@@ -238,8 +230,7 @@ class _ViewFormState extends State<ViewForm> {
                     return GestureDetector(
                       onTap: () async {
                         String url = link.link;
-                        if (!url.startsWith('http://') &&
-                            !url.startsWith('https://')) {
+                        if (!url.startsWith('http://') && !url.startsWith('https://')) {
                           url = 'https://$url';
                         }
                         Uri uri = Uri.parse(url);
@@ -285,8 +276,7 @@ class _ViewFormState extends State<ViewForm> {
           color: Theme.of(context).colorScheme.shadow,
         ),
         // subtitle: Text(email.label),
-        title: widget.user.profile.emails.isNotEmpty &&
-                widget.user.profile.emails.length > 1
+        title: widget.user.profile.emails.isNotEmpty && widget.user.profile.emails.length > 1
             ? DropdownButton(
                 icon: const Icon(Icons.more_vert_outlined),
                 autofocus: true,

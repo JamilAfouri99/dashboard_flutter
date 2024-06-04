@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qcarder/utils/configuration/theme.dart';
 
 class ShimmerLoading extends StatefulWidget {
   const ShimmerLoading({
@@ -103,8 +104,7 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
         stops: widget.linearGradient.stops,
         begin: widget.linearGradient.begin,
         end: widget.linearGradient.end,
-        transform:
-            _SlidingGradientTransform(slidePercent: _shimmerController.value),
+        transform: _SlidingGradientTransform(slidePercent: _shimmerController.value),
       );
 
   Listenable get shimmerChanges => _shimmerController;
@@ -164,19 +164,19 @@ class _SlidingGradientTransform extends GradientTransform {
 }
 
 LinearGradient shimmerGradient(BuildContext context) {
-  return LinearGradient(
+  return const LinearGradient(
     colors: [
-      const Color(0xFFF4F5F6),
-      Theme.of(context).colorScheme.background,
-      const Color(0xFFF4F5F6),
+      Color(0xFFF4F5F6),
+      AppColors.light,
+      Color(0xFFF4F5F6),
     ],
-    stops: const [
+    stops: [
       0.1,
       0.3,
       0.4,
     ],
-    begin: const Alignment(-1.0, -0.3),
-    end: const Alignment(1.0, 0.3),
+    begin: Alignment(-1.0, -0.3),
+    end: Alignment(1.0, 0.3),
     tileMode: TileMode.clamp,
   );
 }
