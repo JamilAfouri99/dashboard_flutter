@@ -40,8 +40,7 @@ class PublicUser {
       (profile.hashCode);
 
   @override
-  String toString() =>
-      'PublicUser[avatar=$avatar, group=$group, profile=$profile]';
+  String toString() => 'PublicUser[avatar=$avatar, group=$group, profile=$profile]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -71,10 +70,8 @@ class PublicUser {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key),
-              'Required key "PublicUser[$key]" is missing from JSON.');
-          assert(json[key] != null,
-              'Required key "PublicUser[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "PublicUser[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "PublicUser[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -139,8 +136,6 @@ class PublicUser {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'avatar',
-    'group',
     'profile',
   };
 }

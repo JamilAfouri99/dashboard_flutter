@@ -79,10 +79,8 @@ class GroupProfile {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key),
-              'Required key "GroupProfile[$key]" is missing from JSON.');
-          assert(json[key] != null,
-              'Required key "GroupProfile[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "GroupProfile[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "GroupProfile[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -153,6 +151,5 @@ class GroupProfile {
     'createdAt',
     'updatedAt',
     'groupId',
-    'banner',
   };
 }

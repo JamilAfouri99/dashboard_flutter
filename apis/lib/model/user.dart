@@ -129,10 +129,8 @@ class User {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key),
-              'Required key "User[$key]" is missing from JSON.');
-          assert(json[key] != null,
-              'Required key "User[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "User[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "User[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -212,11 +210,8 @@ class User {
     'email',
     'firstName',
     'lastName',
-    'avatar',
     'role',
     'status',
-    'group',
-    'groupId',
     'profile',
   };
 }
@@ -246,8 +241,7 @@ class UserRoleEnum {
     SUPERADMIN,
   ];
 
-  static UserRoleEnum? fromJson(dynamic value) =>
-      UserRoleEnumTypeTransformer().decode(value);
+  static UserRoleEnum? fromJson(dynamic value) => UserRoleEnumTypeTransformer().decode(value);
 
   static List<UserRoleEnum> listFromJson(
     dynamic json, {
@@ -269,8 +263,7 @@ class UserRoleEnum {
 /// Transformation class that can [encode] an instance of [UserRoleEnum] to String,
 /// and [decode] dynamic data back to [UserRoleEnum].
 class UserRoleEnumTypeTransformer {
-  factory UserRoleEnumTypeTransformer() =>
-      _instance ??= const UserRoleEnumTypeTransformer._();
+  factory UserRoleEnumTypeTransformer() => _instance ??= const UserRoleEnumTypeTransformer._();
 
   const UserRoleEnumTypeTransformer._();
 
@@ -329,8 +322,7 @@ class UserStatusEnum {
     INACTIVE,
   ];
 
-  static UserStatusEnum? fromJson(dynamic value) =>
-      UserStatusEnumTypeTransformer().decode(value);
+  static UserStatusEnum? fromJson(dynamic value) => UserStatusEnumTypeTransformer().decode(value);
 
   static List<UserStatusEnum> listFromJson(
     dynamic json, {
@@ -352,8 +344,7 @@ class UserStatusEnum {
 /// Transformation class that can [encode] an instance of [UserStatusEnum] to String,
 /// and [decode] dynamic data back to [UserStatusEnum].
 class UserStatusEnumTypeTransformer {
-  factory UserStatusEnumTypeTransformer() =>
-      _instance ??= const UserStatusEnumTypeTransformer._();
+  factory UserStatusEnumTypeTransformer() => _instance ??= const UserStatusEnumTypeTransformer._();
 
   const UserStatusEnumTypeTransformer._();
 

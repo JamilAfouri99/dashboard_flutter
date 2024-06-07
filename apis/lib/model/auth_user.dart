@@ -125,10 +125,8 @@ class AuthUser {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key),
-              'Required key "AuthUser[$key]" is missing from JSON.');
-          assert(json[key] != null,
-              'Required key "AuthUser[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "AuthUser[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "AuthUser[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -208,10 +206,8 @@ class AuthUser {
     'email',
     'firstName',
     'lastName',
-    'avatar',
     'role',
     'status',
-    'groupId',
     'access_token',
     'refresh_token',
   };

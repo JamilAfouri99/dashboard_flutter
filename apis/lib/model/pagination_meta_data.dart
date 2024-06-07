@@ -159,12 +159,5 @@ class PaginationMetaData {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
-    'total',
-    'lastPage',
-    'currentPage',
-    'perPage',
-    'prev',
-    'next',
-  };
+  static const requiredKeys = <String>{'total', 'lastPage', 'currentPage', 'perPage'};
 }

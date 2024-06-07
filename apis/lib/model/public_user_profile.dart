@@ -208,13 +208,6 @@ class PublicUserProfile {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'displayName',
-    'banner',
-    'title',
-    'company',
-    'birthday',
-    'address',
-    'notes',
     'emails',
     'phoneNumbers',
     'links',
