@@ -17,13 +17,13 @@ class UserProfile {
     required this.createdAt,
     required this.updatedAt,
     required this.userId,
-    this.displayName,
-    this.banner,
-    this.title,
-    this.company,
-    this.birthday,
-    this.address,
-    this.notes,
+    required this.displayName,
+    required this.banner,
+    required this.title,
+    required this.company,
+    required this.birthday,
+    required this.address,
+    required this.notes,
     this.emails = const [],
     this.phoneNumbers = const [],
     this.links = const [],
@@ -157,8 +157,10 @@ class UserProfile {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "UserProfile[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "UserProfile[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "UserProfile[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "UserProfile[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -237,5 +239,16 @@ class UserProfile {
     'id',
     'createdAt',
     'updatedAt',
+    'userId',
+    'displayName',
+    'banner',
+    'title',
+    'company',
+    'birthday',
+    'address',
+    'notes',
+    'emails',
+    'phoneNumbers',
+    'links',
   };
 }

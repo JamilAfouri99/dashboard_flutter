@@ -17,8 +17,8 @@ class PaginationMetaData {
     required this.lastPage,
     required this.currentPage,
     required this.perPage,
-    this.prev,
-    this.next,
+    required this.prev,
+    required this.next,
   });
 
   num total;
@@ -164,5 +164,7 @@ class PaginationMetaData {
     'lastPage',
     'currentPage',
     'perPage',
+    'prev',
+    'next',
   };
 }

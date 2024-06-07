@@ -16,8 +16,8 @@ class Group {
     required this.id,
     required this.createdAt,
     required this.updatedAt,
+    required this.name,
     required this.profile,
-    this.name,
   });
 
   String id;
@@ -79,8 +79,10 @@ class Group {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Group[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Group[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "Group[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "Group[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -150,6 +152,7 @@ class Group {
     'id',
     'createdAt',
     'updatedAt',
+    'name',
     'profile',
   };
 }

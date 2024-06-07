@@ -3,8 +3,7 @@ import 'package:qcarder/services/global_services.dart';
 import 'package:flutter/material.dart';
 
 class CustomSnackbar {
-  static void show(BuildContext context, String message,
-      {SnackbarType type = SnackbarType.info}) {
+  static void show(BuildContext context, String message, {SnackbarType type = SnackbarType.info}) {
     final key = KeysService.snackbarKey;
     if (key != null) {
       final snackbar = SnackBar(

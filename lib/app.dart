@@ -1,4 +1,4 @@
-// Openapi Generator last run: : 2024-06-03T01:31:07.888183
+// Openapi Generator last run: : 2024-06-07T18:39:37.791797
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/utils/configuration/constants.dart';

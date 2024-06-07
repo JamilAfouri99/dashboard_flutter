@@ -13,7 +13,7 @@ class AppColors {
   static const Color onTertiaryBold = Color(0xFF675140);
   static const Color shadow = Color(0xFFDBE5ED);
   static const Color success = Color(0xFFF1F9F4);
-  static const Color onSuccess = Color(0xFF36BB74);
+  static const Color onSuccess = Color(0xFF43a047);
   static const Color onSuccessBold = Color(0xFF236642);
   static const Color error = Color(0xFFFCEFEA);
   static const Color onError = Color(0xFFFF6161);
@@ -44,8 +44,7 @@ final lightTheme = ThemeData(
   ),
   indicatorColor: AppColors.primary,
   tabBarTheme: const TabBarTheme(labelColor: AppColors.primary),
-  drawerTheme:
-      const DrawerThemeData(backgroundColor: Colors.white, elevation: 2),
+  drawerTheme: const DrawerThemeData(backgroundColor: Colors.white, elevation: 2),
   scaffoldBackgroundColor: Colors.white,
   inputDecorationTheme: InputDecorationTheme(
     helperStyle: const TextStyle(
@@ -162,8 +161,7 @@ final darkTheme = ThemeData(
   ),
   indicatorColor: AppColors.primary,
   tabBarTheme: const TabBarTheme(labelColor: AppColors.primary),
-  drawerTheme: const DrawerThemeData(
-      backgroundColor: AppColors.darkPrimary, elevation: 2),
+  drawerTheme: const DrawerThemeData(backgroundColor: AppColors.darkPrimary, elevation: 2),
   scaffoldBackgroundColor: AppColors.darkPrimary,
   inputDecorationTheme: InputDecorationTheme(
     helperStyle: TextStyle(

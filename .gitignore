@@ -55,3 +55,4 @@ app.*.map.json
 todo.md
 result.json
 api_docs.yaml
+*.yaml
