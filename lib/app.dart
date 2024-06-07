@@ -1,4 +1,4 @@
-// Openapi Generator last run: : 2024-06-07T18:39:37.791797
+// Openapi Generator last run: : 2024-06-07T18:55:55.918831
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
 import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/utils/configuration/constants.dart';
@@ -23,7 +23,6 @@ import 'package:openapi_generator_annotations/openapi_generator_annotations.dart
     pubAuthor: 'QCarder',
   ),
   skipSpecValidation: true,
-  runSourceGenOnOutput: true,
 )
 class MyApp extends StatefulWidget {
   final Locale locale;

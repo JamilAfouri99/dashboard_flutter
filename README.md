@@ -52,6 +52,8 @@ In our project, we have implemented OpenAPI to streamline the process of generat
 - Transform it from JSON to YAML
 - Delete the existing YAML folder (api_docs.yaml) and replace it with the new one having the same name
 - Execute these commands
+    - Execute the app running process if it's working
+    - flutter clean
     - dart run build_runner clean
     - dart run build_runner build --delete-conflicting-outputs
 ```
