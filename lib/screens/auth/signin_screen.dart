@@ -42,22 +42,28 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 80, bottom: 50),
-            child: SvgPicture.asset(
-              ImageConstants.fullLogo,
-              width: 70,
-              height: 70,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(),
+              child: SvgPicture.asset(
+                ImageConstants.fullLogo,
+                width: 70,
+                height: 70,
+              ),
             ),
-          ),
-          Expanded(
-            child: Container(
+            const SizedBox(height: 30),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
               decoration: const BoxDecoration(
                 color: AppColors.background,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(30),
+                  bottom: Radius.circular(30),
                 ),
               ),
               child: SingleChildScrollView(
@@ -171,8 +177,8 @@ class _SigninScreenState extends State<SigninScreen> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

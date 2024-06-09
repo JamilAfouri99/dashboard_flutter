@@ -53,6 +53,7 @@ app.*.map.json
 
 # Personal
 todo.md
+planning.md
 result.json
 api_docs.yaml
 *.yaml

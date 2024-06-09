@@ -6,6 +6,7 @@ class ImageConstants {
 
   // icons
   static const String user = '${iconsPrefix}user.svg';
+  static const String placeholderUser = '${imagesPrefix}placeholder-2.jpg';
   static const String fullWhiteLogo = '${iconsPrefix}full_white.svg';
   static const String fullLogo = '${iconsPrefix}full.svg';
   static const String letterLogo = '${iconsPrefix}q.svg';

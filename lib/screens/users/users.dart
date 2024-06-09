@@ -156,8 +156,8 @@ Widget _user(User user, BuildContext context) {
                 color: AppColors.onError,
               ),
             )
-          : SvgPicture.asset(
-              ImageConstants.user,
+          : Image.asset(
+              ImageConstants.placeholderUser,
               width: 50.0,
               height: 50.0,
             ),
@@ -201,7 +201,7 @@ _noMoreItems(BuildContext context) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'QCarder © 2023',
+            'QCarder © 2024',
             style: TextStyle(color: Theme.of(context).colorScheme.shadow.withOpacity(0.8)),
           ),
           Text(
