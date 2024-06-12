@@ -205,8 +205,8 @@ class _EditableFormState extends State<EditableForm> {
                                         color: AppColors.onError,
                                       ),
                                     )
-                                  : SvgPicture.asset(
-                                      ImageConstants.user,
+                                  : Image.asset(
+                                      ImageConstants.placeholderUser,
                                       width: 80,
                                       height: 80,
                                     ),
@@ -307,9 +307,9 @@ class _EditableFormState extends State<EditableForm> {
             ),
             const SizedBox(height: 16),
             CustomTextField(
-              labelText: 'Note',
+              labelText: 'Biography',
               prefixIcon: const Icon(
-                Icons.note_add_outlined,
+                Icons.description_outlined,
                 size: 20,
               ),
               scrollPadding: EdgeInsets.zero,

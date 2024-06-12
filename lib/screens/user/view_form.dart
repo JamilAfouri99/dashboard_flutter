@@ -101,8 +101,8 @@ class _ViewFormState extends State<ViewForm> {
                             color: AppColors.onError,
                           ),
                         )
-                      : SvgPicture.asset(
-                          ImageConstants.user,
+                      : Image.asset(
+                          ImageConstants.placeholderUser,
                           width: 80.0,
                           height: 80.0,
                         ),

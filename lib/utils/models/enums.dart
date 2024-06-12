@@ -15,7 +15,7 @@ enum Links {
   whatsapp,
   gmail,
   linkedin,
-  twitter,
+  x,
   instagram,
   github,
   outlook,

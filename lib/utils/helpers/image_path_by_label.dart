@@ -12,7 +12,7 @@ String linkPathByLabel(LinkLabelEnum label) {
     case 'linkedin':
       return ImageConstants.linkedin;
     case 'x':
-      return ImageConstants.twitter;
+      return ImageConstants.x;
     case 'instagram':
       return ImageConstants.instagram;
     case 'github':

@@ -135,8 +135,8 @@ class _NewFormState extends State<NewForm> {
                     child: ClipOval(
                       child: binaryImage != null
                           ? Image.memory(binaryImage!, fit: BoxFit.cover)
-                          : SvgPicture.asset(
-                              ImageConstants.user,
+                          : Image.asset(
+                              ImageConstants.placeholderUser,
                               width: 50.0,
                               height: 50.0,
                             ),
@@ -167,7 +167,7 @@ class _NewFormState extends State<NewForm> {
               labelText: 'First Name',
               prefixIcon: const Icon(
                 Icons.person,
-                size: 20,
+                size: 25,
               ),
               scrollPadding: EdgeInsets.zero,
               controller: _firstNameController,
@@ -176,7 +176,7 @@ class _NewFormState extends State<NewForm> {
             const SizedBox(height: 16),
             CustomTextField(
               labelText: 'Last Name',
-              prefixIcon: const Icon(Icons.person, size: 20),
+              prefixIcon: const Icon(Icons.person_outline, size: 25),
               scrollPadding: EdgeInsets.zero,
               controller: _lastNameController,
               validator: (value) => _validator(value),
@@ -184,8 +184,8 @@ class _NewFormState extends State<NewForm> {
             const SizedBox(height: 16),
             CustomTextField(
               prefixIcon: const Icon(
-                Icons.person,
-                size: 20,
+                Icons.badge_outlined,
+                size: 25,
               ),
               labelText: 'Display Name',
               scrollPadding: EdgeInsets.zero,
@@ -206,7 +206,7 @@ class _NewFormState extends State<NewForm> {
               labelText: 'Title',
               prefixIcon: const Icon(
                 Icons.title,
-                size: 20,
+                size: 25,
               ),
               scrollPadding: EdgeInsets.zero,
               controller: _titleController,
@@ -216,7 +216,7 @@ class _NewFormState extends State<NewForm> {
               labelText: 'Company',
               prefixIcon: const Icon(
                 Icons.business,
-                size: 20,
+                size: 25,
               ),
               scrollPadding: EdgeInsets.zero,
               controller: _companyController,
@@ -232,7 +232,7 @@ class _NewFormState extends State<NewForm> {
               labelText: 'Address',
               prefixIcon: const Icon(
                 Icons.location_on_outlined,
-                size: 20,
+                size: 25,
               ),
               scrollPadding: EdgeInsets.zero,
               controller: _addressController,
@@ -240,9 +240,9 @@ class _NewFormState extends State<NewForm> {
             const SizedBox(height: 16),
             CustomTextField(
               labelText: 'Birthday',
-              prefixIcon: Icon(
+              prefixIcon: const Icon(
                 Icons.calendar_month,
-                size: 20,
+                size: 25,
               ),
               scrollPadding: EdgeInsets.zero,
               controller: _birthdayController,
@@ -263,10 +263,10 @@ class _NewFormState extends State<NewForm> {
             ),
             const SizedBox(height: 16),
             CustomTextField(
-              labelText: 'Note',
+              labelText: 'Biography',
               prefixIcon: const Icon(
-                Icons.note_add_outlined,
-                size: 20,
+                Icons.description_outlined,
+                size: 25,
               ),
               scrollPadding: EdgeInsets.zero,
               controller: _noteController,
@@ -360,7 +360,7 @@ class _NewFormState extends State<NewForm> {
                         labelText: 'Email',
                         prefixIcon: const Icon(
                           Icons.email_outlined,
-                          size: 20,
+                          size: 25,
                         ),
                         inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
                         scrollPadding: EdgeInsets.zero,
@@ -499,7 +499,7 @@ class _NewFormState extends State<NewForm> {
                   labelText: 'Phone',
                   prefixIcon: const Icon(
                     Icons.phone,
-                    size: 20,
+                    size: 25,
                   ),
                   controller: _phoneControllers[i],
                   onChanged: (value) {
@@ -585,20 +585,26 @@ class _NewFormState extends State<NewForm> {
                   labelText: 'Link',
                   prefixIcon: GestureDetector(
                     onTap: () => _showLinksIcons(i),
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: ClipOval(
-                        child: SvgPicture.asset(
-                          linkPathByLabel(_links[i].label),
-                          fit: BoxFit.cover,
-                          color: Theme.of(context).colorScheme.shadow.withOpacity(0.7),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 25,
+                          height: 25,
+                          margin: const EdgeInsets.only(left: 12),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: ClipOval(
+                            child: SvgPicture.asset(
+                              linkPathByLabel(_links[i].label),
+                              fit: BoxFit.cover,
+                              color: AppColors.primary,
+                            ),
+                          ),
                         ),
-                      ),
+                        const Icon(Icons.arrow_drop_down),
+                      ],
                     ),
                   ),
                   controller: _linkControllers[i],
@@ -692,32 +698,62 @@ class _NewFormState extends State<NewForm> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (context) {
-        return ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: Links.values.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading: Container(
-                width: 30,
-                height: 30,
-                decoration: const BoxDecoration(shape: BoxShape.circle),
-                child: ClipOval(
-                  child: SvgPicture.asset(
-                    linkPathByLabel(stringToEnumLink(Links.values[index].toString().split('.')[1])),
-                    fit: BoxFit.cover,
-                    color: AppColors.primary,
-                  ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Links',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.darkPrimary,
                 ),
               ),
-              title: Text(Links.values[index].toString().split('.')[1].toUpperCase()),
-              onTap: () {
-                _links[linkIndex].label =
-                    stringToEnumLink(Links.values[index].toString().split('.')[1]);
-                setState(() {});
-                Navigator.of(context).pop();
-              },
-            );
-          },
+            ),
+            Divider(
+              color: AppColors.primary.withOpacity(0.2),
+              height: 1,
+            ),
+            Expanded(
+              child: ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  color: AppColors.primary.withOpacity(0.2),
+                  height: 10,
+                ),
+                padding: const EdgeInsets.all(10),
+                itemCount: Links.values.length,
+                itemBuilder: (context, index) {
+                  String label = Links.values[index].toString().split('.')[1];
+                  String formattedLabel = label[0].toUpperCase() + label.substring(1).toLowerCase();
+                  return ListTile(
+                    leading: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
+                      child: ClipOval(
+                        child: SvgPicture.asset(
+                          linkPathByLabel(stringToEnumLink(label)),
+                          fit: BoxFit.cover,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      formattedLabel,
+                      style: const TextStyle(color: AppColors.darkPrimary),
+                    ),
+                    onTap: () {
+                      _links[linkIndex].label = stringToEnumLink(label);
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
     );

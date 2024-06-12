@@ -16,13 +16,13 @@ class ImageConstants {
   static const String whatsapp = '${linksPrefix}WhatsApp_black.svg';
   static const String gmail = '${linksPrefix}Gmail_black.svg';
   static const String linkedin = '${linksPrefix}LinkedIN_black.svg';
-  static const String twitter = '${linksPrefix}Twitter_black.svg';
+  static const String x = '${linksPrefix}x.svg';
   static const String instagram = '${linksPrefix}Instagram_black.svg';
   static const String github = '${linksPrefix}Github_black.svg';
   static const String outlook = '${linksPrefix}Outlook_black.svg';
   static const String skype = '${linksPrefix}Skype_black.svg';
   static const String slack = '${linksPrefix}Slack_black.svg';
-  static const String letterLogoWhite = '${linksPrefix}white_q_logo.svg';
+  static const String letterLogoWhite = '${linksPrefix}qcarder-logo.svg';
 
   static const String defaultLink = '${linksPrefix}Creativemarket_black.svg';
 
