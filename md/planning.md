@@ -9,8 +9,8 @@ QCarder UI updates
     - New user screen
         <!-- - Update the UI for links list & change the name for twitter to x. -->
         <!-- - Change 'Note' to be 'Biography' -->
+        <!-- - Add a drop list behavior on the UI for link field. -->
         - For confirmation pop on cancel process, if the user filled any information show it, if not no need.
-        - Add a drop list behavior on the UI for link field.
     - View user screen
         - Add wallpaper.
 

@@ -12,6 +12,7 @@ BuildContext context = KeysService.navigatorKey.currentState!.context;
 
 class NetworkExceptions {
   static String getHttpException(dynamic error) {
+    print(error);
     try {
       if (error is ApiException) {
         return _handleHttpResponse(error);

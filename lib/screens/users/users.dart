@@ -227,31 +227,42 @@ Widget _usersShimmer(BuildContext context) {
           children: List.generate(
             10,
             (index) => ListTile(
-              leading: CircleAvatar(
+              leading: const CircleAvatar(
                 radius: 30,
-                backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+                backgroundColor: AppColors.light,
               ),
               title: Container(
                 height: 10,
-                color: Theme.of(context).colorScheme.inverseSurface,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: AppColors.light,
+                ),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     height: 10,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(2)),
                   ),
                   Container(
                     height: 10,
-                    color: Theme.of(context).colorScheme.inverseSurface,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: AppColors.light,
+                    ),
                   ),
                   Container(
                     height: 10,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(2)),
                   ),
                   Container(
                     height: 10,
                     width: MediaQuery.of(context).size.width * 0.2,
-                    color: Theme.of(context).colorScheme.inverseSurface,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: AppColors.light,
+                    ),
                   ),
                 ],
               ),

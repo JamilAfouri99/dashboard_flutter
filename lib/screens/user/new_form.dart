@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:qcarder/cubit/auth/auth_cubit.dart';
+import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:qcarder/utils/configuration/image-constants.dart';
 import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';
@@ -22,7 +24,7 @@ import 'package:qcarder/widgets/custom_text_field.dart';
 import 'package:qcarder_api/api.dart';
 
 class NewForm extends StatefulWidget {
-  const NewForm({Key? key}) : super(key: key);
+  const NewForm({super.key});
 
   @override
   State<NewForm> createState() => _NewFormState();
@@ -50,6 +52,7 @@ class _NewFormState extends State<NewForm> {
   final List<Email> _emails = [];
   http.MultipartFile? multipartFile;
   Uint8List? binaryImage;
+  Uint8List? bannerImage;
 
   @override
   void initState() {
@@ -98,248 +101,374 @@ class _NewFormState extends State<NewForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-      child: Form(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () async {
-                File? file = await FileHelper.pickImage(context);
-                if (file == null) return;
-                multipartFile = http.MultipartFile(
-                  'avatar',
-                  file.readAsBytes().asStream(),
-                  file.lengthSync(),
-                  filename: file.path.split('/').last,
-                  contentType: MediaType('image', 'jpeg'),
-                );
-                binaryImage = await file.readAsBytes();
-                setState(() {});
-              },
-              child: Stack(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        width: 4,
-                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
-                      ),
-                    ),
-                    child: ClipOval(
-                      child: binaryImage != null
-                          ? Image.memory(binaryImage!, fit: BoxFit.cover)
-                          : Image.asset(
-                              ImageConstants.placeholderUser,
-                              width: 50.0,
-                              height: 50.0,
-                            ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.edit,
-                        color: AppColors.light,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'First Name',
-              prefixIcon: const Icon(
-                Icons.person,
-                size: 25,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _firstNameController,
-              validator: (value) => _validator(value),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Last Name',
-              prefixIcon: const Icon(Icons.person_outline, size: 25),
-              scrollPadding: EdgeInsets.zero,
-              controller: _lastNameController,
-              validator: (value) => _validator(value),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              prefixIcon: const Icon(
-                Icons.badge_outlined,
-                size: 25,
-              ),
-              labelText: 'Display Name',
-              scrollPadding: EdgeInsets.zero,
-              controller: _displayNameController,
-              validator: (value) => _validator(value),
-            ),
-            // const SizedBox(height: 16),
-            // TextFormField(
-            //   decoration: const InputDecoration(
-            //     labelText: 'Category',
-            //     prefixIcon: Icon(Icons.category_outlined),
-            //   ),
-            //   controller: _categoryController,
-            //   validator: (value) => _validator(value),
-            // ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Title',
-              prefixIcon: const Icon(
-                Icons.title,
-                size: 25,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _titleController,
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Company',
-              prefixIcon: const Icon(
-                Icons.business,
-                size: 25,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _companyController,
-            ),
-            const SizedBox(height: 16),
-            emailsWidget(),
-            const SizedBox(height: 16),
-            phonesWidget(),
-            const SizedBox(height: 16),
-            linksWidget(),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Address',
-              prefixIcon: const Icon(
-                Icons.location_on_outlined,
-                size: 25,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _addressController,
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Birthday',
-              prefixIcon: const Icon(
-                Icons.calendar_month,
-                size: 25,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _birthdayController,
-              validator: (value) => _validator(value),
-              onTap: () async {
-                // Show date picker and update the birthday field
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now(),
-                );
-                if (pickedDate != null) {
-                  _birthdayController.text = pickedDate.ymd;
-                }
-              },
-              readOnly: true,
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Biography',
-              prefixIcon: const Icon(
-                Icons.description_outlined,
-                size: 25,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _noteController,
-              keyboardType: TextInputType.multiline,
-            ),
-            const SizedBox(height: 24),
-            BlocBuilder<UserCubit, UserState>(builder: (context, state) {
-              return Container(
-                margin: const EdgeInsets.only(top: 10),
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: Row(
-                  children: [
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     if (widget.user == null) {
-                    //       return;
-                    //     }
-                    //     showDialog(
-                    //       context: context,
-                    //       builder: (context) => ConfirmationDialog(
-                    //         action: ConfirmationDialogAction.delete,
-                    //         user: widget.user,
-                    //       ),
-                    //     );
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     foregroundColor: AppColors.light,
-                    //     backgroundColor: AppColors.onError,
-                    //   ),
-                    //   child: const Text('Delete'),
-                    // ),
+    return Form(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // GestureDetector(
+          //   onTap: () async {
+          //     File? file = await FileHelper.pickImage(context);
+          //     if (file == null) return;
+          //     setState(() {
+          //       multipartFile = http.MultipartFile(
+          //         'background',
+          //         file.readAsBytes().asStream(),
+          //         file.lengthSync(),
+          //         filename: file.path.split('/').last,
+          //         contentType: MediaType('image', 'jpeg'),
+          //       );
+          //     });
+          //     bannerImage = await file.readAsBytes();
+          //   },
+          //   child: SizedBox(
+          //     height: MediaQuery.of(context).size.height * 0.25,
+          //     child: Stack(
+          //       alignment: Alignment.topCenter,
+          //       children: [
+          //         Container(
+          //           padding: const EdgeInsets.only(top: 0),
+          //           margin: const EdgeInsets.only(top: 0),
+          //           height: MediaQuery.of(context).size.height * 0.2,
+          //           width: MediaQuery.of(context).size.width * 1,
+          //           child: ClipRRect(
+          //             borderRadius: BorderRadius.zero,
+          //             child: bannerImage != null
+          //                 ? Image.memory(
+          //                     bannerImage!,
+          //                     fit: BoxFit.cover,
+          //                     alignment: Alignment.topCenter,
+          //                   )
+          //                 : Image.asset(
+          //                     ImageConstants.banner,
+          //                     alignment: Alignment.topCenter,
+          //                   ),
+          //           ),
+          //         ),
+          //         Positioned(
+          //           top: 10,
+          //           right: 10,
+          //           child: Container(
+          //             width: 30,
+          //             height: 30,
+          //             decoration: const BoxDecoration(
+          //               color: AppColors.primary,
+          //               shape: BoxShape.circle,
+          //             ),
+          //             child: const Icon(
+          //               Icons.edit,
+          //               color: AppColors.light,
+          //               size: 18,
+          //             ),
+          //           ),
+          //         ),
+          //         Positioned(
+          //           left: 10,
+          //           bottom: 0,
+          //           child: GestureDetector(
+          //             onTap: () async {
+          //               File? file = await FileHelper.pickImage(context);
+          //               if (file == null) return;
+          //               multipartFile = http.MultipartFile(
+          //                 'avatar',
+          //                 file.readAsBytes().asStream(),
+          //                 file.lengthSync(),
+          //                 filename: file.path.split('/').last,
+          //                 contentType: MediaType('image', 'jpeg'),
+          //               );
+          //               binaryImage = await file.readAsBytes();
+          //               setState(() {});
+          //             },
+          //             child: Stack(
+          //               children: [
+          //                 Container(
+          //                   width: 100,
+          //                   height: 100,
+          //                   decoration: BoxDecoration(
+          //                     shape: BoxShape.circle,
+          //                     border: Border.all(
+          //                       width: 4,
+          //                       color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+          //                     ),
+          //                   ),
+          //                   child: ClipOval(
+          //                     child: binaryImage != null
+          //                         ? Image.memory(binaryImage!, fit: BoxFit.cover)
+          //                         : Image.asset(
+          //                             ImageConstants.placeholderUser,
+          //                             width: 50.0,
+          //                             height: 50.0,
+          //                           ),
+          //                   ),
+          //                 ),
+          //                 Positioned(
+          //                   bottom: 0,
+          //                   right: 0,
+          //                   child: Container(
+          //                     width: 30,
+          //                     height: 30,
+          //                     decoration: const BoxDecoration(
+          //                       color: AppColors.primary,
+          //                       shape: BoxShape.circle,
+          //                     ),
+          //                     child: const Icon(
+          //                       Icons.edit,
+          //                       color: AppColors.light,
+          //                       size: 18,
+          //                     ),
+          //                   ),
+          //                 ),
+          //               ],
+          //             ),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
 
-                    SizedBox(
-                      width: 150,
-                      child: CustomButton(
-                        title: 'Cancel',
-                        isInverted: true,
-                        onPressed: () => showDialog(
-                          context: context,
-                          builder: (context) => const ConfirmationDialog(
-                            action: ConfirmationDialogAction.cancel,
+          //   ),
+          // ),
+          const SizedBox(height: 30),
+          GestureDetector(
+            onTap: () async {
+              File? file = await FileHelper.pickImage(context);
+              if (file == null) return;
+              multipartFile = http.MultipartFile(
+                'avatar',
+                file.readAsBytes().asStream(),
+                file.lengthSync(),
+                filename: file.path.split('/').last,
+                contentType: MediaType('image', 'jpeg'),
+              );
+              binaryImage = await file.readAsBytes();
+              setState(() {});
+            },
+            child: Stack(
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      width: 4,
+                      color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: binaryImage != null
+                        ? Image.memory(binaryImage!, fit: BoxFit.cover)
+                        : Image.asset(
+                            ImageConstants.placeholderUser,
+                            width: 50.0,
+                            height: 50.0,
+                          ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: const BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.edit,
+                      color: AppColors.light,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              children: [
+                CustomTextField(
+                  labelText: 'First Name',
+                  prefixIcon: const Icon(
+                    Icons.person,
+                    size: 25,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _firstNameController,
+                  validator: (value) => _validator(value),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Last Name',
+                  prefixIcon: const Icon(Icons.person_outline, size: 25),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _lastNameController,
+                  validator: (value) => _validator(value),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  prefixIcon: const Icon(
+                    Icons.badge_outlined,
+                    size: 25,
+                  ),
+                  labelText: 'Display Name',
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _displayNameController,
+                  validator: (value) => _validator(value),
+                ),
+                // const SizedBox(height: 16),
+                // TextFormField(
+                //   decoration: const InputDecoration(
+                //     labelText: 'Category',
+                //     prefixIcon: Icon(Icons.category_outlined),
+                //   ),
+                //   controller: _categoryController,
+                //   validator: (value) => _validator(value),
+                // ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Title',
+                  prefixIcon: const Icon(
+                    Icons.title,
+                    size: 25,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _titleController,
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Company',
+                  prefixIcon: const Icon(
+                    Icons.business,
+                    size: 25,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _companyController,
+                ),
+                const SizedBox(height: 16),
+                emailsWidget(),
+                const SizedBox(height: 16),
+                phonesWidget(),
+                const SizedBox(height: 16),
+                linksWidget(),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Address',
+                  prefixIcon: const Icon(
+                    Icons.location_on_outlined,
+                    size: 25,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _addressController,
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Birthday',
+                  prefixIcon: const Icon(
+                    Icons.calendar_month,
+                    size: 25,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _birthdayController,
+                  validator: (value) => _validator(value),
+                  onTap: () async {
+                    // Show date picker and update the birthday field
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (pickedDate != null) {
+                      _birthdayController.text = pickedDate.ymd;
+                    }
+                  },
+                  readOnly: true,
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Biography',
+                  prefixIcon: const Icon(
+                    Icons.description_outlined,
+                    size: 25,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _noteController,
+                  keyboardType: TextInputType.multiline,
+                ),
+                const SizedBox(height: 24),
+                BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+                  return Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Row(
+                      children: [
+                        // ElevatedButton(
+                        //   onPressed: () {
+                        //     if (widget.user == null) {
+                        //       return;
+                        //     }
+                        //     showDialog(
+                        //       context: context,
+                        //       builder: (context) => ConfirmationDialog(
+                        //         action: ConfirmationDialogAction.delete,
+                        //         user: widget.user,
+                        //       ),
+                        //     );
+                        //   },
+                        //   style: ElevatedButton.styleFrom(
+                        //     foregroundColor: AppColors.light,
+                        //     backgroundColor: AppColors.onError,
+                        //   ),
+                        //   child: const Text('Delete'),
+                        // ),
+
+                        SizedBox(
+                          width: 150,
+                          child: CustomButton(
+                            title: 'Cancel',
+                            isInverted: true,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) => const ConfirmationDialog(
+                                action: ConfirmationDialogAction.cancel,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      width: 150,
-                      child: CustomButton(
-                        title: 'Create',
-                        onPressed: () {
-                          final form = Form.of(context);
-                          if (form.validate()) {
-                            form.save();
+                        const Spacer(),
+                        SizedBox(
+                          width: 150,
+                          child: CustomButton(
+                            title: 'Create',
+                            onPressed: () {
+                              final form = Form.of(context);
+                              if (form.validate()) {
+                                form.save();
 
-                            showDialog(
-                              context: context,
-                              builder: (context) => ConfirmationDialog(
-                                action: ConfirmationDialogAction.add,
-                                newUser: _createUser(),
-                                avatar: multipartFile,
-                              ),
-                            );
-                          }
-                        },
-                      ),
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ConfirmationDialog(
+                                    action: ConfirmationDialogAction.add,
+                                    newUser: _createUser(),
+                                    avatar: multipartFile,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            }),
-          ],
-        ),
+                  );
+                }),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

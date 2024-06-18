@@ -164,19 +164,19 @@ class _SlidingGradientTransform extends GradientTransform {
 }
 
 LinearGradient shimmerGradient(BuildContext context) {
-  return const LinearGradient(
+  return LinearGradient(
     colors: [
-      Color(0xFFF4F5F6),
-      AppColors.light,
-      Color(0xFFF4F5F6),
+      AppColors.grey.withOpacity(0.2),
+      AppColors.grey.withOpacity(0.1),
+      AppColors.grey.withOpacity(0.2),
     ],
-    stops: [
+    stops: const [
       0.1,
       0.3,
       0.4,
     ],
-    begin: Alignment(-1.0, -0.3),
-    end: Alignment(1.0, 0.3),
+    begin: const Alignment(-1.0, -0.3),
+    end: const Alignment(1.0, 0.3),
     tileMode: TileMode.clamp,
   );
 }

@@ -19,8 +19,7 @@ class AvatarCubit extends Cubit<AvatarState> {
 
   Future<void> uploadAvatar(String userId, http.MultipartFile avatar) async {
     emit(AvatarLoading());
-    final result = await remoteService
-        .asyncTryCatch(() => usersApi.postUserFiles(userId, avatar));
+    final result = await remoteService.asyncTryCatch(() => usersApi.postUserFiles(userId, avatar));
     if (!result.isError) {
       emit(AvatarLoaded());
     }

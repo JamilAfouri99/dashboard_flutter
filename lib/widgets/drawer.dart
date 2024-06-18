@@ -25,9 +25,10 @@ class GlobalDrawer extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 20),
                   child: SvgPicture.asset(ImageConstants.fullWhiteLogo, width: 40, height: 40),
                 ),
-                itemBuilder(context, ' Dashboard', RouteConstants.users),
-                itemBuilder(context, ' Analytics', null),
-                itemBuilder(context, ' Contact us', null),
+                itemBuilder(
+                    context, ' Dashboard', Icons.space_dashboard_rounded, RouteConstants.users),
+                itemBuilder(context, ' Analytics', Icons.auto_graph_sharp, null),
+                itemBuilder(context, ' Contact us', Icons.phone, null),
               ],
             ),
           ),
@@ -37,7 +38,7 @@ class GlobalDrawer extends StatelessWidget {
     );
   }
 
-  Widget itemBuilder(BuildContext context, String name, String? route) {
+  Widget itemBuilder(BuildContext context, String name, IconData? icon, String? route) {
     final routeName = ModalRoute.of(context)?.settings.name;
     return MouseRegion(
       cursor: SystemMouseCursors.click, // Set the cursor to pointer
@@ -68,7 +69,7 @@ class GlobalDrawer extends StatelessWidget {
                   color: AppColors.light,
                 ),
           ),
-          leading: const Icon(Icons.group_outlined),
+          leading: Icon(icon),
           iconColor: AppColors.light,
           textColor: AppColors.light,
           tileColor: AppColors.light.withOpacity(0.12),

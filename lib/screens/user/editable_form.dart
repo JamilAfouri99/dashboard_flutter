@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
+import 'package:qcarder/cubit/banner/banner_cubit.dart';
+import 'package:qcarder/cubit/banner/banner_state.dart';
 import 'package:qcarder/utils/configuration/image-constants.dart';
 import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
@@ -28,7 +30,7 @@ import 'package:http_parser/http_parser.dart';
 class EditableForm extends StatefulWidget {
   final User user;
 
-  const EditableForm({Key? key, required this.user}) : super(key: key);
+  const EditableForm({super.key, required this.user});
 
   @override
   State<EditableForm> createState() => _EditableFormState();
@@ -129,50 +131,53 @@ class _EditableFormState extends State<EditableForm> {
     _phones.clear();
   }
 
-  Uint8List? binaryImage;
+  Uint8List? avatarImage;
+  Uint8List? bannerImage;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-      child: Form(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () async {
-                File? file = await FileHelper.pickImage(context);
-                if (file == null) return;
-                var multipartFile = http.MultipartFile(
-                  'avatar',
-                  file.readAsBytes().asStream(),
-                  file.lengthSync(),
-                  filename: file.path.split('/').last,
-                  contentType: MediaType('image', 'jpeg'),
-                );
-                if (context.mounted) {
-                  context.read<AvatarCubit>().uploadAvatar(widget.user.id, multipartFile);
-                  binaryImage = await file.readAsBytes();
-                  setState(() {});
-                }
-              },
+    final isUserRole = widget.user.role == UserRoleEnum.USER;
+
+    return Form(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () async {
+              if (isUserRole) return;
+              File? file = await FileHelper.pickImage(context);
+              if (file == null) return;
+              var multipartFile = http.MultipartFile(
+                'banner',
+                file.readAsBytes().asStream(),
+                file.lengthSync(),
+                filename: file.path.split('/').last,
+                contentType: MediaType('image', 'jpeg'),
+              );
+              if (context.mounted) {
+                context.read<BannerCubit>().uploadBanner(
+                      widget.user.groupId ?? '',
+                      widget.user.profile.id,
+                      multipartFile,
+                    );
+                bannerImage = await file.readAsBytes();
+                setState(() {});
+              }
+            },
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.25,
               child: Stack(
                 children: [
                   Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        width: 4,
-                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
-                      ),
-                    ),
-                    child: BlocConsumer<AvatarCubit, AvatarState>(
+                    padding: const EdgeInsets.only(top: 0),
+                    margin: const EdgeInsets.only(top: 0),
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    width: MediaQuery.of(context).size.width * 1,
+                    child: BlocConsumer<BannerCubit, BannerState>(
                       listener: (context, state) {
-                        if (state is AvatarFailed) {
+                        if (state is BannerFailed) {
                           CustomSnackbar.show(
                             context,
                             state.reason.toString(),
@@ -181,188 +186,308 @@ class _EditableFormState extends State<EditableForm> {
                         }
                       },
                       builder: (context, state) {
-                        if (state is AvatarLoading) return const CircularProgressIndicator();
-                        return ClipOval(
-                          child: binaryImage != null
+                        if (state is BannerLoading) {
+                          return const Center(
+                            child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                        return ClipRRect(
+                          borderRadius: BorderRadius.zero,
+                          child: bannerImage != null
                               ? Image.memory(
-                                  binaryImage!,
+                                  bannerImage!,
                                   fit: BoxFit.cover,
+                                  alignment: Alignment.topCenter,
                                 )
-                              : widget.user.avatar != null &&
-                                      widget.user.avatar!.isNotEmpty &&
-                                      widget.user.avatar!.contains('https')
+                              : widget.user.profile.banner != null &&
+                                      widget.user.profile.banner!.isNotEmpty &&
+                                      widget.user.profile.banner!.contains('https')
                                   ? CachedNetworkImage(
                                       height: 80,
-                                      width: 80,
-                                      imageUrl: widget.user.avatar ?? '',
+                                      imageUrl: widget.user.profile.banner ?? '',
                                       fit: BoxFit.cover,
-                                      placeholder: (context, url) =>
-                                          const CircularProgressIndicator(
-                                        color: AppColors.primary,
+                                      placeholder: (context, url) => const Center(
+                                        child: SizedBox(
+                                          width: 40,
+                                          height: 40,
+                                          child: CircularProgressIndicator(),
+                                        ),
                                       ),
                                       errorWidget: (context, url, error) => const Icon(
                                         Icons.error,
                                         color: AppColors.onError,
                                       ),
+                                      alignment: Alignment.topCenter,
                                     )
                                   : Image.asset(
-                                      ImageConstants.placeholderUser,
-                                      width: 80,
-                                      height: 80,
+                                      ImageConstants.banner,
+                                      alignment: Alignment.topCenter,
+                                      fit: BoxFit.cover,
                                     ),
                         );
                       },
                     ),
                   ),
+                  if (!isUserRole)
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
+                    ),
                   Positioned(
                     bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: const BoxDecoration(
-                        color: AppColors.darkPrimary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                        size: 18,
+                    left: 10,
+                    child: GestureDetector(
+                      onTap: () async {
+                        File? file = await FileHelper.pickImage(context);
+                        if (file == null) return;
+                        var multipartFile = http.MultipartFile(
+                          'avatar',
+                          file.readAsBytes().asStream(),
+                          file.lengthSync(),
+                          filename: file.path.split('/').last,
+                          contentType: MediaType('image', 'jpeg'),
+                        );
+                        if (context.mounted) {
+                          context.read<AvatarCubit>().uploadAvatar(widget.user.id, multipartFile);
+                          avatarImage = await file.readAsBytes();
+                          setState(() {});
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 4,
+                                color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+                              ),
+                            ),
+                            child: BlocConsumer<AvatarCubit, AvatarState>(
+                              listener: (context, aState) {
+                                if (aState is AvatarFailed) {
+                                  CustomSnackbar.show(
+                                    context,
+                                    aState.reason.toString(),
+                                    type: SnackbarType.error,
+                                  );
+                                }
+                              },
+                              builder: (context, aState) {
+                                if (aState is AvatarLoading) {
+                                  return const CircularProgressIndicator();
+                                }
+                                return ClipOval(
+                                  child: avatarImage != null
+                                      ? Image.memory(
+                                          avatarImage!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : widget.user.avatar != null &&
+                                              widget.user.avatar!.isNotEmpty &&
+                                              widget.user.avatar!.contains('https')
+                                          ? CachedNetworkImage(
+                                              height: 80,
+                                              width: 80,
+                                              imageUrl: widget.user.avatar ?? '',
+                                              fit: BoxFit.cover,
+                                              placeholder: (context, url) =>
+                                                  const CircularProgressIndicator(
+                                                color: AppColors.primary,
+                                              ),
+                                              errorWidget: (context, url, error) => const Icon(
+                                                Icons.error,
+                                                color: AppColors.onError,
+                                              ),
+                                            )
+                                          : Image.asset(
+                                              ImageConstants.placeholderUser,
+                                              width: 80,
+                                              height: 80,
+                                            ),
+                                );
+                              },
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: const BoxDecoration(
+                                color: AppColors.primary,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Display Name',
-              prefixIcon: const Icon(
-                Icons.person,
-                size: 20,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _displayNameController,
-              validator: (value) => _validator(value),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Title',
-              prefixIcon: const Icon(
-                Icons.title,
-                size: 20,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _titleController,
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Company',
-              prefixIcon: const Icon(
-                Icons.business,
-                size: 20,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _companyController,
-            ),
-            const SizedBox(height: 16),
-            emailsWidget(),
-            const SizedBox(height: 16),
-            phonesWidget(),
-            const SizedBox(height: 16),
-            linksWidget(),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Address',
-              prefixIcon: const Icon(
-                Icons.location_on_outlined,
-                size: 20,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _addressController,
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Birthday',
-              prefixIcon: const Icon(
-                Icons.calendar_month,
-                size: 20,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _birthdayController,
-              validator: (value) => _validator(value),
-              onTap: () async {
-                // Show date picker and update the birthday field
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now(),
-                );
-                if (pickedDate != null) {
-                  _birthdayController.text = pickedDate.ymd;
-                }
-              },
-              readOnly: true,
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Biography',
-              prefixIcon: const Icon(
-                Icons.description_outlined,
-                size: 20,
-              ),
-              scrollPadding: EdgeInsets.zero,
-              controller: _noteController,
-              keyboardType: TextInputType.multiline,
-            ),
-            const SizedBox(height: 24),
-            BlocBuilder<UserCubit, UserState>(builder: (context, state) {
-              return Container(
-                margin: const EdgeInsets.only(top: 10),
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      child: CustomButton(
-                          title: 'Cancel',
-                          isInverted: true,
-                          onPressed: () => showDialog(
-                                context: context,
-                                builder: (context) => ConfirmationDialog(
-                                  action: ConfirmationDialogAction.cancel,
-                                  userId: widget.user.id,
-                                ),
-                              )),
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      width: 150,
-                      child: CustomButton(
-                        title: 'Update',
-                        onPressed: () {
-                          final form = Form.of(context);
-                          if (form.validate()) {
-                            form.save();
-                            showDialog(
-                              context: context,
-                              builder: (context) => ConfirmationDialog(
-                                action: ConfirmationDialogAction.update,
-                                updatedUser: widget.user,
-                                updateProfile: _updateProfile(),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            child: Column(
+              children: [
+                CustomTextField(
+                  labelText: 'Display Name',
+                  prefixIcon: const Icon(
+                    Icons.person,
+                    size: 20,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _displayNameController,
+                  validator: (value) => _validator(value),
                 ),
-              );
-            }),
-          ],
-        ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Title',
+                  prefixIcon: const Icon(
+                    Icons.title,
+                    size: 20,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _titleController,
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Company',
+                  prefixIcon: const Icon(
+                    Icons.business,
+                    size: 20,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _companyController,
+                ),
+                const SizedBox(height: 16),
+                emailsWidget(),
+                const SizedBox(height: 16),
+                phonesWidget(),
+                const SizedBox(height: 16),
+                linksWidget(),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Address',
+                  prefixIcon: const Icon(
+                    Icons.location_on_outlined,
+                    size: 20,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _addressController,
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Birthday',
+                  prefixIcon: const Icon(
+                    Icons.calendar_month,
+                    size: 20,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _birthdayController,
+                  validator: (value) => _validator(value),
+                  onTap: () async {
+                    // Show date picker and update the birthday field
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (pickedDate != null) {
+                      _birthdayController.text = pickedDate.ymd;
+                    }
+                  },
+                  readOnly: true,
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Biography',
+                  prefixIcon: const Icon(
+                    Icons.description_outlined,
+                    size: 20,
+                  ),
+                  scrollPadding: EdgeInsets.zero,
+                  controller: _noteController,
+                  keyboardType: TextInputType.multiline,
+                ),
+                const SizedBox(height: 24),
+                BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+                  return Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: CustomButton(
+                              title: 'Cancel',
+                              isInverted: true,
+                              onPressed: () => showDialog(
+                                    context: context,
+                                    builder: (context) => ConfirmationDialog(
+                                      action: ConfirmationDialogAction.cancel,
+                                      userId: widget.user.id,
+                                    ),
+                                  )),
+                        ),
+                        const Spacer(),
+                        SizedBox(
+                          width: 150,
+                          child: CustomButton(
+                            title: 'Update',
+                            onPressed: () {
+                              final form = Form.of(context);
+                              if (form.validate()) {
+                                form.save();
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ConfirmationDialog(
+                                    action: ConfirmationDialogAction.update,
+                                    updatedUser: widget.user,
+                                    updateProfile: _updateProfile(),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

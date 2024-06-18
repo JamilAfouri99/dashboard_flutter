@@ -72,7 +72,9 @@ class UserScreen extends StatelessWidget {
                 : null,
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             body: state is UserLoading
-                ? _userShimmer(context)
+                ? isEditable
+                    ? _updateUserShimmer(context)
+                    : _viewUserShimmer(context)
                 : state is UserFailed
                     ? Center(child: Text(state.reason.toString()))
                     : RefreshIndicator(
@@ -204,38 +206,46 @@ class UserScreen extends StatelessWidget {
     );
   }
 
-  Widget _userShimmer(BuildContext context) => Shimmer(
+  Widget _viewUserShimmer(BuildContext context) => Shimmer(
         linearGradient: shimmerGradient(context),
         child: ShimmerLoading(
           isLoading: true,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 20),
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 4,
-                      color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
-                    ),
-                  ),
-                  child: ClipOval(
-                    child: Container(
-                      color: Theme.of(context).colorScheme.shadow,
-                      height: 120,
-                      width: 120,
-                    ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  width: MediaQuery.of(context).size.width * 1,
+                  child: Stack(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(top: 0),
+                        margin: const EdgeInsets.only(top: 0),
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width * 1,
+                        color: AppColors.light,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: MediaQuery.of(context).size.width / 2 - 50,
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          decoration: const BoxDecoration(
+                            color: AppColors.light,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 Container(
-                  width: 120,
+                  width: 200,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.shadow,
+                    color: AppColors.light,
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),
@@ -248,6 +258,57 @@ class UserScreen extends StatelessWidget {
                     color: AppColors.light,
                   ),
                 )
+              ],
+            ),
+          ),
+        ),
+      );
+
+  Widget _updateUserShimmer(BuildContext context) => Shimmer(
+        linearGradient: shimmerGradient(context),
+        child: ShimmerLoading(
+          isLoading: true,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  width: MediaQuery.of(context).size.width * 1,
+                  child: Stack(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(top: 0),
+                        margin: const EdgeInsets.only(top: 0),
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width * 1,
+                        color: AppColors.light,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 10,
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          decoration: const BoxDecoration(
+                            color: AppColors.light,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ...List.generate(10, (index) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: AppColors.light,
+                    ),
+                  );
+                }),
               ],
             ),
           ),

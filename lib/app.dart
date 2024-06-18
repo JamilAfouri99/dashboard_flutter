@@ -1,5 +1,6 @@
 // Openapi Generator last run: : 2024-06-07T18:55:55.918831
 import 'package:qcarder/cubit/auth/auth_cubit.dart';
+import 'package:qcarder/cubit/banner/banner_cubit.dart';
 import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/utils/configuration/constants.dart';
 import 'package:qcarder/cubit/avatar/avatar_cubit.dart';
@@ -48,6 +49,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => UsersCubit()),
         BlocProvider(create: (_) => UserCubit()),
         BlocProvider(create: (_) => AvatarCubit()),
+        BlocProvider(create: (_) => BannerCubit()),
         BlocProvider(create: (_) => ThemeCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
