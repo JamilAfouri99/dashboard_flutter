@@ -69,7 +69,7 @@ class CustomTextField extends StatelessWidget {
         prefixIcon: prefixIcon,
       ),
       scrollPadding: scrollPadding ?? const EdgeInsets.all(20.0),
-      style: const TextStyle(color: AppColors.dark, fontSize: 16),
+      style: const TextStyle(color: AppColors.dark, fontSize: 16, height: 1),
       validator: validator,
       readOnly: readOnly ?? false,
       onTap: onTap,

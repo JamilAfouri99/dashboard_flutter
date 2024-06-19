@@ -7,20 +7,17 @@ class PasswordField extends StatefulWidget {
   const PasswordField(this.controller, {super.key});
 
   @override
-  _PasswordFieldState createState() => _PasswordFieldState();
+  PasswordFieldState createState() => PasswordFieldState();
 }
 
-class _PasswordFieldState extends State<PasswordField> {
+class PasswordFieldState extends State<PasswordField> {
   bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
       controller: widget.controller,
-      hintText: 'Password',
-      hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-            color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
-          ),
+      labelText: 'Password',
       suffixIcon: GestureDetector(
         onTap: () {
           setState(() {

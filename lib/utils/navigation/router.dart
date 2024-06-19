@@ -7,12 +7,13 @@ import 'package:qcarder/screens/notfound/notfound_screen.dart';
 import 'package:qcarder/screens/splash/splash_screen.dart';
 import 'package:qcarder/screens/user/user_screen.dart';
 import 'package:qcarder/screens/users/users.dart';
+import 'package:qcarder/utils/helpers/webview.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final routeName = settings.name;
-    final builder =
-        _routeBuilders[routeName] ?? _getDynamicRouteBuilder(routeName);
+    final builder = _routeBuilders[routeName] ?? _getDynamicRouteBuilder(routeName);
 
     return MaterialPageRoute(
       builder: builder,
@@ -30,10 +31,17 @@ class Router {
   };
 
   static WidgetBuilder _getDynamicRouteBuilder(String? routeName) {
+    print(routeName);
     if (routeName != null && routeName.startsWith(RouteConstants.users)) {
-      final userId =
-          routeName.replaceFirst(RouteConstants.users, '').replaceAll('/', '');
-      return (_) => UserScreen(userId: userId);
+      final userId = routeName.replaceFirst(RouteConstants.users, '').replaceAll('/', '');
+      final String url = 'https://qcarder.com/users/$userId';
+      Uri uri = Uri.parse(url);
+      launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      return (_) => Container();
+      // return (_) => UserScreen(userId: userId);
     } else {
       return (_) => NotFoundScreen(msg: 'No route defined for $routeName');
     }

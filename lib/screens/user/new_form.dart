@@ -2,8 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:qcarder/cubit/auth/auth_cubit.dart';
-import 'package:qcarder/cubit/auth/auth_state.dart';
 import 'package:qcarder/utils/configuration/image-constants.dart';
 import 'package:qcarder/utils/configuration/theme.dart';
 import 'package:qcarder/cubit/user/user_cubit.dart';

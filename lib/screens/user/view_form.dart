@@ -269,7 +269,7 @@ class _ViewFormState extends State<ViewForm> {
                       launchUrl(
                         uri,
                         mode: url.contains('qcarder')
-                            ? LaunchMode.inAppWebView
+                            ? LaunchMode.externalApplication
                             : LaunchMode.externalApplication,
                       );
                     },

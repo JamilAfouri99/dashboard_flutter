@@ -21,7 +21,11 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: AppColors.light,
       leading: Builder(
         builder: (context) => IconButton(
-          icon: const Icon(Icons.density_medium_outlined, color: AppColors.grey),
+          icon: const Icon(
+            Icons.format_list_bulleted_rounded,
+            color: AppColors.grey,
+            size: 25,
+          ),
           onPressed: () => Scaffold.of(context).openDrawer(),
         ),
       ),

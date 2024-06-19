@@ -77,9 +77,6 @@ class _SigninScreenState extends State<SigninScreen> {
                           labelText: 'Email',
                           hintText: 'user@qcarder.com',
                           controller: _emailController,
-                          hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
-                              ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';

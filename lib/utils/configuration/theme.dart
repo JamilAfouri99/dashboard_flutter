@@ -142,7 +142,7 @@ TextTheme textLightTheme = const TextTheme(
     color: AppColors.secondary,
   ),
   bodySmall: TextStyle(
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: FontWeight.w500,
     color: AppColors.grey,
   ),
