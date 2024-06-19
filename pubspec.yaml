@@ -2,7 +2,7 @@ name: qcarder
 description: Digital business cards are the modern solution for exchanging contact information and nurturing client relationships. Unlike traditional paper cards, these dynamic and efficient tools offer immediate access to essential details, such as websites, product portfolios, and social media profiles. This not only enhances professionalism but also streamlines follow-up actions, leading to more effective sales conversions.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.1+11
+version: 1.0.2+12
 
 environment:
   sdk: ">=2.19.6 <4.0.0"
